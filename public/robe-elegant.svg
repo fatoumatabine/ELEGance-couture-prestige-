@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600">
+  <defs>
+    <linearGradient id="dress" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9B7C2B;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="600" fill="#F5E6D3"/>
+  <!-- Dress body -->
+  <path d="M 100 80 L 150 150 L 150 500 Q 150 550 200 550 Q 250 550 250 500 L 250 150 L 300 80 Z" fill="url(#dress)" stroke="#8B6914" stroke-width="2"/>
+  <!-- Neckline -->
+  <ellipse cx="200" cy="85" rx="50" ry="20" fill="#C9A424" stroke="#8B6914" stroke-width="1"/>
+  <!-- Pattern -->
+  <circle cx="180" cy="200" r="5" fill="rgba(0,0,0,0.1)"/>
+  <circle cx="220" cy="220" r="5" fill="rgba(0,0,0,0.1)"/>
+  <circle cx="200" cy="280" r="5" fill="rgba(0,0,0,0.1)"/>
+</svg>

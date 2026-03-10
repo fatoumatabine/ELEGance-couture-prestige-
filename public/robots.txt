@@ -1,0 +1,15 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin and API routes
+Disallow: /admin/
+Disallow: /api/
+Disallow: /commander/
+Disallow: /panier/
+
+# Sitemap
+Sitemap: https://elegancecouture.sn/sitemap.xml
+
+# Crawl-delay (optional)
+Crawl-delay: 1

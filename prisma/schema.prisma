@@ -1,0 +1,89 @@
+// Prisma schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  price       Int     // Price in cents (25000 = €250)
+  category    String  // robes, boubous, complets, accessoires
+  images      String[] // Cloudinary URLs
+  sizes       String[] // S, M, L, XL, etc
+  colors      String[] // Noir, Rose, Blanc, etc
+  inStock     Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+}
+
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  sessionId String
+  productId Int
+  quantity  Int
+  size      String?
+  color     String?
+  createdAt DateTime @default(now())
+
+  @@unique([sessionId, productId, size, color])
+}
+
+model Order {
+  id              Int      @id @default(autoincrement())
+  customerNom     String
+  customerPrenom String
+  customerEmail   String
+  customerTelephone String
+  customerAdresse String
+  customerVille   String
+  customerQuartier String
+  customerInstructions String?
+  items           Json     // [{productId, name, price, quantity, size, color, image}]
+  total           Int
+  fraisLivraison Int
+  totalFinal      Int
+  paiement        String   // cash, virement
+  status          String   @default("pending") // pending, confirmed, shipped, delivered, cancelled
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([customerEmail])
+  @@index([status])
+}
+
+model Contact {
+  id          Int      @id @default(autoincrement())
+  nom         String
+  email       String
+  telephone   String
+  sujet       String
+  message     String
+  lu          Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([email])
+}
+
+model Reclamation {
+  id          Int      @id @default(autoincrement())
+  nom         String
+  email       String
+  telephone   String
+  commandeId  Int?
+  sujet       String
+  message     String
+  statut      String   @default("en_attente") // en_attente, en_cours, traitee, resolue
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([commandeId])
+}

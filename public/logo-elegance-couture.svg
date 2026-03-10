@@ -1,0 +1,23 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer circle - Orange -->
+  <circle cx="100" cy="100" r="95" fill="none" stroke="#E67E22" stroke-width="3"/>
+  
+  <!-- Middle circle - Brown -->
+  <circle cx="100" cy="100" r="85" fill="none" stroke="#4E342E" stroke-width="4"/>
+  
+  <!-- Inner circle - Orange -->
+  <circle cx="100" cy="100" r="70" fill="none" stroke="#E67E22" stroke-width="2"/>
+  
+  <!-- Stylized 'E' and needle -->
+  <g transform="translate(100, 100)">
+    <!-- Needle -->
+    <line x1="-30" y1="-40" x2="10" y2="30" stroke="#4E342E" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Thread curve -->
+    <path d="M 10 30 Q 30 20, 40 0 Q 45 -15, 35 -25" fill="none" stroke="#E67E22" stroke-width="2.5"/>
+    
+    <!-- Elegance text -->
+    <text x="-25" y="45" font-family="serif" font-size="14" fill="#4E342E" font-style="italic">Elegance</text>
+    <text x="15" y="50" font-family="serif" font-size="16" fill="#E67E22" font-style="italic">Couture</text>
+  </g>
+</svg>
