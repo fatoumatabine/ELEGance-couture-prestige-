@@ -141,16 +141,22 @@ export async function POST(request: NextRequest) {
       );
     }
     
+    const customer = validationResult.data.customer;
+    const locationUrl = customer.location?.mapUrl || customer.adresse || '';
+    const locationInstructions = customer.location
+      ? `Latitude: ${customer.location.latitude}, Longitude: ${customer.location.longitude}${customer.location.accuracy ? `, précision: ${Math.round(customer.location.accuracy)} m` : ''}`
+      : '';
+
     const order = await prisma.order.create({
       data: {
-        customerNom: validationResult.data.customer.nom,
-        customerPrenom: validationResult.data.customer.prenom,
-        customerEmail: validationResult.data.customer.email,
-        customerTelephone: validationResult.data.customer.telephone,
-        customerAdresse: validationResult.data.customer.adresse || '',
-        customerVille: validationResult.data.customer.ville || '',
-        customerQuartier: validationResult.data.customer.quartier || '',
-        customerInstructions: validationResult.data.customer.instructions || '',
+        customerNom: customer.nom || '',
+        customerPrenom: customer.prenom || 'Client',
+        customerEmail: customer.email || '',
+        customerTelephone: customer.telephone,
+        customerAdresse: locationUrl,
+        customerVille: customer.ville || (customer.location ? 'Localisation GPS' : ''),
+        customerQuartier: customer.quartier || '',
+        customerInstructions: customer.instructions || locationInstructions,
         items: validationResult.data.items,
         total: validationResult.data.total || 0,
         fraisLivraison: validationResult.data.fraisLivraison || 0,

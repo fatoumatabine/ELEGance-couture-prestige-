@@ -1,5 +1,8 @@
 import { v2 as cloudinary } from 'cloudinary';
+import crypto from 'crypto';
+import { mkdir, writeFile } from 'fs/promises';
 import { NextRequest, NextResponse } from 'next/server';
+import path from 'path';
 import { validateAdminToken } from '@/lib/auth';
 
 cloudinary.config({
@@ -20,6 +23,12 @@ const ALLOWED_TYPES = [
 // Taille maximale: 10MB
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
+const hasCloudinaryConfig = Boolean(
+  process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME &&
+  process.env.CLOUDINARY_API_KEY &&
+  process.env.CLOUDINARY_API_SECRET
+);
+
 // Fonction de validation du fichier
 function validateFile(file: File): { valid: boolean; error: string } {
   // Vérifier le type MIME
@@ -39,6 +48,23 @@ function validateFile(file: File): { valid: boolean; error: string } {
   }
 
   return { valid: true, error: '' };
+}
+
+function sanitizeFolder(folder: string): string {
+  return folder
+    .split('/')
+    .map((segment) => segment.replace(/[^a-zA-Z0-9_-]/g, ''))
+    .filter(Boolean)
+    .join('/');
+}
+
+function getFileExtension(file: File): string {
+  const fromName = file.name.split('.').pop()?.toLowerCase();
+  if (fromName && /^[a-z0-9]+$/.test(fromName)) {
+    return fromName === 'jpeg' ? 'jpg' : fromName;
+  }
+
+  return file.type.split('/')[1]?.replace('jpeg', 'jpg') || 'jpg';
 }
 
 export async function POST(request: NextRequest) {
@@ -74,6 +100,29 @@ export async function POST(request: NextRequest) {
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+
+    if (!hasCloudinaryConfig) {
+      const safeFolder = sanitizeFolder(folder);
+      const extension = getFileExtension(file);
+      const fileName = `${Date.now()}-${crypto.randomBytes(8).toString('hex')}.${extension}`;
+      const uploadDir = path.join(process.cwd(), 'public', 'uploads', safeFolder);
+      const uploadPath = path.join(uploadDir, fileName);
+      const publicUrl = `/uploads/${safeFolder}/${fileName}`;
+
+      await mkdir(uploadDir, { recursive: true });
+      await writeFile(uploadPath, buffer);
+
+      return NextResponse.json({
+        asset_id: fileName,
+        public_id: `${safeFolder}/${fileName}`,
+        secure_url: publicUrl,
+        url: publicUrl,
+        format: extension,
+        bytes: file.size,
+        created_at: new Date().toISOString(),
+        storage: 'local',
+      });
+    }
 
     // Upload to Cloudinary avec optimisation
     const result = await new Promise((resolve, reject) => {

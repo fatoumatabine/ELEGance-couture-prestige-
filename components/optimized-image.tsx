@@ -29,7 +29,7 @@ export function OptimizedImage({
 
   // Fonction pour générer l'URL optimisée avec Cloudinary
   const getOptimizedUrl = (url: string, targetWidth: number): string => {
-    if (!url) return "/placeholder.svg";
+    if (!url) return "";
     
     // Si c'est une URL Cloudinary, ajouter les transformations
     if (url.includes("cloudinary.com")) {

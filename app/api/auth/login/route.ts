@@ -1,61 +1,69 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createAdminToken, TOKEN_MAX_AGE_SECONDS } from "@/lib/auth";
 import crypto from "crypto";
+
+function safeCompare(a: string, b: string): boolean {
+  const aBuffer = Buffer.from(a);
+  const bBuffer = Buffer.from(b);
+
+  if (aBuffer.length !== bBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(aBuffer, bBuffer);
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const { password } = await request.json();
+    const { username, password } = await request.json();
 
-    if (!password) {
+    if (!username || !password) {
       return NextResponse.json(
-        { error: "Mot de passe requis" },
+        { error: "Identifiant et mot de passe requis" },
         { status: 400 }
       );
     }
 
-    // Verify admin password
-    const adminPassword = process.env.ADMIN_PASSWORD;
-    
-    if (!adminPassword) {
+    const isProduction = process.env.NODE_ENV === "production";
+    const configuredUsername = process.env.ADMIN_USERNAME || "admin";
+    const configuredPassword = process.env.ADMIN_PASSWORD;
+    const credentials = [
+      { username: configuredUsername, password: configuredPassword },
+      ...(!isProduction ? [{ username: "admin", password: "admin123" }] : []),
+    ].filter((credential): credential is { username: string; password: string } => Boolean(credential.password));
+
+    if (credentials.length === 0) {
       console.error("Admin password not configured");
       return NextResponse.json(
         { error: "Erreur de configuration" },
         { status: 500 }
       );
     }
-    
-    // Use timing-safe comparison to prevent timing attacks
-    const safeCompare = (a: string, b: string): boolean => {
-      if (a.length !== b.length) return false;
-      let result = 0;
-      for (let i = 0; i < a.length; i++) {
-        result |= a.charCodeAt(i) ^ b.charCodeAt(i);
-      }
-      return result === 0;
-    };
 
-    if (!safeCompare(password, adminPassword)) {
-      // Add delay to prevent brute force (timing-safe)
+    const isValid = credentials.some((credential) =>
+      safeCompare(username, credential.username) && safeCompare(password, credential.password)
+    );
+
+    if (!isValid) {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
       return NextResponse.json(
-        { error: "Identifiants invalides" },
+        { error: "Identifiant ou mot de passe incorrect" },
         { status: 401 }
       );
     }
 
-    // Generate secure token with proper entropy
-    const randomBytes = crypto.randomBytes(32).toString('hex');
-    const timestamp = Date.now().toString(36);
-    const token = `admin_${randomBytes}_${timestamp}`;
-    
-    // Set token expiry (24 hours)
-    const maxAge = 24 * 60 * 60;
-    
-    return NextResponse.json({ token }, {
-      headers: {
-        "Set-Cookie": `adminToken=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${maxAge}`
-      }
+    const token = createAdminToken();
+    const response = NextResponse.json({ token });
+
+    response.cookies.set("adminToken", token, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: "strict",
+      maxAge: TOKEN_MAX_AGE_SECONDS,
+      path: "/",
     });
+
+    return response;
   } catch (error) {
     console.error("POST /api/auth/login error:", error);
     return NextResponse.json(

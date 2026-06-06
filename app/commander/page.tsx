@@ -9,13 +9,18 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Separator } from "@/components/ui/separator"
 import { useCartStore } from "@/lib/cart-store"
 import { useRouter } from "next/navigation"
-import { Package, CreditCard, MapPin } from "lucide-react"
+import { CheckCircle, Loader2, MapPin, Phone } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+
+interface CustomerLocation {
+  latitude: number
+  longitude: number
+  accuracy?: number
+  mapUrl: string
+}
 
 export default function CommanderPage() {
   const { items, getTotalPrice, clearCart } = useCartStore()
@@ -23,18 +28,14 @@ export default function CommanderPage() {
   const { toast } = useToast()
 
   const [formData, setFormData] = useState({
-    nom: "",
-    prenom: "",
     telephone: "",
-    email: "",
-    adresse: "",
-    ville: "Dakar",
-    quartier: "",
-    instructions: "",
     paiement: "cash",
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLocating, setIsLocating] = useState(false)
+  const [location, setLocation] = useState<CustomerLocation | null>(null)
+  const [locationError, setLocationError] = useState("")
 
   const total = getTotalPrice()
   const fraisLivraison = 2000
@@ -47,13 +48,45 @@ export default function CommanderPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!formData.telephone.trim()) {
+      toast({
+        title: "Numéro requis",
+        description: "Ajoutez votre numéro de téléphone pour confirmer la commande.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!location) {
+      toast({
+        title: "Localisation requise",
+        description: "Cliquez sur “Partager ma localisation” avant de confirmer.",
+        variant: "destructive",
+      })
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
-      // Simple WhatsApp message - only price and contact
+      const customer = {
+        telephone: formData.telephone.trim(),
+        nom: "",
+        prenom: "Client",
+        email: "",
+        adresse: location.mapUrl,
+        ville: "Localisation GPS",
+        quartier: "",
+        instructions: `Latitude: ${location.latitude}, Longitude: ${location.longitude}${location.accuracy ? `, précision: ${Math.round(location.accuracy)} m` : ""}`,
+        location,
+      }
+
       const itemsList = items
         .map((item) => {
-          return `• ${item.product.name}: ${item.product.price.toLocaleString()} CFA`;
+          const options = [item.selectedSize, item.selectedColor].filter(Boolean).join(" / ")
+          const optionText = options ? ` (${options})` : ""
+          return `• ${item.product.name}${optionText} x${item.quantity}: ${(item.product.price * item.quantity).toLocaleString()} CFA`;
         })
         .join('\n');
 
@@ -61,25 +94,33 @@ export default function CommanderPage() {
         `🛍️ COMMANDE - ELEGANCE COUTURE PRESTIGE\n\n` +
         `Produits:\n${itemsList}\n\n` +
         `Total: ${totalFinal.toLocaleString()} CFA\n\n` +
-        `Client: ${formData.prenom} ${formData.nom}\n` +
-        `Tél: ${formData.telephone}`;
+        `Téléphone client: ${customer.telephone}\n` +
+        `Localisation livraison: ${location.mapUrl}\n` +
+        `Paiement: à la livraison`;
 
-      // Send email with invoice
       try {
+        const orderPayload = {
+          customer,
+          items: items,
+          total,
+          fraisLivraison,
+          totalFinal,
+          paiement: formData.paiement,
+        }
+
+        await fetch("/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderPayload),
+        })
+
         await fetch("/api/commande", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            customer: formData,
-            items: items,
-            total,
-            fraisLivraison,
-            totalFinal,
-            paiement: formData.paiement,
-          }),
+          body: JSON.stringify(orderPayload),
         })
       } catch (emailError) {
-        console.error("Email error:", emailError)
+        console.error("Order save/email error:", emailError)
       }
 
       const whatsappUrl = `https://wa.me/221778137032?text=${encodeURIComponent(message)}`
@@ -105,8 +146,46 @@ export default function CommanderPage() {
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  const handleLocate = () => {
+    if (!navigator.geolocation) {
+      setLocationError("La localisation n'est pas disponible sur ce navigateur.")
+      return
+    }
+
+    setIsLocating(true)
+    setLocationError("")
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const latitude = Number(position.coords.latitude.toFixed(6))
+        const longitude = Number(position.coords.longitude.toFixed(6))
+
+        setLocation({
+          latitude,
+          longitude,
+          accuracy: position.coords.accuracy,
+          mapUrl: `https://www.google.com/maps?q=${latitude},${longitude}`,
+        })
+        setIsLocating(false)
+      },
+      (error) => {
+        const message = error.code === error.PERMISSION_DENIED
+          ? "Autorisez la localisation pour envoyer votre position de livraison."
+          : "Impossible de récupérer votre localisation. Réessayez dans un instant."
+
+        setLocationError(message)
+        setIsLocating(false)
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 60000,
+      }
+    )
   }
 
   return (
@@ -125,163 +204,81 @@ export default function CommanderPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Form Section */}
               <div className="lg:col-span-2 space-y-6">
-                {/* Contact Information */}
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <Package className="h-5 w-5 text-accent" />
-                      Informations de contact
+                      <Phone className="h-5 w-5 text-accent" />
+                      Votre téléphone
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="prenom">Prénom *</Label>
-                        <Input
-                          id="prenom"
-                          name="prenom"
-                          value={formData.prenom}
-                          onChange={handleChange}
-                          required
-                          placeholder="Votre prénom"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="nom">Nom *</Label>
-                        <Input
-                          id="nom"
-                          name="nom"
-                          value={formData.nom}
-                          onChange={handleChange}
-                          required
-                          placeholder="Votre nom"
-                        />
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="telephone">Numéro de téléphone *</Label>
+                      <Input
+                        id="telephone"
+                        name="telephone"
+                        type="tel"
+                        value={formData.telephone}
+                        onChange={handleChange}
+                        required
+                        placeholder="+221 77 123 45 67"
+                      />
                     </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="telephone">Téléphone *</Label>
-                        <Input
-                          id="telephone"
-                          name="telephone"
-                          type="tel"
-                          value={formData.telephone}
-                          onChange={handleChange}
-                          required
-                          placeholder="+221 77 123 45 67"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          placeholder="email@exemple.com"
-                        />
-                      </div>
-                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Nous vous appellerons ou écrirons sur WhatsApp pour confirmer les détails de la livraison.
+                    </p>
                   </CardContent>
                 </Card>
 
-                {/* Delivery Address */}
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <MapPin className="h-5 w-5 text-accent" />
-                      Adresse de livraison
+                      Localisation de livraison
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="adresse">Adresse complète *</Label>
-                      <Input
-                        id="adresse"
-                        name="adresse"
-                        value={formData.adresse}
-                        onChange={handleChange}
-                        required
-                        placeholder="Numéro, rue, immeuble..."
-                      />
+                  <CardContent className="space-y-5">
+                    <div className="rounded-[8px] border border-[#f0d2a0] bg-[#fffaf2] p-4">
+                      <p className="text-sm text-muted-foreground">
+                        Cliquez sur le bouton pour envoyer automatiquement votre position. Elle sera utilisée uniquement pour la livraison.
+                      </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="ville">Ville *</Label>
-                        <Input
-                          id="ville"
-                          name="ville"
-                          value={formData.ville}
-                          onChange={handleChange}
-                          required
-                          placeholder="Dakar"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="quartier">Quartier *</Label>
-                        <Input
-                          id="quartier"
-                          name="quartier"
-                          value={formData.quartier}
-                          onChange={handleChange}
-                          required
-                          placeholder="Keur Massar, Almadies..."
-                        />
-                      </div>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                      <Button
+                        type="button"
+                        onClick={handleLocate}
+                        disabled={isLocating}
+                        className="h-12 rounded-[6px] bg-[#FF9D00] px-6 font-bold text-[#180f08] hover:bg-[#e88e00]"
+                      >
+                        {isLocating ? <Loader2 className="h-4 w-4 animate-spin" /> : <MapPin className="h-4 w-4" />}
+                        {location ? "Modifier ma localisation" : "Partager ma localisation"}
+                      </Button>
+
+                      {location && (
+                        <a
+                          href={location.mapUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 underline-offset-4 hover:underline"
+                        >
+                          <CheckCircle className="h-4 w-4" />
+                          Localisation ajoutée
+                        </a>
+                      )}
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="instructions">Instructions de livraison (optionnel)</Label>
-                      <Textarea
-                        id="instructions"
-                        name="instructions"
-                        value={formData.instructions}
-                        onChange={handleChange}
-                        placeholder="Points de repère, étage, code d'accès..."
-                        rows={3}
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
+                    {location && (
+                      <p className="text-xs text-muted-foreground">
+                        Précision approximative : {location.accuracy ? `${Math.round(location.accuracy)} m` : "non indiquée"}
+                      </p>
+                    )}
 
-                {/* Payment Method */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <CreditCard className="h-5 w-5 text-accent" />
-                      Mode de paiement
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <RadioGroup
-                      value={formData.paiement}
-                      onValueChange={(value) => setFormData((prev) => ({ ...prev, paiement: value }))}
-                      className="space-y-3"
-                    >
-                      <div className="flex items-center space-x-3 border rounded-lg p-4">
-                        <RadioGroupItem value="cash" id="cash" />
-                        <Label htmlFor="cash" className="flex-1 cursor-pointer">
-                          <div>
-                            <p className="font-semibold">Paiement à la livraison</p>
-                            <p className="text-sm text-muted-foreground">Payez en espèces lors de la réception</p>
-                          </div>
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-3 border rounded-lg p-4">
-                        <RadioGroupItem value="virement" id="virement" />
-                        <Label htmlFor="virement" className="flex-1 cursor-pointer">
-                          <div>
-                            <p className="font-semibold">Virement bancaire / Wave / Orange Money</p>
-                            <p className="text-sm text-muted-foreground">
-                              Nous vous enverrons les coordonnées bancaires
-                            </p>
-                          </div>
-                        </Label>
-                      </div>
-                    </RadioGroup>
+                    {locationError && (
+                      <p className="text-sm font-medium text-rose-700">
+                        {locationError}
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
               </div>
@@ -297,11 +294,15 @@ export default function CommanderPage() {
                       {items.map((item, index) => (
                         <div key={`${item.product.id}-${index}`} className="flex gap-3">
                           <div className="relative w-16 h-16 bg-muted rounded overflow-hidden flex-shrink-0">
-                            <img
-                              src={item.product.images[0]?.replace('http://', 'https://') || "/placeholder.svg"}
-                              alt={item.product.name}
-                              className="object-cover w-full h-full"
-                            />
+                            {item.product.images[0] ? (
+                              <img
+                                src={item.product.images[0].replace('http://', 'https://')}
+                                alt={item.product.name}
+                                className="object-cover w-full h-full"
+                              />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center text-[8px] uppercase tracking-wide text-muted-foreground">Image admin</div>
+                            )}
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-medium text-sm line-clamp-1">{item.product.name}</p>
@@ -327,6 +328,10 @@ export default function CommanderPage() {
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Livraison</span>
                         <span className="font-medium">{fraisLivraison.toLocaleString()} CFA</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">Paiement</span>
+                        <span className="font-medium">À la livraison</span>
                       </div>
                       <Separator />
                       <div className="flex justify-between">

@@ -67,9 +67,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="min-h-screen flex flex-col">
         <Header />
 
-        <main className="flex-1">
+        <main className="flex-1 bg-[#fffaf2]">
           <div className="container mx-auto px-4 py-8 md:py-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-16">
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(360px,0.85fr)_1fr] lg:gap-12 mb-16">
               <ProductGallery images={product.images} productName={product.name} />
               <ProductInfo product={product} />
             </div>

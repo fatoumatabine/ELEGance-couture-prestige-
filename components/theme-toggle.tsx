@@ -14,7 +14,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <button className="w-8 h-8 flex items-center justify-center text-[#9e9585]">
+      <button className="w-8 h-8 flex items-center justify-center text-[#d7ba8c]">
         <span className="w-3.5 h-3.5" />
       </button>
     )
@@ -27,8 +27,8 @@ export function ThemeToggle() {
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className={`w-8 h-8 flex items-center justify-center transition-colors duration-200 border ${
         isDark
-          ? "border-[#2a2520] text-[#9e9585] hover:text-[#C9A96E] hover:border-[#C9A96E]"
-          : "border-[#e0d5c5] text-[#6b5c47] hover:text-[#a8854a] hover:border-[#C9A96E]"
+          ? "border-[#3b2717] text-[#d7ba8c] hover:text-[#FF9D00] hover:border-[#FF9D00]"
+          : "border-[#e0d5c5] text-[#7B542F] hover:text-[#B6771D] hover:border-[#FF9D00]"
       }`}
       aria-label={isDark ? "Mode clair" : "Mode sombre"}
       title={isDark ? "Mode clair" : "Mode sombre"}

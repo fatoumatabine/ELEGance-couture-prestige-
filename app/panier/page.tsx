@@ -1,20 +1,174 @@
 "use client"
 
+import type React from "react"
+
+import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { useCartStore } from "@/lib/cart-store"
-import { Minus, Plus, X, ShoppingBag, ArrowRight } from "lucide-react"
+import { Minus, Plus, X, ShoppingBag, ArrowRight, CheckCircle, Loader2, MapPin, Phone } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useToast } from "@/hooks/use-toast"
+
+interface CustomerLocation {
+  latitude: number
+  longitude: number
+  accuracy?: number
+  mapUrl: string
+}
 
 export default function PanierPage() {
-  const { items, removeItem, updateQuantity, getTotalPrice } = useCartStore()
+  const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCartStore()
+  const router = useRouter()
+  const { toast } = useToast()
+
+  const [telephone, setTelephone] = useState("")
+  const [location, setLocation] = useState<CustomerLocation | null>(null)
+  const [locationError, setLocationError] = useState("")
+  const [isLocating, setIsLocating] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const total = getTotalPrice()
   const fraisLivraison = total > 0 ? 2000 : 0
   const totalFinal = total + fraisLivraison
+
+  const handleLocate = () => {
+    if (!navigator.geolocation) {
+      setLocationError("La localisation n'est pas disponible sur ce navigateur.")
+      return
+    }
+
+    setIsLocating(true)
+    setLocationError("")
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const latitude = Number(position.coords.latitude.toFixed(6))
+        const longitude = Number(position.coords.longitude.toFixed(6))
+
+        setLocation({
+          latitude,
+          longitude,
+          accuracy: position.coords.accuracy,
+          mapUrl: `https://www.google.com/maps?q=${latitude},${longitude}`,
+        })
+        setIsLocating(false)
+      },
+      (error) => {
+        const message = error.code === error.PERMISSION_DENIED
+          ? "Autorisez la localisation pour envoyer votre position de livraison."
+          : "Impossible de récupérer votre localisation. Réessayez dans un instant."
+
+        setLocationError(message)
+        setIsLocating(false)
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 60000,
+      }
+    )
+  }
+
+  const handleQuickOrder = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!telephone.trim()) {
+      toast({
+        title: "Numéro requis",
+        description: "Ajoutez votre numéro de téléphone pour confirmer la commande.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!location) {
+      toast({
+        title: "Localisation requise",
+        description: "Cliquez sur “Partager ma localisation” avant de confirmer.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const customer = {
+        telephone: telephone.trim(),
+        nom: "",
+        prenom: "Client",
+        email: "",
+        adresse: location.mapUrl,
+        ville: "Localisation GPS",
+        quartier: "",
+        instructions: `Latitude: ${location.latitude}, Longitude: ${location.longitude}${location.accuracy ? `, précision: ${Math.round(location.accuracy)} m` : ""}`,
+        location,
+      }
+
+      const itemsList = items
+        .map((item) => {
+          const options = [item.selectedSize, item.selectedColor].filter(Boolean).join(" / ")
+          const optionText = options ? ` (${options})` : ""
+          return `• ${item.product.name}${optionText} x${item.quantity}: ${(item.product.price * item.quantity).toLocaleString()} CFA`
+        })
+        .join("\n")
+
+      const message =
+        `🛍️ COMMANDE - ELEGANCE COUTURE PRESTIGE\n\n` +
+        `Produits:\n${itemsList}\n\n` +
+        `Total: ${totalFinal.toLocaleString()} CFA\n\n` +
+        `Téléphone client: ${customer.telephone}\n` +
+        `Localisation livraison: ${location.mapUrl}\n` +
+        `Paiement: à la livraison`
+      const whatsappUrl = `https://wa.me/221778137032?text=${encodeURIComponent(message)}`
+      window.open(whatsappUrl, "_blank")
+
+      const orderPayload = {
+        customer,
+        items,
+        total,
+        fraisLivraison,
+        totalFinal,
+        paiement: "cash",
+      }
+
+      await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderPayload),
+      }).catch((error) => console.error("Order save error:", error))
+
+      await fetch("/api/commande", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderPayload),
+      }).catch((error) => console.error("Order notification error:", error))
+
+      clearCart()
+      toast({
+        title: "Commande envoyée!",
+        description: "Nous vous contacterons bientôt.",
+      })
+
+      router.push("/commande-confirmee")
+    } catch (error) {
+      console.error("Quick order error:", error)
+      toast({
+        title: "Erreur",
+        description: "Une erreur s'est produite. Veuillez réessayer.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   if (items.length === 0) {
     return (
@@ -64,11 +218,15 @@ export default function PanierPage() {
                   <CardContent className="p-4 md:p-6">
                     <div className="flex gap-4">
                       <div className="relative w-24 h-24 md:w-32 md:h-32 bg-muted rounded-lg overflow-hidden flex-shrink-0">
-                        <img
-                          src={item.product.images[0] || "/placeholder.svg"}
-                          alt={item.product.name}
-                          className="object-cover w-full h-full"
-                        />
+                        {item.product.images[0] ? (
+                          <img
+                            src={item.product.images[0].replace("http://", "https://")}
+                            alt={item.product.name}
+                            className="object-cover w-full h-full"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center px-2 text-center text-[9px] uppercase tracking-wide text-muted-foreground">Image admin requise</div>
+                        )}
                       </div>
 
                       <div className="flex-1 min-w-0">
@@ -156,11 +314,76 @@ export default function PanierPage() {
                     </div>
                   </div>
 
-                  <Button asChild size="lg" className="w-full mb-3">
-                    <Link href="/commander">
-                      Passer la commande
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
+                  <form onSubmit={handleQuickOrder} className="space-y-4">
+                    <div className="rounded-[8px] border border-[#f0d2a0] bg-[#fffaf2] p-4">
+                      <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.22em] text-[#B6771D]">
+                        Commande rapide
+                      </p>
+                      <div className="space-y-3">
+                        <div className="space-y-2">
+                          <Label htmlFor="quick-phone" className="flex items-center gap-2 text-xs font-semibold">
+                            <Phone className="h-3.5 w-3.5 text-[#FF9D00]" />
+                            Téléphone
+                          </Label>
+                          <Input
+                            id="quick-phone"
+                            type="tel"
+                            value={telephone}
+                            onChange={(e) => setTelephone(e.target.value)}
+                            required
+                            placeholder="+221 77 123 45 67"
+                            className="h-10 bg-white"
+                          />
+                        </div>
+
+                        <Button
+                          type="button"
+                          onClick={handleLocate}
+                          disabled={isLocating}
+                          variant="outline"
+                          className="h-10 w-full border-[#f0c987] bg-white text-[#7B542F] hover:border-[#FF9D00] hover:bg-[#fff6e6]"
+                        >
+                          {isLocating ? <Loader2 className="h-4 w-4 animate-spin" /> : <MapPin className="h-4 w-4" />}
+                          {location ? "Modifier ma localisation" : "Partager ma localisation"}
+                        </Button>
+
+                        {location && (
+                          <a
+                            href={location.mapUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-700 underline-offset-4 hover:underline"
+                          >
+                            <CheckCircle className="h-3.5 w-3.5" />
+                            Localisation ajoutée
+                          </a>
+                        )}
+
+                        {locationError && (
+                          <p className="text-xs font-medium text-rose-700">{locationError}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      className="w-full bg-[#FF9D00] font-bold text-[#180f08] hover:bg-[#e88e00]"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Envoi en cours..." : "Confirmer maintenant"}
+                      {isSubmitting ? <Loader2 className="ml-2 h-5 w-5 animate-spin" /> : <ArrowRight className="ml-2 h-5 w-5" />}
+                    </Button>
+                  </form>
+
+                  <div className="my-4 flex items-center gap-3">
+                    <Separator className="flex-1" />
+                    <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">ou</span>
+                    <Separator className="flex-1" />
+                  </div>
+
+                  <Button asChild variant="outline" size="lg" className="w-full bg-transparent mb-3">
+                    <Link href="/commander">Finalisation détaillée</Link>
                   </Button>
 
                   <Button asChild variant="outline" size="lg" className="w-full bg-transparent">

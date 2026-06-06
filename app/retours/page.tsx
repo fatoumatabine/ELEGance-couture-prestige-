@@ -20,18 +20,18 @@ export default function RetoursPage() {
   ]
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#111111]">
+    <div className="min-h-screen flex flex-col bg-[#180f08]">
       <Header />
 
       {/* Hero */}
-      <section className="h-64 bg-[#0d0d0d] border-b border-[#2a2520] flex items-center justify-center">
+      <section className="h-64 bg-[#120b06] border-b border-[#3b2717] flex items-center justify-center">
         <div className="text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="h-px w-8 bg-[#C9A96E]" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-[#C9A96E]">Politique</span>
-            <div className="h-px w-8 bg-[#C9A96E]" />
+            <div className="h-px w-8 bg-[#FF9D00]" />
+            <span className="text-[10px] tracking-[0.4em] uppercase text-[#FF9D00]">Politique</span>
+            <div className="h-px w-8 bg-[#FF9D00]" />
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl text-[#f5f0e8] font-bold tracking-wide">
+          <h1 className="font-serif text-4xl md:text-5xl text-[#fff8ed] font-bold tracking-wide">
             Retours & Échanges
           </h1>
         </div>
@@ -42,13 +42,13 @@ export default function RetoursPage() {
 
           {/* Intro */}
           <div className="text-center mb-16">
-            <div className="w-14 h-14 border border-[#C9A96E] flex items-center justify-center mx-auto mb-6">
-              <RefreshCw className="w-6 h-6 text-[#C9A96E]" />
+            <div className="w-14 h-14 border border-[#FF9D00] flex items-center justify-center mx-auto mb-6">
+              <RefreshCw className="w-6 h-6 text-[#FF9D00]" />
             </div>
-            <h2 className="font-serif text-3xl text-[#f5f0e8] font-bold mb-4 tracking-wide">
+            <h2 className="font-serif text-3xl text-[#fff8ed] font-bold mb-4 tracking-wide">
               Notre Politique de Retour
             </h2>
-            <p className="text-[#9e9585] text-sm leading-relaxed tracking-wide max-w-lg mx-auto">
+            <p className="text-[#d7ba8c] text-sm leading-relaxed tracking-wide max-w-lg mx-auto">
               Votre satisfaction est notre priorité absolue. Si pour une raison quelconque vous n'êtes
               pas entièrement satisfait(e) de votre commande, nous acceptons les retours sous 14 jours
               à compter de la date de réception.
@@ -56,38 +56,38 @@ export default function RetoursPage() {
           </div>
 
           {/* Délai highlight */}
-          <div className="border border-[#C9A96E]/30 bg-[#1a1a1a] p-8 mb-12 text-center">
-            <Clock className="w-5 h-5 text-[#C9A96E] mx-auto mb-3" />
-            <div className="font-serif text-4xl text-[#C9A96E] font-bold mb-2">14 Jours</div>
-            <p className="text-[11px] tracking-[0.2em] uppercase text-[#9e9585]">Délai de retour garanti</p>
+          <div className="border border-[#FF9D00]/30 bg-[#1a1a1a] p-8 mb-12 text-center">
+            <Clock className="w-5 h-5 text-[#FF9D00] mx-auto mb-3" />
+            <div className="font-serif text-4xl text-[#FF9D00] font-bold mb-2">14 Jours</div>
+            <p className="text-[11px] tracking-[0.2em] uppercase text-[#d7ba8c]">Délai de retour garanti</p>
           </div>
 
           {/* Accepted / Refused */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-            <div className="border border-[#2a2520] p-6">
+            <div className="border border-[#3b2717] p-6">
               <div className="flex items-center gap-3 mb-5">
                 <CheckCircle className="w-4 h-4 text-green-500" />
-                <h3 className="text-[11px] tracking-[0.2em] uppercase text-[#f5f0e8] font-semibold">Articles Acceptés</h3>
+                <h3 className="text-[11px] tracking-[0.2em] uppercase text-[#fff8ed] font-semibold">Articles Acceptés</h3>
               </div>
               <ul className="space-y-3">
                 {accepted.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <div className="w-1 h-1 bg-[#C9A96E] rounded-full mt-2 flex-shrink-0" />
-                    <p className="text-[12px] text-[#9e9585] leading-relaxed tracking-wide">{item}</p>
+                    <div className="w-1 h-1 bg-[#FF9D00] rounded-full mt-2 flex-shrink-0" />
+                    <p className="text-[12px] text-[#d7ba8c] leading-relaxed tracking-wide">{item}</p>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="border border-[#2a2520] p-6">
+            <div className="border border-[#3b2717] p-6">
               <div className="flex items-center gap-3 mb-5">
                 <XCircle className="w-4 h-4 text-red-500" />
-                <h3 className="text-[11px] tracking-[0.2em] uppercase text-[#f5f0e8] font-semibold">Articles Non Acceptés</h3>
+                <h3 className="text-[11px] tracking-[0.2em] uppercase text-[#fff8ed] font-semibold">Articles Non Acceptés</h3>
               </div>
               <ul className="space-y-3">
                 {refused.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <div className="w-1 h-1 bg-red-500/60 rounded-full mt-2 flex-shrink-0" />
-                    <p className="text-[12px] text-[#9e9585] leading-relaxed tracking-wide">{item}</p>
+                    <p className="text-[12px] text-[#d7ba8c] leading-relaxed tracking-wide">{item}</p>
                   </li>
                 ))}
               </ul>
@@ -96,7 +96,7 @@ export default function RetoursPage() {
 
           {/* Process */}
           <div className="mb-16">
-            <h3 className="font-serif text-2xl text-[#f5f0e8] font-bold mb-8 tracking-wide">Comment Effectuer un Retour ?</h3>
+            <h3 className="font-serif text-2xl text-[#fff8ed] font-bold mb-8 tracking-wide">Comment Effectuer un Retour ?</h3>
             <div className="space-y-4">
               {[
                 { step: "01", text: "Contactez notre service client par email ou WhatsApp dans les 14 jours suivant la réception." },
@@ -104,22 +104,22 @@ export default function RetoursPage() {
                 { step: "03", text: "Nous vous communiquerons les instructions de retour et l'adresse d'envoi." },
                 { step: "04", text: "Une fois le colis reçu et vérifié, nous procéderons au remboursement ou à l'échange sous 5 jours ouvrables." },
               ].map((s, i) => (
-                <div key={i} className="flex gap-5 items-start border-b border-[#2a2520] pb-5">
-                  <span className="font-serif text-lg text-[#C9A96E] font-bold flex-shrink-0 w-8">{s.step}</span>
-                  <p className="text-[12px] text-[#9e9585] leading-relaxed tracking-wide pt-1">{s.text}</p>
+                <div key={i} className="flex gap-5 items-start border-b border-[#3b2717] pb-5">
+                  <span className="font-serif text-lg text-[#FF9D00] font-bold flex-shrink-0 w-8">{s.step}</span>
+                  <p className="text-[12px] text-[#d7ba8c] leading-relaxed tracking-wide pt-1">{s.text}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Contact */}
-          <div className="border border-[#2a2520] p-8 text-center bg-[#0d0d0d]">
-            <h3 className="font-serif text-xl text-[#f5f0e8] font-bold mb-4 tracking-wide">Besoin d'Aide ?</h3>
-            <p className="text-[#9e9585] text-sm mb-6 tracking-wide">Notre équipe est disponible pour vous accompagner</p>
+          <div className="border border-[#3b2717] p-8 text-center bg-[#120b06]">
+            <h3 className="font-serif text-xl text-[#fff8ed] font-bold mb-4 tracking-wide">Besoin d'Aide ?</h3>
+            <p className="text-[#d7ba8c] text-sm mb-6 tracking-wide">Notre équipe est disponible pour vous accompagner</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="mailto:contact@elegancecouture.sn"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-[#C9A96E] text-[#C9A96E] text-[10px] tracking-[0.2em] uppercase hover:bg-[#C9A96E] hover:text-[#111111] transition-all duration-300"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-[#FF9D00] text-[#FF9D00] text-[10px] tracking-[0.2em] uppercase hover:bg-[#FF9D00] hover:text-[#180f08] transition-all duration-300"
               >
                 <Mail className="w-3.5 h-3.5" />
                 Envoyer un Email
@@ -128,7 +128,7 @@ export default function RetoursPage() {
                 href="https://wa.me/221778137032"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#C9A96E] text-[#111111] text-[10px] tracking-[0.2em] uppercase font-semibold hover:bg-[#e8d5b0] transition-all duration-300"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#FF9D00] text-[#180f08] text-[10px] tracking-[0.2em] uppercase font-semibold hover:bg-[#FFCF71] transition-all duration-300"
               >
                 <Phone className="w-3.5 h-3.5" />
                 WhatsApp

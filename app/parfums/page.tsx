@@ -20,16 +20,18 @@ export default async function ParfumsPage() {
       <Header />
 
       <main className="flex-1">
-        <div className="bg-muted/30 py-12 md:py-16">
-          <div className="container mx-auto px-4">
-            <h1 className="font-serif text-4xl md:text-6xl font-bold text-center mb-4">Parfums</h1>
-            <p className="text-center text-muted-foreground text-lg max-w-2xl mx-auto">
+        <div className="relative overflow-hidden bg-[#120b06] py-16 md:py-24">
+          <div className="editorial-grid absolute inset-0 opacity-[0.08]" />
+          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#FF9D00] to-transparent" />
+          <div className="container relative mx-auto px-6">
+            <h1 className="mb-4 text-center font-serif text-5xl font-bold tracking-wide text-[#fff8ed] md:text-7xl">Parfums</h1>
+            <p className="mx-auto max-w-2xl text-center text-base leading-relaxed tracking-wide text-[#f2d9ad] md:text-lg">
               Fragrances exclusives pour celles qui aiment séduire
             </p>
           </div>
         </div>
 
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-6 py-12 md:py-16">
           <div className="flex gap-8">
             <aside className="hidden lg:block w-64 flex-shrink-0">
               <div className="sticky top-24">
@@ -38,7 +40,7 @@ export default async function ParfumsPage() {
             </aside>
 
             <div className="flex-1">
-              <div className="mb-6">
+              <div className="mb-8 border-b border-border pb-4">
                 <p className="text-muted-foreground">{products.length} produits disponibles</p>
               </div>
 

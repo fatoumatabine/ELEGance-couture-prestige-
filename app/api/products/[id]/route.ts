@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { normalizeImageUrls } from "@/lib/image-utils";
 import { NextRequest, NextResponse } from "next/server";
 import { validateAdminToken } from "@/lib/auth";
 
@@ -22,7 +23,10 @@ export async function GET(
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    return NextResponse.json(product);
+    return NextResponse.json({
+      ...product,
+      images: normalizeImageUrls(product.images),
+    });
   } catch (error) {
     console.error("GET /api/products/[id] error:", error);
     return NextResponse.json(
@@ -62,6 +66,8 @@ export async function PUT(
       );
     }
 
+    const images = normalizeImageUrls(body.images);
+
     const product = await prisma.product.update({
       where: { id: productId },
       data: {
@@ -69,14 +75,25 @@ export async function PUT(
         description: body.description,
         price: body.price,
         category: body.category || "robes",
-        images: body.images || [],
+        gender: body.gender || null,
+        collection: body.collection || null,
+        subcategory: body.subcategory || null,
+        featured: body.featured ?? false,
+        bestSeller: body.bestSeller ?? false,
+        onSale: body.onSale ?? false,
+        discount: body.discount ?? null,
+        sortOrder: body.sortOrder ?? 0,
+        images,
         sizes: body.sizes || [],
         colors: body.colors || [],
         inStock: body.inStock ?? true,
-      },
+      } as any,
     });
 
-    return NextResponse.json(product);
+    return NextResponse.json({
+      ...product,
+      images: normalizeImageUrls(product.images),
+    });
   } catch (error: any) {
     console.error("PUT /api/products/[id] error:", error);
     

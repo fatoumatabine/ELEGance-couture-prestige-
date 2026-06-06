@@ -4,6 +4,7 @@ import { Geist, Playfair_Display } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider"
+import { WhatsappFloat } from "@/components/whatsapp-float"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -15,11 +16,10 @@ export const metadata: Metadata = {
   generator: "v0.app",
   icons: {
     icon: [
-      { url: "/icon-light-32x32.png", media: "(prefers-color-scheme: light)" },
-      { url: "/icon-dark-32x32.png", media: "(prefers-color-scheme: dark)" },
-      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/logo-elegance-couture.svg", type: "image/svg+xml" },
+      { url: "/logo.png", type: "image/png" },
     ],
-    apple: "/apple-icon.png",
+    apple: "/logo.png",
   },
 }
 
@@ -41,6 +41,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <WhatsappFloat />
           <Toaster />
           <Analytics />
         </ThemeProvider>

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RotateCcw, ChevronDown } from "lucide-react"
+import { RotateCcw, ChevronDown, SlidersHorizontal } from "lucide-react"
 
 interface ProductFiltersProps {
   onFilterChange?: (filters: unknown) => void
@@ -10,7 +10,7 @@ interface ProductFiltersProps {
 
 const colorSwatches: Record<string, string> = {
   Noir: "#1a1a1a",
-  Blanc: "#f5f0e8",
+  Blanc: "#fff8ed",
   Rouge: "#dc2626",
   Rose: "#ec4899",
   Bleu: "#2563eb",
@@ -60,48 +60,53 @@ export function ProductFilters({ onFilterChange }: ProductFiltersProps) {
   }) => {
     const isOpen = openSection.includes(id)
     return (
-      <div className="border-b border-border">
+      <div className="border-b border-[#ead3aa]/70 last:border-b-0 dark:border-[#3b2717]">
         <button
           onClick={() => toggleSection(id)}
-          className="w-full flex items-center justify-between py-4 text-left group"
+          className="group flex w-full items-center justify-between py-3 text-left"
         >
-          <span className="text-[11px] tracking-[0.25em] uppercase font-semibold text-foreground group-hover:text-[#C9A96E] transition-colors">
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#241609] transition-colors group-hover:text-[#B6771D] dark:text-[#fff8ed] dark:group-hover:text-[#FFCF71]">
             {label}
           </span>
           <ChevronDown
-            className={`w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+            className={`h-3.5 w-3.5 text-[#B6771D] transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
           />
         </button>
-        {isOpen && <div className="pb-5">{children}</div>}
+        {isOpen && <div className="pb-4">{children}</div>}
       </div>
     )
   }
 
   return (
-    <div>
+    <div className="rounded-[8px] border border-[#ead3aa] bg-white/80 p-4 shadow-[0_18px_45px_rgba(123,84,47,0.08)] backdrop-blur-sm dark:border-[#3b2717] dark:bg-[#180f08]/80">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-1 h-4 bg-[#C9A96E]" />
-          <span className="text-[11px] tracking-[0.3em] uppercase font-semibold text-foreground">Filtres</span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-[6px] bg-[#fff1d4] text-[#B6771D] dark:bg-[#2b190d] dark:text-[#FFCF71]">
+            <SlidersHorizontal className="h-4 w-4" />
+          </div>
+          <div>
+            <span className="block text-[11px] font-bold uppercase tracking-[0.22em] text-foreground">Filtres</span>
+            <span className="text-[10px] text-muted-foreground">Affiner la sélection</span>
+          </div>
         </div>
         {hasFilters && (
           <button
             onClick={resetAll}
-            className="flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-[#C9A96E] transition-colors"
+            className="flex h-8 w-8 items-center justify-center rounded-[6px] border border-[#ead3aa] text-[#B6771D] transition-colors hover:border-[#FF9D00] hover:bg-[#fff6e6] dark:border-[#3b2717] dark:hover:bg-[#2b190d]"
+            aria-label="Effacer les filtres"
           >
             <RotateCcw className="w-3 h-3" />
-            Effacer
           </button>
         )}
       </div>
 
       <FilterSection id="sort" label="Trier par">
         <Select defaultValue="featured">
-          <SelectTrigger className="border-border text-[11px] tracking-wide h-9 rounded-none">
+          <SelectTrigger className="h-9 rounded-[6px] border-[#ead3aa] bg-white text-[11px] tracking-wide dark:border-[#3b2717] dark:bg-[#211207]">
             <SelectValue placeholder="Sélectionner" />
           </SelectTrigger>
-          <SelectContent className="rounded-none">
+          <SelectContent className="rounded-[6px]">
             <SelectItem value="featured">En vedette</SelectItem>
             <SelectItem value="price-asc">Prix croissant</SelectItem>
             <SelectItem value="price-desc">Prix décroissant</SelectItem>
@@ -112,10 +117,10 @@ export function ProductFilters({ onFilterChange }: ProductFiltersProps) {
 
       <FilterSection id="prix" label="Budget">
         <Select value={priceRange} onValueChange={setPriceRange}>
-          <SelectTrigger className="border-border text-[11px] tracking-wide h-9 rounded-none">
+          <SelectTrigger className="h-9 rounded-[6px] border-[#ead3aa] bg-white text-[11px] tracking-wide dark:border-[#3b2717] dark:bg-[#211207]">
             <SelectValue placeholder="Tous les prix" />
           </SelectTrigger>
-          <SelectContent className="rounded-none">
+          <SelectContent className="rounded-[6px]">
             <SelectItem value="all">Tous les prix</SelectItem>
             <SelectItem value="0-15000">Moins de 15 000 FCFA</SelectItem>
             <SelectItem value="15000-30000">15 000 – 30 000 FCFA</SelectItem>
@@ -131,10 +136,10 @@ export function ProductFilters({ onFilterChange }: ProductFiltersProps) {
             <button
               key={size}
               onClick={() => toggleSize(size)}
-              className={`w-9 h-9 text-[11px] font-medium tracking-wide border transition-all duration-200 ${
+              className={`h-8 min-w-8 rounded-[6px] border px-2 text-[10px] font-bold tracking-wide transition-all duration-200 ${
                 selectedSizes.includes(size)
-                  ? "border-[#C9A96E] bg-[#C9A96E] text-white"
-                  : "border-border text-foreground hover:border-[#C9A96E] hover:text-[#C9A96E]"
+                  ? "border-[#FF9D00] bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] text-[#180f08]"
+                  : "border-[#ead3aa] bg-white text-foreground hover:border-[#FF9D00] hover:text-[#B6771D] dark:border-[#3b2717] dark:bg-[#211207] dark:hover:text-[#FFCF71]"
               }`}
             >
               {size}
@@ -144,16 +149,16 @@ export function ProductFilters({ onFilterChange }: ProductFiltersProps) {
       </FilterSection>
 
       <FilterSection id="couleur" label="Couleur">
-        <div className="flex flex-wrap gap-2.5">
+        <div className="flex flex-wrap gap-2">
           {colors.map((color) => (
             <button
               key={color}
               onClick={() => toggleColor(color)}
               title={color}
-              className={`relative w-7 h-7 rounded-full border-2 transition-all duration-200 ${
+              className={`relative h-7 w-7 rounded-full border-2 transition-all duration-200 ${
                 selectedColors.includes(color)
-                  ? "border-[#C9A96E] scale-110 shadow-sm"
-                  : "border-transparent hover:border-[#C9A96E]/50 hover:scale-105"
+                  ? "scale-110 border-[#FF9D00] shadow-sm"
+                  : "border-[#fff8ed] hover:border-[#FF9D00]/60 hover:scale-105 dark:border-[#211207]"
               }`}
               style={{ backgroundColor: colorSwatches[color] }}
             >

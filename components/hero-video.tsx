@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react"
 import { Volume2, VolumeX } from "lucide-react"
 
-export default function HeroVideo({ mp4 = '/hero-video-optimized.mp4', webm = '/hero-video.webm', poster = '' }: { mp4?: string, webm?: string, poster?: string }) {
+export default function HeroVideo({ mp4 = '/hero-video.mp4', webm = '', poster = '' }: { mp4?: string, webm?: string, poster?: string }) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [muted, setMuted] = useState(true)
 
@@ -19,23 +19,37 @@ export default function HeroVideo({ mp4 = '/hero-video-optimized.mp4', webm = '/
   }
 
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0 overflow-hidden bg-[#120b06]">
+      <video
+        aria-hidden="true"
+        className="absolute inset-0 h-full w-full scale-110 object-cover opacity-80 blur-xl"
+        autoPlay
+        loop
+        playsInline
+        muted
+        preload="auto"
+        poster={poster}
+      >
+        <source src={mp4} type="video/mp4" />
+      </video>
+
       <video
         ref={videoRef}
-        className="w-full h-full object-cover"
+        className="relative z-[1] h-full w-full object-cover"
         autoPlay
         loop
         playsInline
         muted={muted}
+        preload="auto"
         poster={poster}
       >
-        {webm && <source src={webm} type="video/webm" />}
         <source src={mp4} type="video/mp4" />
+        {webm && <source src={webm} type="video/webm" />}
       </video>
 
       {/* overlay gradients to keep text readable */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/45 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
+      <div className="absolute inset-0 z-[2] bg-gradient-to-r from-black/50 via-black/28 to-black/20" />
+      <div className="absolute inset-0 z-[2] bg-gradient-to-b from-black/10 via-transparent to-black/35" />
 
       {/* mute button */}
       <button

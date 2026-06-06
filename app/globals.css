@@ -6,76 +6,80 @@
 
 :root {
   /* ===== ELEGANCE COUTURE - LIGHT MODE (default) ===== */
-  --background: #faf9f7;
-  --foreground: #1a1410;
-  --card: #ffffff;
-  --card-foreground: #1a1410;
+  --background: #fffaf2;
+  --foreground: #241609;
+  --card: #fffdf8;
+  --card-foreground: #241609;
   --popover: #ffffff;
-  --popover-foreground: #1a1410;
-  --primary: #a8854a;
-  --primary-foreground: #ffffff;
-  --secondary: #f3ede4;
-  --secondary-foreground: #1a1410;
-  --muted: #f0ebe3;
-  --muted-foreground: #6b5c47;
-  --accent: #a8854a;
-  --accent-foreground: #ffffff;
+  --popover-foreground: #241609;
+  --primary: #ff9d00;
+  --primary-foreground: #180f08;
+  --secondary: #fff1d4;
+  --secondary-foreground: #241609;
+  --muted: #fff3dd;
+  --muted-foreground: #7B542F;
+  --accent: #B6771D;
+  --accent-foreground: #fff8ed;
   --destructive: #DC2626;
   --destructive-foreground: #FFFFFF;
-  --border: #e0d5c5;
-  --input: #e0d5c5;
-  --ring: #C9A96E;
-  --chart-1: #C9A96E;
-  --chart-2: #a8854a;
-  --chart-3: #8D7D65;
-  --chart-4: #6a5d4e;
-  --chart-5: #1a1410;
+  --border: #ead3aa;
+  --input: #ead3aa;
+  --ring: #ff9d00;
+  --chart-1: #ff9d00;
+  --chart-2: #B6771D;
+  --chart-3: #ffcf71;
+  --chart-4: #7B542F;
+  --chart-5: #241609;
   --radius: 0.125rem;
-  --sidebar: #faf9f7;
-  --sidebar-foreground: #1a1410;
-  --sidebar-primary: #a8854a;
+  --sidebar: #fffaf2;
+  --sidebar-foreground: #241609;
+  --sidebar-primary: #B6771D;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f3ede4;
-  --sidebar-accent-foreground: #1a1410;
+  --sidebar-accent: #fff1d4;
+  --sidebar-accent-foreground: #241609;
   --sidebar-border: #e0d5c5;
-  --sidebar-ring: #C9A96E;
+  --sidebar-ring: #ff9d00;
 
   /* Custom brand tokens */
-  --gold: #C9A96E;
-  --gold-light: #e8d5b0;
-  --gold-dark: #a8854a;
-  --cream: #f5f0e8;
-  --cream-muted: #d4cdc2;
-  --luxury-dark: #111111;
-  --luxury-dark-2: #1a1a1a;
-  --luxury-dark-3: #222222;
-  --luxury-dark-4: #2a2520;
+  --gold: #ff9d00;
+  --gold-light: #ffcf71;
+  --gold-dark: #B6771D;
+  --cream: #fff8ed;
+  --cream-muted: #f2d9ad;
+  --cocoa: #7B542F;
+  --copper: #B6771D;
+  --amber: #ff9d00;
+  --honey: #ffcf71;
+  --luxury-dark: #180f08;
+  --luxury-dark-2: #211207;
+  --luxury-dark-3: #2b190d;
+  --luxury-dark-4: #3b2717;
 }
 
 /* ===== DARK MODE ===== */
 .dark {
-  --background: #111111;
-  --foreground: #f5f0e8;
-  --card: #1a1a1a;
-  --card-foreground: #f5f0e8;
+  --background: #140b05;
+  --foreground: #fff8ed;
+  --card: #211207;
+  --card-foreground: #fff8ed;
   --popover: #1a1a1a;
-  --popover-foreground: #f5f0e8;
-  --primary: #C9A96E;
-  --primary-foreground: #111111;
+  --popover-foreground: #fff8ed;
+  --primary: #ff9d00;
+  --primary-foreground: #180f08;
   --secondary: #1e1e1e;
-  --secondary-foreground: #f5f0e8;
-  --muted: #222222;
-  --muted-foreground: #9e9585;
-  --accent: #C9A96E;
-  --accent-foreground: #111111;
+  --secondary-foreground: #fff8ed;
+  --muted: #2b190d;
+  --muted-foreground: #d7ba8c;
+  --accent: #ff9d00;
+  --accent-foreground: #180f08;
   --destructive: #DC2626;
   --destructive-foreground: #FFFFFF;
-  --border: #2a2520;
-  --input: #2a2520;
-  --ring: #C9A96E;
-  --sidebar: #0d0d0d;
-  --sidebar-foreground: #f5f0e8;
-  --sidebar-border: #2a2520;
+  --border: #3b2717;
+  --input: #3b2717;
+  --ring: #ff9d00;
+  --sidebar: #120b06;
+  --sidebar-foreground: #fff8ed;
+  --sidebar-border: #3b2717;
 }
 
 @theme inline {
@@ -117,6 +121,10 @@
   --color-gold: var(--gold);
   --color-gold-light: var(--gold-light);
   --color-gold-dark: var(--gold-dark);
+  --color-cocoa: var(--cocoa);
+  --color-copper: var(--copper);
+  --color-amber: var(--amber);
+  --color-honey: var(--honey);
   --color-cream: var(--cream);
   --color-cream-muted: var(--cream-muted);
   --color-luxury-dark: var(--luxury-dark);
@@ -137,11 +145,25 @@
 
   body {
     @apply bg-background text-foreground;
+    background:
+      linear-gradient(180deg, rgba(255, 207, 113, 0.22) 0%, rgba(255, 250, 242, 0) 18rem),
+      radial-gradient(140% 80% at 50% -20%, rgba(255, 157, 0, 0.12), transparent 58%),
+      var(--background);
     font-feature-settings: "rlig" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif;
+  }
+
+  ::selection {
+    background: rgba(255, 157, 0, 0.28);
+    color: var(--foreground);
+  }
+
+  img {
+    -webkit-user-drag: none;
   }
 }
 
@@ -188,7 +210,7 @@
 }
 
 @utility btn-gold {
-  background-color: var(--gold);
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
   color: var(--luxury-dark);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -196,6 +218,7 @@
   font-weight: 600;
   padding: 0.75rem 2rem;
   transition: all 0.3s ease;
+  box-shadow: 0 14px 34px rgba(255, 157, 0, 0.22);
 }
 
 @utility btn-ghost-gold {
@@ -208,6 +231,34 @@
   padding: 0.75rem 2rem;
   transition: all 0.3s ease;
   background: transparent;
+}
+
+@utility brand-surface {
+  background:
+    linear-gradient(135deg, rgba(255, 207, 113, 0.18), rgba(255, 157, 0, 0.03)),
+    var(--card);
+  border: 1px solid rgba(182, 119, 29, 0.2);
+  box-shadow: 0 20px 60px rgba(123, 84, 47, 0.08);
+}
+
+@utility brand-text-gradient {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 46%, var(--gold-dark) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility brand-glow {
+  box-shadow:
+    0 18px 45px rgba(255, 157, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+@utility editorial-grid {
+  background-image:
+    linear-gradient(rgba(123, 84, 47, 0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(123, 84, 47, 0.075) 1px, transparent 1px);
+  background-size: 44px 44px;
 }
 
 /* ===== ANIMATIONS ===== */
@@ -273,13 +324,24 @@
 
   /* Gold shimmer hover for cards */
   .card-luxury {
-    background-color: var(--luxury-dark-2);
-    border: 1px solid var(--luxury-dark-4);
-    transition: border-color 0.3s ease, transform 0.3s ease;
+    background:
+      linear-gradient(145deg, rgba(255, 207, 113, 0.08), rgba(255, 157, 0, 0.02)),
+      var(--luxury-dark-2);
+    border: 1px solid rgba(255, 157, 0, 0.18);
+    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .card-luxury:hover {
     border-color: var(--gold);
     transform: translateY(-4px);
+    box-shadow: 0 24px 70px rgba(255, 157, 0, 0.16);
+  }
+
+  .scrollbar-hide {
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }

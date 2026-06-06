@@ -2,14 +2,20 @@ import { z } from "zod";
 
 // Customer info validation
 export const customerSchema = z.object({
-  nom: z.string().min(1, "Le nom est requis"),
-  prenom: z.string().min(1, "Le prénom est requis"),
+  nom: z.string().optional().default(""),
+  prenom: z.string().optional().default("Client"),
   telephone: z.string().min(8, "Numéro de téléphone invalide"),
-  email: z.string().email("Email invalide"),
+  email: z.union([z.string().email("Email invalide"), z.literal("")]).optional().default(""),
   adresse: z.string().optional(),
   ville: z.string().optional(),
   quartier: z.string().optional(),
   instructions: z.string().optional(),
+  location: z.object({
+    latitude: z.number(),
+    longitude: z.number(),
+    accuracy: z.number().optional(),
+    mapUrl: z.string().url().optional(),
+  }).optional(),
 });
 
 // Order item validation

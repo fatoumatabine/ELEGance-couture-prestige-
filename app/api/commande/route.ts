@@ -15,14 +15,20 @@ interface OrderItem {
 
 interface OrderData {
   customer: {
-    nom: string;
-    prenom: string;
+    nom?: string;
+    prenom?: string;
     telephone: string;
-    email: string;
-    adresse: string;
-    ville: string;
-    quartier: string;
+    email?: string;
+    adresse?: string;
+    ville?: string;
+    quartier?: string;
     instructions?: string;
+    location?: {
+      latitude: number;
+      longitude: number;
+      accuracy?: number;
+      mapUrl?: string;
+    };
   };
   items: OrderItem[];
   total: number;
@@ -38,12 +44,13 @@ export async function POST(request: NextRequest) {
     // Generate invoice HTML
     const invoiceHtml = generateInvoiceHtml(data);
 
-    // Send email using Resend
-    const emailResult = await sendInvoiceEmail(data.customer.email, invoiceHtml, data);
+    const emailResult = data.customer.email
+      ? await sendInvoiceEmail(data.customer.email, invoiceHtml, data)
+      : { success: true, skipped: true, reason: 'Aucun email client renseigné' };
 
     return NextResponse.json({
       success: true,
-      message: 'Email de facture envoyé',
+      message: data.customer.email ? 'Email de facture envoyé' : 'Commande reçue',
       emailResult
     });
   } catch (error: any) {
@@ -64,6 +71,11 @@ function generateInvoiceHtml(data: OrderData): string {
     hour: '2-digit',
     minute: '2-digit'
   });
+  const customerName = [customer.prenom, customer.nom].filter(Boolean).join(' ') || 'Client';
+  const locationUrl = customer.location?.mapUrl || customer.adresse;
+  const locationLabel = customer.location
+    ? `${customer.location.latitude}, ${customer.location.longitude}`
+    : [customer.adresse, customer.quartier, customer.ville].filter(Boolean).join(', ');
 
   const itemsHtml = items.map((item, index) => `
     <tr style="border-bottom: 1px solid #eee;">
@@ -108,7 +120,7 @@ function generateInvoiceHtml(data: OrderData): string {
       <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
         <div>
           <p style="margin: 0; color: #666; font-size: 12px; text-transform: uppercase;">Facture N°</p>
-          <p style="margin: 5px 0 0; font-size: 18px; font-weight: bold; color: #C9A96E;">ECP-${Date.now().toString().slice(-8)}</p>
+          <p style="margin: 5px 0 0; font-size: 18px; font-weight: bold; color: #FF9D00;">ECP-${Date.now().toString().slice(-8)}</p>
         </div>
         <div>
           <p style="margin: 0; color: #666; font-size: 12px; text-transform: uppercase;">Date</p>
@@ -121,11 +133,16 @@ function generateInvoiceHtml(data: OrderData): string {
     <div style="padding: 30px; border-bottom: 2px solid #f0f0f0;">
       <h3 style="margin: 0 0 15px; color: #1a1a1a;">Informations Client</h3>
       <p style="margin: 5px 0; color: #333;">
-        <strong>${customer.prenom} ${customer.nom}</strong>
+        <strong>${customerName}</strong>
       </p>
       <p style="margin: 5px 0; color: #666;">📱 ${customer.telephone}</p>
-      <p style="margin: 5px 0; color: #666;">📧 ${customer.email}</p>
-      <p style="margin: 5px 0; color: #666;">📍 ${customer.adresse}, ${customer.quartier}, ${customer.ville}</p>
+      ${customer.email ? `<p style="margin: 5px 0; color: #666;">📧 ${customer.email}</p>` : ''}
+      ${locationUrl ? `
+      <p style="margin: 5px 0; color: #666;">
+        📍 <a href="${locationUrl}" style="color: #FF9D00;">Voir la localisation</a>
+        ${locationLabel ? `<br/><small style="color: #777;">${locationLabel}</small>` : ''}
+      </p>
+      ` : ''}
     </div>
 
     <!-- Items Table -->
@@ -160,7 +177,7 @@ function generateInvoiceHtml(data: OrderData): string {
             <span>Livraison</span>
             <span>${fraisLivraison.toLocaleString()} CFA</span>
           </div>
-          <div style="display: flex; justify-content: space-between; padding: 15px 0; border-top: 2px solid #ddd; font-size: 20px; font-weight: bold; color: #C9A96E;">
+          <div style="display: flex; justify-content: space-between; padding: 15px 0; border-top: 2px solid #ddd; font-size: 20px; font-weight: bold; color: #FF9D00;">
             <span>Total</span>
             <span>${totalFinal.toLocaleString()} CFA</span>
           </div>

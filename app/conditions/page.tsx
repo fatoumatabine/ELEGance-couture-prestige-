@@ -46,18 +46,18 @@ export default function ConditionsPage() {
   ]
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#111111]">
+    <div className="min-h-screen flex flex-col bg-[#180f08]">
       <Header />
 
       {/* Hero */}
-      <section className="h-64 bg-[#0d0d0d] border-b border-[#2a2520] flex items-center justify-center">
+      <section className="h-64 bg-[#120b06] border-b border-[#3b2717] flex items-center justify-center">
         <div className="text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="h-px w-8 bg-[#C9A96E]" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-[#C9A96E]">Légal</span>
-            <div className="h-px w-8 bg-[#C9A96E]" />
+            <div className="h-px w-8 bg-[#FF9D00]" />
+            <span className="text-[10px] tracking-[0.4em] uppercase text-[#FF9D00]">Légal</span>
+            <div className="h-px w-8 bg-[#FF9D00]" />
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl text-[#f5f0e8] font-bold tracking-wide">
+          <h1 className="font-serif text-4xl md:text-5xl text-[#fff8ed] font-bold tracking-wide">
             Conditions Générales de Vente
           </h1>
         </div>
@@ -67,15 +67,15 @@ export default function ConditionsPage() {
         <div className="container mx-auto px-6 max-w-3xl">
 
           {/* Last Updated */}
-          <div className="flex items-center gap-3 mb-12 pb-6 border-b border-[#2a2520]">
-            <div className="h-px w-8 bg-[#C9A96E]" />
-            <p className="text-[11px] tracking-[0.2em] uppercase text-[#9e9585]">
+          <div className="flex items-center gap-3 mb-12 pb-6 border-b border-[#3b2717]">
+            <div className="h-px w-8 bg-[#FF9D00]" />
+            <p className="text-[11px] tracking-[0.2em] uppercase text-[#d7ba8c]">
               Dernière mise à jour : Janvier 2025
             </p>
           </div>
 
           {/* Intro */}
-          <p className="text-[#9e9585] text-sm leading-relaxed mb-12 tracking-wide">
+          <p className="text-[#d7ba8c] text-sm leading-relaxed mb-12 tracking-wide">
             En accédant à notre boutique et en effectuant un achat, vous acceptez d'être lié(e) par les présentes
             Conditions Générales de Vente. Veuillez les lire attentivement avant de passer commande.
           </p>
@@ -83,26 +83,26 @@ export default function ConditionsPage() {
           {/* Sections */}
           <div className="space-y-10">
             {sections.map((s, i) => (
-              <div key={i} className="border-l-2 border-[#2a2520] pl-6 hover:border-l-[#C9A96E]/50 transition-colors duration-300">
-                <h2 className="font-serif text-lg text-[#f5f0e8] font-bold mb-3 tracking-wide">{s.title}</h2>
-                <p className="text-[12px] text-[#9e9585] leading-relaxed tracking-wide">{s.content}</p>
+              <div key={i} className="border-l-2 border-[#3b2717] pl-6 hover:border-l-[#FF9D00]/50 transition-colors duration-300">
+                <h2 className="font-serif text-lg text-[#fff8ed] font-bold mb-3 tracking-wide">{s.title}</h2>
+                <p className="text-[12px] text-[#d7ba8c] leading-relaxed tracking-wide">{s.content}</p>
               </div>
             ))}
           </div>
 
           {/* Contact */}
-          <div className="mt-16 border border-[#2a2520] p-8 bg-[#0d0d0d]">
-            <h3 className="font-serif text-lg text-[#f5f0e8] font-bold mb-3 tracking-wide">
+          <div className="mt-16 border border-[#3b2717] p-8 bg-[#120b06]">
+            <h3 className="font-serif text-lg text-[#fff8ed] font-bold mb-3 tracking-wide">
               Des Questions ?
             </h3>
-            <p className="text-[12px] text-[#9e9585] mb-5 tracking-wide">
+            <p className="text-[12px] text-[#d7ba8c] mb-5 tracking-wide">
               Pour toute question relative à ces conditions, contactez-nous :
             </p>
             <div className="flex flex-col gap-2">
-              <a href="mailto:contact@elegancecouture.sn" className="text-[12px] text-[#C9A96E] hover:text-[#e8d5b0] transition-colors tracking-wide">
+              <a href="mailto:contact@elegancecouture.sn" className="text-[12px] text-[#FF9D00] hover:text-[#FFCF71] transition-colors tracking-wide">
                 contact@elegancecouture.sn
               </a>
-              <a href="tel:+221778137032" className="text-[12px] text-[#C9A96E] hover:text-[#e8d5b0] transition-colors tracking-wide">
+              <a href="tel:+221778137032" className="text-[12px] text-[#FF9D00] hover:text-[#FFCF71] transition-colors tracking-wide">
                 +221 77 813 70 32
               </a>
             </div>
