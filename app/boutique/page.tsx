@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
 import { ProductFilters } from "@/components/product-filters"
 import { normalizeImageUrls } from "@/lib/image-utils"
-import { prisma } from "@/lib/prisma"
+import { prisma, withPrismaRetry } from "@/lib/prisma"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 
@@ -21,10 +21,12 @@ interface BoutiquePageProps {
 export default async function BoutiquePage({ searchParams }: BoutiquePageProps) {
   const params = await searchParams
   const selectedCategory = params?.category || "all"
-  const productsFromDb = await prisma.product.findMany({
-    where: selectedCategory !== "all" ? { category: selectedCategory } : undefined,
-    orderBy: { createdAt: "desc" }
-  })
+  const productsFromDb = await withPrismaRetry(() =>
+    prisma.product.findMany({
+      where: selectedCategory !== "all" ? { category: selectedCategory } : undefined,
+      orderBy: { createdAt: "desc" }
+    })
+  )
   const products = productsFromDb.map((product) => ({
     ...product,
     images: normalizeImageUrls(product.images),

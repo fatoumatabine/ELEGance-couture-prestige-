@@ -69,8 +69,12 @@ export default function HomePage() {
   const [heroIndex, setHeroIndex] = useState(0);
   const [spotlightTab, setSpotlightTab] = useState("best");
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const hasLoadedHomeData = useRef(false);
 
   useEffect(() => {
+    if (hasLoadedHomeData.current) return;
+
+    hasLoadedHomeData.current = true;
     fetchProducts();
     fetchSiteImages();
   }, []);

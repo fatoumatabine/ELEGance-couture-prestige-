@@ -2,7 +2,7 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
 import { ProductFilters } from "@/components/product-filters"
-import { prisma } from "@/lib/prisma"
+import { prisma, withPrismaRetry } from "@/lib/prisma"
 
 export const metadata = {
   title: "Nuisettes - Sella Seduction",
@@ -10,10 +10,12 @@ export const metadata = {
 }
 
 export default async function NuisettesPage() {
-  const products = await prisma.product.findMany({
-    where: { category: "nuisettes" },
-    orderBy: { createdAt: "desc" }
-  })
+  const products = await withPrismaRetry(() =>
+    prisma.product.findMany({
+      where: { category: "nuisettes" },
+      orderBy: { createdAt: "desc" }
+    })
+  )
 
   return (
     <div className="min-h-screen flex flex-col">

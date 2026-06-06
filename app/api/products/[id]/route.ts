@@ -1,5 +1,6 @@
-import { prisma } from "@/lib/prisma";
+import { prisma, withPrismaRetry } from "@/lib/prisma";
 import { normalizeImageUrls } from "@/lib/image-utils";
+import { publicDataCacheHeaders } from "@/lib/http-cache";
 import { NextRequest, NextResponse } from "next/server";
 import { validateAdminToken } from "@/lib/auth";
 
@@ -15,18 +16,23 @@ export async function GET(
       return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
     }
 
-    const product = await prisma.product.findUnique({
-      where: { id: productId },
-    });
+    const product = await withPrismaRetry(() =>
+      prisma.product.findUnique({
+        where: { id: productId },
+      })
+    );
 
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    return NextResponse.json({
-      ...product,
-      images: normalizeImageUrls(product.images),
-    });
+    return NextResponse.json(
+      {
+        ...product,
+        images: normalizeImageUrls(product.images),
+      },
+      { headers: publicDataCacheHeaders }
+    );
   } catch (error) {
     console.error("GET /api/products/[id] error:", error);
     return NextResponse.json(

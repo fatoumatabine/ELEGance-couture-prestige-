@@ -1,19 +1,31 @@
 import { validateAdminToken } from "@/lib/auth";
+import { publicDataCacheHeaders } from "@/lib/http-cache";
 import { normalizeImageUrl } from "@/lib/image-utils";
-import { prisma } from "@/lib/prisma";
+import { prisma, withPrismaRetry } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-  const images = await prisma.siteImage.findMany({
-    orderBy: [{ section: "asc" }, { sortOrder: "asc" }, { title: "asc" }],
-  });
+  try {
+    const images = await withPrismaRetry(() =>
+      prisma.siteImage.findMany({
+        orderBy: [{ section: "asc" }, { sortOrder: "asc" }, { title: "asc" }],
+      })
+    );
 
-  return NextResponse.json(
-    images.map((image) => ({
-      ...image,
-      url: normalizeImageUrl(image.url) || image.url,
-    }))
-  );
+    return NextResponse.json(
+      images.map((image) => ({
+        ...image,
+        url: normalizeImageUrl(image.url) || image.url,
+      })),
+      { headers: publicDataCacheHeaders }
+    );
+  } catch (error) {
+    console.error("GET /api/site-images error:", error);
+    return NextResponse.json(
+      { error: "Erreur lors de la récupération des images du site" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {

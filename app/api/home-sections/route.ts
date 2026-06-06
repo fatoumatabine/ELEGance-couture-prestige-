@@ -1,13 +1,16 @@
 import { validateAdminToken } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { publicDataCacheHeaders } from "@/lib/http-cache";
+import { prisma, withPrismaRetry } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-  const sections = await prisma.homeSection.findMany({
-    orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-  });
+  const sections = await withPrismaRetry(() =>
+    prisma.homeSection.findMany({
+      orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+    })
+  );
 
-  return NextResponse.json(sections);
+  return NextResponse.json(sections, { headers: publicDataCacheHeaders });
 }
 
 export async function POST(request: NextRequest) {

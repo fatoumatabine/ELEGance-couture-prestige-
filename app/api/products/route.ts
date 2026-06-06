@@ -1,5 +1,6 @@
-import { prisma } from "@/lib/prisma";
+import { prisma, withPrismaRetry } from "@/lib/prisma";
 import { normalizeImageUrls } from "@/lib/image-utils";
+import { publicDataCacheHeaders } from "@/lib/http-cache";
 import { NextRequest, NextResponse } from "next/server";
 import { validateAdminToken } from "@/lib/auth";
 
@@ -8,16 +9,19 @@ export async function GET(request: NextRequest) {
   try {
     const category = request.nextUrl.searchParams.get("category");
 
-    const products = await prisma.product.findMany({
-      where: category ? { category } : undefined,
-      orderBy: { createdAt: "desc" },
-    });
+    const products = await withPrismaRetry(() =>
+      prisma.product.findMany({
+        where: category ? { category } : undefined,
+        orderBy: { createdAt: "desc" },
+      })
+    );
 
     return NextResponse.json(
       products.map((product) => ({
         ...product,
         images: normalizeImageUrls(product.images),
-      }))
+      })),
+      { headers: publicDataCacheHeaders }
     );
   } catch (error) {
     console.error("GET /api/products error:", error);
