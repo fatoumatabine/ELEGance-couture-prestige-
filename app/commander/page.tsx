@@ -280,14 +280,14 @@ export default function CommanderPage() {
       <Header />
 
       <main className="flex-1">
-        <div className="bg-muted/30 py-12 md:py-16">
+        <div className="bg-muted/30 py-10 sm:py-12 md:py-16">
           <div className="container mx-auto px-4">
             <BackButton className="mb-6" fallbackHref="/panier" />
-            <h1 className="font-serif text-4xl md:text-6xl font-bold text-center">Finaliser la commande</h1>
+            <h1 className="text-center font-serif text-3xl font-bold sm:text-4xl md:text-6xl">Finaliser la commande</h1>
           </div>
         </div>
 
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-4 py-8 sm:py-12">
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Form Section */}
@@ -337,7 +337,7 @@ export default function CommanderPage() {
                         type="button"
                         onClick={handleLocate}
                         disabled={isLocating}
-                        className="h-12 rounded-[6px] bg-[#FF9D00] px-6 font-bold text-[#180f08] hover:bg-[#e88e00]"
+                        className="h-12 w-full rounded-[6px] bg-[#FF9D00] px-4 font-bold text-[#180f08] hover:bg-[#e88e00] sm:w-auto sm:px-6"
                       >
                         {isLocating ? <Loader2 className="h-4 w-4 animate-spin" /> : <MapPin className="h-4 w-4" />}
                         {location ? "Modifier ma localisation" : "Partager ma localisation"}
@@ -408,14 +408,14 @@ export default function CommanderPage() {
 
                     {manualPayment && (
                       <div className="rounded-[8px] border border-[#f1c97f] bg-[#fff7e9] p-4">
-                        <div className="mb-3 flex items-start justify-between gap-3">
+                        <div className="mb-3 flex flex-col gap-2 min-[420px]:flex-row min-[420px]:items-start min-[420px]:justify-between min-[420px]:gap-3">
                           <div>
                             <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#B6771D]">
                               Paiement mobile
                             </p>
                             <p className="mt-1 text-sm font-semibold">{selectedPayment.label}</p>
                           </div>
-                          <p className="text-right text-sm font-bold text-[#B6771D]">
+                          <p className="break-words text-left text-sm font-bold text-[#B6771D] min-[420px]:text-right">
                             {totalFinal.toLocaleString()} FCFA
                           </p>
                         </div>
@@ -468,7 +468,7 @@ export default function CommanderPage() {
 
               {/* Order Summary */}
               <div className="lg:col-span-1">
-                <Card className="sticky top-24">
+                <Card className="lg:sticky lg:top-24">
                   <CardHeader>
                     <CardTitle>Résumé de la commande</CardTitle>
                   </CardHeader>
@@ -504,24 +504,24 @@ export default function CommanderPage() {
                     <Separator />
 
                     <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
+                      <div className="flex flex-wrap justify-between gap-2 text-sm">
                         <span className="text-muted-foreground">Sous-total</span>
                         <span className="font-medium">{total.toLocaleString()} CFA</span>
                       </div>
-                      <div className="flex justify-between text-sm">
+                      <div className="flex flex-wrap justify-between gap-2 text-sm">
                         <span className="text-muted-foreground">Livraison</span>
                         <span className={`font-medium ${fraisLivraison === 0 ? "text-emerald-700" : ""}`}>
                           {fraisLivraison === 0 ? "Offerte" : `${fraisLivraison.toLocaleString()} CFA`}
                         </span>
                       </div>
-                      <div className="flex justify-between text-sm">
+                      <div className="flex flex-wrap justify-between gap-2 text-sm">
                         <span className="text-muted-foreground">Paiement</span>
                         <span className="font-medium">{selectedPayment.shortLabel}</span>
                       </div>
                       <Separator />
-                      <div className="flex justify-between">
+                      <div className="flex flex-col gap-1 min-[420px]:flex-row min-[420px]:justify-between">
                         <span className="font-semibold text-lg">Total</span>
-                        <span className="font-bold text-2xl">{totalFinal.toLocaleString()} CFA</span>
+                        <span className="break-words font-bold text-2xl">{totalFinal.toLocaleString()} CFA</span>
                       </div>
                     </div>
 

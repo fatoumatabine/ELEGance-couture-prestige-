@@ -51,9 +51,9 @@ export function ProductInfo({ product }: ProductInfoProps) {
   }
 
   return (
-    <div className="max-w-[620px] space-y-6">
+    <div className="w-full max-w-[620px] space-y-6">
       <div>
-        <div className="mb-3 flex items-center gap-2">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-[#fff1d4] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#B6771D]">
             {product.category}
           </span>
@@ -68,12 +68,12 @@ export function ProductInfo({ product }: ProductInfoProps) {
           )}
         </div>
 
-        <h1 className="mb-3 font-serif text-3xl font-bold leading-tight text-[#111827] md:text-4xl">
+        <h1 className="mb-3 break-words font-serif text-2xl font-bold leading-tight text-[#111827] sm:text-3xl md:text-4xl">
           {product.name}
         </h1>
 
         <div className="flex flex-wrap items-center gap-3">
-          <span className="text-2xl font-bold text-[#d97706] md:text-3xl">
+          <span className="break-words text-xl font-bold text-[#d97706] sm:text-2xl md:text-3xl">
             {product.price.toLocaleString()} CFA
             {optionLabels.priceSuffix && (
               <span className="ml-1 text-base font-semibold text-[#B6771D]">{optionLabels.priceSuffix}</span>
@@ -107,14 +107,14 @@ export function ProductInfo({ product }: ProductInfoProps) {
       )}
 
       <div className="border-y border-[#ead3aa] py-5">
-        <p className="text-base leading-relaxed text-slate-700">
+        <p className="break-words text-sm leading-relaxed text-slate-700 sm:text-base">
           {product.description}
         </p>
       </div>
 
       {availableSizes.length > 0 && (
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <Label className="text-sm font-bold text-[#180f08]">{optionLabels.optionLabel}</Label>
             {optionLabels.showSizeGuide && (
               <button className="text-xs text-[#d97706] underline">Guide des tailles</button>
@@ -127,7 +127,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
                   <RadioGroupItem value={size} id={`size-${size}`} className="peer sr-only" />
                   <Label
                     htmlFor={`size-${size}`}
-                    className="flex h-12 min-w-14 cursor-pointer items-center justify-center rounded-[6px] border-2 border-slate-200 px-4 text-sm font-semibold transition-all hover:border-[#FF9D00] peer-data-[state=checked]:border-[#FF9D00] peer-data-[state=checked]:bg-[#fff6e6]"
+                    className="flex h-11 min-w-12 cursor-pointer items-center justify-center rounded-[6px] border-2 border-slate-200 px-3 text-sm font-semibold transition-all hover:border-[#FF9D00] peer-data-[state=checked]:border-[#FF9D00] peer-data-[state=checked]:bg-[#fff6e6] sm:h-12 sm:min-w-14 sm:px-4"
                   >
                     {size}
                   </Label>
@@ -151,7 +151,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
                   <RadioGroupItem value={color} id={`color-${color}`} className="peer sr-only" />
                   <Label
                     htmlFor={`color-${color}`}
-                    className="flex h-11 cursor-pointer items-center justify-center rounded-[6px] border-2 border-slate-200 px-4 text-sm font-semibold transition-all hover:border-[#FF9D00] peer-data-[state=checked]:border-[#FF9D00] peer-data-[state=checked]:bg-[#fff6e6]"
+                    className="flex min-h-11 cursor-pointer items-center justify-center rounded-[6px] border-2 border-slate-200 px-3 py-2 text-sm font-semibold transition-all hover:border-[#FF9D00] peer-data-[state=checked]:border-[#FF9D00] peer-data-[state=checked]:bg-[#fff6e6] sm:px-4"
                   >
                     {color}
                   </Label>
@@ -194,7 +194,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
           <div className="flex w-full gap-3 sm:w-auto">
             <Button
-              className="h-12 flex-1 rounded-[6px] bg-[#FF9D00] px-6 text-sm font-bold text-[#180f08] shadow-[0_14px_30px_rgba(255,157,0,0.22)] hover:bg-[#e88e00] sm:min-w-[240px]"
+              className="h-12 min-w-0 flex-1 rounded-[6px] bg-[#FF9D00] px-4 text-sm font-bold text-[#180f08] shadow-[0_14px_30px_rgba(255,157,0,0.22)] hover:bg-[#e88e00] sm:min-w-[240px] sm:px-6"
               onClick={handleAddToCart}
               disabled={!product.inStock}
             >

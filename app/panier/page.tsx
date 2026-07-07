@@ -290,7 +290,7 @@ export default function PanierPage() {
             <p className="text-muted-foreground mb-8 leading-relaxed">
               Découvrez notre collection et ajoutez des produits à votre panier
             </p>
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="w-full sm:w-auto">
               <Link href="/boutique">
                 Découvrir la boutique
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -316,25 +316,25 @@ export default function PanierPage() {
               <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.32em] text-[#B6771D] dark:text-[#FFCF71]">
                 Checkout
               </p>
-              <h1 className="font-serif text-4xl font-bold leading-none md:text-5xl">
+              <h1 className="font-serif text-3xl font-bold leading-none sm:text-4xl md:text-5xl">
                 Mon panier
               </h1>
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-[#7B542F] dark:text-[#d7ba8c]">
                 Vérifiez vos articles, partagez votre position et confirmez rapidement votre commande.
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-col gap-2 min-[420px]:flex-row min-[420px]:flex-wrap">
               <button
                 type="button"
                 onClick={handleClearCart}
-                className="inline-flex h-10 items-center gap-2 rounded-[6px] border border-[#ead3aa] bg-white/70 px-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B542F] transition-colors hover:border-rose-300 hover:text-rose-600 dark:border-[#3b2717] dark:bg-[#211207] dark:text-[#d7ba8c]"
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-[6px] border border-[#ead3aa] bg-white/70 px-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B542F] transition-colors hover:border-rose-300 hover:text-rose-600 dark:border-[#3b2717] dark:bg-[#211207] dark:text-[#d7ba8c]"
               >
                 <Trash2 className="h-3.5 w-3.5" />
                 Vider
               </button>
               <Link
                 href="/boutique"
-                className="inline-flex h-10 items-center gap-2 rounded-[6px] border border-[#ead3aa] bg-white/70 px-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B542F] transition-colors hover:border-[#FF9D00] hover:text-[#B6771D] dark:border-[#3b2717] dark:bg-[#211207] dark:text-[#d7ba8c]"
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-[6px] border border-[#ead3aa] bg-white/70 px-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#7B542F] transition-colors hover:border-[#FF9D00] hover:text-[#B6771D] dark:border-[#3b2717] dark:bg-[#211207] dark:text-[#d7ba8c]"
               >
                 Continuer
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -353,7 +353,7 @@ export default function PanierPage() {
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B6771D] dark:text-[#FFCF71]">{stat.label}</p>
                   <stat.icon className="h-4 w-4 text-[#FF9D00]" />
                 </div>
-                <p className="font-serif text-2xl font-bold">{stat.value}</p>
+                <p className="break-words font-serif text-xl font-bold sm:text-2xl">{stat.value}</p>
               </div>
             ))}
           </div>
@@ -361,7 +361,7 @@ export default function PanierPage() {
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_400px] xl:gap-10">
             <section className="space-y-4">
               <div className="flex items-center justify-between gap-4">
-                <div>
+                <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#B6771D] dark:text-[#FFCF71]">
                     Sélection
                   </p>
@@ -384,7 +384,7 @@ export default function PanierPage() {
                 return (
                   <article
                     key={`${item.product.id}-${item.selectedSize || "no-size"}-${item.selectedColor || "no-color"}-${index}`}
-                    className="grid gap-4 rounded-[8px] border border-[#ead3aa] bg-white p-4 shadow-[0_16px_44px_rgba(123,84,47,0.10)] dark:border-[#3b2717] dark:bg-[#211207] sm:grid-cols-[148px_minmax(0,1fr)]"
+                    className="grid gap-4 rounded-[8px] border border-[#ead3aa] bg-white p-4 shadow-[0_16px_44px_rgba(123,84,47,0.10)] dark:border-[#3b2717] dark:bg-[#211207] sm:grid-cols-[140px_minmax(0,1fr)] lg:grid-cols-[148px_minmax(0,1fr)]"
                   >
                     <Link
                       href={`/produit/${item.product.id}`}
@@ -404,14 +404,14 @@ export default function PanierPage() {
                     </Link>
 
                     <div className="flex min-w-0 flex-col justify-between gap-5">
-                      <div className="flex items-start justify-between gap-4">
+                      <div className="flex flex-col gap-3 min-[420px]:flex-row min-[420px]:items-start min-[420px]:justify-between min-[420px]:gap-4">
                         <div className="min-w-0">
                           <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#B6771D] dark:text-[#FFCF71]">
                             {item.product.category}
                           </p>
                           <Link
                             href={`/produit/${item.product.id}`}
-                            className="font-serif text-2xl font-bold leading-tight transition-colors hover:text-[#B6771D]"
+                            className="break-words font-serif text-xl font-bold leading-tight transition-colors hover:text-[#B6771D] sm:text-2xl"
                           >
                             {item.product.name}
                           </Link>
@@ -466,7 +466,7 @@ export default function PanierPage() {
 
                         <div className="text-left sm:text-right">
                           <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#B6771D] dark:text-[#FFCF71]">Total ligne</p>
-                          <p className="mt-1 text-2xl font-bold">
+                          <p className="mt-1 break-words text-xl font-bold sm:text-2xl">
                             {lineTotal.toLocaleString()} FCFA
                           </p>
                         </div>
@@ -478,7 +478,7 @@ export default function PanierPage() {
             </section>
 
             <aside>
-              <div className="sticky top-28 overflow-hidden rounded-[8px] border border-[#ead3aa] bg-white shadow-[0_24px_70px_rgba(123,84,47,0.14)] dark:border-[#3b2717] dark:bg-[#211207]">
+              <div className="overflow-hidden rounded-[8px] border border-[#ead3aa] bg-white shadow-[0_24px_70px_rgba(123,84,47,0.14)] dark:border-[#3b2717] dark:bg-[#211207] lg:sticky lg:top-28">
                 <div className="border-b border-[#ead3aa] bg-[#fff3dd] p-5 dark:border-[#3b2717] dark:bg-[#2b190d]">
                   <div className="flex items-start justify-between gap-4">
                     <div>
@@ -497,20 +497,20 @@ export default function PanierPage() {
 
                 <div className="p-5">
                   <div className="space-y-3 text-sm">
-                    <div className="flex justify-between gap-4">
+                    <div className="flex flex-wrap justify-between gap-4">
                       <span className="text-[#7B542F] dark:text-[#d7ba8c]">Sous-total</span>
                       <span className="font-semibold">{total.toLocaleString()} FCFA</span>
                     </div>
-                    <div className="flex justify-between gap-4">
+                    <div className="flex flex-wrap justify-between gap-4">
                       <span className="text-[#7B542F] dark:text-[#d7ba8c]">Livraison</span>
                       <span className={`font-semibold ${hasFreeDelivery ? "text-emerald-700" : ""}`}>
                         {hasFreeDelivery ? "Offerte" : `${fraisLivraison.toLocaleString()} FCFA`}
                       </span>
                     </div>
                     <Separator className="bg-[#ead3aa] dark:bg-[#3b2717]" />
-                    <div className="flex items-end justify-between gap-4">
+                    <div className="flex flex-col gap-1 min-[420px]:flex-row min-[420px]:items-end min-[420px]:justify-between min-[420px]:gap-4">
                       <span className="text-base font-bold">Total</span>
-                      <span className="text-3xl font-bold">
+                      <span className="break-words text-2xl font-bold sm:text-3xl">
                         {totalFinal.toLocaleString()} FCFA
                       </span>
                     </div>

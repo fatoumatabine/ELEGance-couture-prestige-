@@ -323,7 +323,7 @@ export default function AdminPage() {
   const [username, setUsername] = useState("");
   const [token, setToken] = useState("");
   const [activeTab, setActiveTab] = useState<Tab>("dashboard");
-  const [productView, setProductView] = useState<ProductView>("table");
+  const [productView, setProductView] = useState<ProductView>("cards");
   const [adminTheme, setAdminTheme] = useState<AdminTheme>("light");
   const [adminThemeLoaded, setAdminThemeLoaded] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
@@ -1076,7 +1076,7 @@ export default function AdminPage() {
   if (!isLoggedIn) {
     return (
       <div
-        className="admin-dashboard-theme min-h-screen bg-[var(--admin-bg)] lg:flex"
+        className="admin-dashboard-theme min-h-dvh bg-[var(--admin-bg)] lg:flex"
         data-admin-theme={adminTheme}
         style={adminStyle}
       >
@@ -1127,7 +1127,7 @@ export default function AdminPage() {
         </div>
 
         {/* Right login form */}
-        <div className="relative flex min-h-screen flex-1 flex-col items-center justify-start px-6 py-20 sm:justify-center sm:py-10">
+        <div className="relative flex min-h-dvh flex-1 flex-col items-center justify-start px-4 py-20 sm:justify-center sm:px-6 sm:py-10">
           {/* Back link */}
           <div className="absolute top-6 left-6">
             <Link href="/" className="flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-[var(--admin-text)] hover:text-[var(--admin-accent)] transition-colors">
@@ -1136,7 +1136,7 @@ export default function AdminPage() {
             </Link>
           </div>
 
-          <div className="w-full max-w-md rounded-[8px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-6 shadow-[0_22px_70px_rgba(var(--admin-text-rgb),0.14)]">
+          <div className="w-full max-w-md rounded-[8px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-5 shadow-[0_22px_70px_rgba(var(--admin-text-rgb),0.14)] sm:p-6">
             {/* Logo */}
             <div className="mb-10 text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-[8px] border border-[var(--admin-accent)]/40 bg-[var(--admin-accent)]/10 mb-6">
@@ -1196,13 +1196,13 @@ export default function AdminPage() {
   /* ─────────── DASHBOARD ─────────── */
   return (
     <div
-      className="admin-dashboard-theme flex h-screen overflow-hidden bg-[var(--admin-bg)] text-[var(--admin-text)]"
+      className="admin-dashboard-theme flex h-dvh overflow-hidden bg-[var(--admin-bg)] text-[var(--admin-text)]"
       data-admin-theme={adminTheme}
       style={adminStyle}
     >
 
       {/* ── Sidebar ── */}
-      <aside className="hidden h-full w-64 flex-shrink-0 flex-col border-r border-[var(--admin-soft)] bg-[var(--admin-bg)] shadow-[8px_0_28px_rgba(var(--admin-text-rgb),0.06)] md:flex">
+      <aside className="hidden h-full w-64 flex-shrink-0 flex-col border-r border-[var(--admin-soft)] bg-[var(--admin-bg)] shadow-[8px_0_28px_rgba(var(--admin-text-rgb),0.06)] lg:flex">
         {/* Brand */}
         <div className="px-6 py-8 border-b border-[var(--admin-soft)]">
           <div className="flex items-center gap-3 mb-1">
@@ -1272,17 +1272,17 @@ export default function AdminPage() {
       <div className="flex min-h-0 flex-1 flex-col">
 
         {/* Header */}
-        <header className="z-30 shrink-0 border-b border-[var(--admin-soft)] bg-[var(--admin-bg)]/95 px-5 py-4 backdrop-blur md:px-8">
-          <div className="flex items-center justify-between gap-4">
-          <div>
-            <h1 className="font-serif text-xl font-bold text-foreground capitalize">
+        <header className="z-30 shrink-0 border-b border-[var(--admin-soft)] bg-[var(--admin-bg)]/95 px-4 py-4 backdrop-blur md:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <h1 className="font-serif text-lg font-bold capitalize text-foreground sm:text-xl">
               {activeMeta.title}
             </h1>
-            <p className="text-muted-foreground text-xs tracking-wide mt-0.5">
+            <p className="mt-0.5 line-clamp-2 text-xs tracking-wide text-muted-foreground">
               {activeMeta.description}
             </p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3 sm:justify-end lg:gap-4">
             <button
               type="button"
               onClick={() => setAdminTheme((theme) => (theme === "dark" ? "light" : "dark"))}
@@ -1303,7 +1303,7 @@ export default function AdminPage() {
             </div>
           </div>
           </div>
-          <div className="mt-4 flex gap-2 overflow-x-auto md:hidden">
+          <div className="mt-4 flex gap-2 overflow-x-auto pb-1 scrollbar-hide lg:hidden">
             {navItems.map((item) => (
               <button
                 key={item.id}
@@ -1321,20 +1321,20 @@ export default function AdminPage() {
           </div>
         </header>
 
-        <main className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-          <section className="mb-6 rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] px-5 py-5 shadow-sm">
+        <main className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 lg:p-8">
+          <section className="mb-6 rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] px-4 py-5 shadow-sm sm:px-5">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex items-start gap-4">
+              <div className="flex min-w-0 items-start gap-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[8px] bg-[var(--admin-soft)] text-[var(--admin-bg)]">
                   <ActiveTabIcon className="h-5 w-5" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--admin-text)]">{activeMeta.eyebrow}</p>
-                  <h2 className="font-serif text-2xl font-bold text-[var(--admin-text)]">{activeMeta.title}</h2>
+                  <h2 className="break-words font-serif text-xl font-bold text-[var(--admin-text)] sm:text-2xl">{activeMeta.title}</h2>
                   <p className="mt-1 max-w-2xl text-sm leading-relaxed text-[var(--admin-text)]">{activeMeta.description}</p>
                 </div>
               </div>
-              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--admin-soft)] bg-[var(--admin-bg)] px-4 py-2 text-xs font-semibold text-[var(--admin-text)]">
+              <div className="inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-[var(--admin-soft)] bg-[var(--admin-bg)] px-4 py-2 text-xs font-semibold text-[var(--admin-text)]">
                 <span className="h-2 w-2 rounded-full bg-[var(--admin-accent)]" />
                 {activeMeta.metric}
               </div>
@@ -1343,14 +1343,14 @@ export default function AdminPage() {
 
           {activeTab === "dashboard" && (
             <>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <div className="mb-8 grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 lg:grid-cols-4">
                 {[
                   { label: "Produits", value: products.length, icon: Package, color: "text-[var(--admin-accent)]" },
                   { label: "Catégories", value: categories.length, icon: Tags, color: "text-[var(--admin-text)]" },
                   { label: "Collections", value: collections.length, icon: Layers, color: "text-emerald-600" },
                   { label: "Images site", value: siteImages.length, icon: Images, color: "text-blue-600" },
                 ].map((stat, i) => (
-                  <div key={i} className="group rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-5 shadow-sm transition-colors hover:border-[var(--admin-accent)]/60">
+                  <div key={i} className="group rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-4 shadow-sm transition-colors hover:border-[var(--admin-accent)]/60 sm:p-5">
                     <div className="flex items-start justify-between mb-3">
                       <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground">{stat.label}</p>
                       <stat.icon className={`w-4 h-4 ${stat.color} opacity-70`} />
@@ -1361,7 +1361,7 @@ export default function AdminPage() {
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
-                <div className="bg-[var(--admin-panel)] border border-border p-6">
+                <div className="border border-border bg-[var(--admin-panel)] p-4 sm:p-6">
                   <h2 className="font-serif text-xl font-bold mb-2">Priorités admin</h2>
                   <p className="text-sm text-muted-foreground mb-5">Ce dashboard pilote maintenant le catalogue, les menus, l'accueil et les images de l'interface.</p>
                   {[
@@ -1379,11 +1379,11 @@ export default function AdminPage() {
 
                 <div className="bg-[var(--admin-panel)] border border-border p-6">
                   <h2 className="font-serif text-xl font-bold mb-5">Accès rapide</h2>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2">
                     {navItems.slice(1, 7).map((item) => (
-                      <button key={item.id} onClick={() => setActiveTab(item.id)} className="flex items-center gap-3 border border-border p-4 text-left transition-colors hover:border-[var(--admin-accent)] hover:bg-[var(--admin-accent)]/5">
+                      <button key={item.id} onClick={() => setActiveTab(item.id)} className="flex min-w-0 items-center gap-3 border border-border p-4 text-left transition-colors hover:border-[var(--admin-accent)] hover:bg-[var(--admin-accent)]/5">
                         <item.icon className="h-4 w-4 text-[var(--admin-accent)]" />
-                        <span className="text-xs font-semibold uppercase tracking-[0.12em]">{item.label}</span>
+                        <span className="min-w-0 text-xs font-semibold uppercase tracking-[0.12em]">{item.label}</span>
                       </button>
                     ))}
                   </div>
@@ -1395,14 +1395,14 @@ export default function AdminPage() {
           {/* ── Stats Row ── */}
           {activeTab === "products" && (
             <>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <div className="mb-8 grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 lg:grid-cols-4">
                 {[
                   { label: "Total Produits", value: products.length, icon: Package, color: "text-[var(--admin-accent)]" },
                   { label: "En Stock", value: inStockCount, icon: TrendingUp, color: "text-emerald-600" },
                   { label: "Rupture", value: products.length - inStockCount, icon: X, color: "text-rose-500" },
                   { label: "Valeur Totale", value: `${totalValue.toLocaleString()}`, icon: ShoppingCart, sub: "XOF", color: "text-[var(--admin-accent)]" },
                 ].map((stat, i) => (
-                  <div key={i} className="bg-[var(--admin-panel)] border border-border p-5 group hover:border-[var(--admin-accent)]/30 transition-colors">
+                  <div key={i} className="group border border-border bg-[var(--admin-panel)] p-4 transition-colors hover:border-[var(--admin-accent)]/30 sm:p-5">
                     <div className="flex items-start justify-between mb-3">
                       <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground">{stat.label}</p>
                       <stat.icon className={`w-4 h-4 ${stat.color} opacity-60`} />
@@ -1755,7 +1755,7 @@ export default function AdminPage() {
               <div className="overflow-hidden rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] shadow-sm">
                 {productView === "table" ? (
                 <div className="overflow-x-auto">
-                  <table className="w-full">
+                  <table className="w-full min-w-[760px]">
                     <thead>
                       <tr className="border-b border-[var(--admin-soft)] bg-[var(--admin-bg)]/70">
                         <th className="px-5 py-4 text-left text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-medium">Produit</th>
@@ -1779,7 +1779,7 @@ export default function AdminPage() {
                                   </div>
                                 )}
                               </div>
-                              <div>
+                              <div className="min-w-0">
                                 <p className="text-sm font-semibold text-foreground line-clamp-1">{product.name}</p>
                                 <p className="text-xs text-muted-foreground line-clamp-2 max-w-[200px] mt-1">{product.description}</p>
                               </div>
@@ -1880,11 +1880,11 @@ export default function AdminPage() {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="border-t border-[var(--admin-soft)] px-5 py-3.5 flex items-center justify-between bg-[var(--admin-bg)]/35">
+                  <div className="flex flex-col gap-3 border-t border-[var(--admin-soft)] bg-[var(--admin-bg)]/35 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:px-5">
                     <p className="text-xs text-muted-foreground">
                       {startIndex + 1}–{Math.min(startIndex + itemsPerPage, products.length)} sur {products.length}
                     </p>
-                    <div className="flex gap-1">
+                    <div className="flex flex-wrap gap-1">
                       <button onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1}
                         className="px-3 py-1.5 border border-border text-xs text-foreground hover:border-[var(--admin-accent)] disabled:opacity-40 transition-colors">
                         Préc.
@@ -1908,7 +1908,7 @@ export default function AdminPage() {
 
           {activeTab === "categories" && (
             <>
-              <div className="mb-6 grid gap-4 md:grid-cols-3">
+              <div className="mb-6 grid gap-4 min-[420px]:grid-cols-2 md:grid-cols-3">
                 {[
                   { label: "Racines", value: rootCategoryCount, icon: Tags },
                   { label: "Sous-catégories", value: childCategoryCount, icon: Layers },
@@ -1924,8 +1924,8 @@ export default function AdminPage() {
                 ))}
               </div>
 
-              <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
-              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-6 shadow-sm">
+              <div className="grid gap-6 lg:grid-cols-[minmax(0,360px)_1fr]">
+              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-4 shadow-sm sm:p-6">
                 <h2 className="font-serif text-xl font-bold">Nouvelle catégorie</h2>
                 <p className="mb-5 mt-1 text-sm text-[var(--admin-text)]">Créez une famille principale ou une sous-rubrique liée à une catégorie existante.</p>
                 <div className="space-y-4">
@@ -1953,8 +1953,8 @@ export default function AdminPage() {
                 ) : (
                   <div className="divide-y divide-[var(--admin-soft)]">
                     {categories.map((category) => (
-                      <div key={category.id} className="flex items-center justify-between gap-4 p-4 transition-colors hover:bg-[var(--admin-bg)]">
-                        <div>
+                      <div key={category.id} className="flex flex-col gap-3 p-4 transition-colors hover:bg-[var(--admin-bg)] min-[460px]:flex-row min-[460px]:items-center min-[460px]:justify-between min-[460px]:gap-4">
+                        <div className="min-w-0">
                           <p className="font-semibold text-[var(--admin-text)]">{category.name}</p>
                           <p className="text-xs text-[var(--admin-text)]">{category.slug} · {category.type}{category.parentSlug ? ` · parent: ${category.parentSlug}` : ""}</p>
                         </div>
@@ -1970,7 +1970,7 @@ export default function AdminPage() {
 
           {activeTab === "collections" && (
             <>
-              <div className="mb-6 grid gap-4 md:grid-cols-3">
+              <div className="mb-6 grid gap-4 min-[420px]:grid-cols-2 md:grid-cols-3">
                 {["femme", "homme", "enfant"].map((gender) => (
                   <div key={gender} className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-5 shadow-sm">
                     <div className="mb-3 flex items-center justify-between">
@@ -1982,8 +1982,8 @@ export default function AdminPage() {
                 ))}
               </div>
 
-              <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
-              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-6 shadow-sm">
+              <div className="grid gap-6 lg:grid-cols-[minmax(0,360px)_1fr]">
+              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-4 shadow-sm sm:p-6">
                 <h2 className="font-serif text-xl font-bold">Nouvelle collection</h2>
                 <p className="mb-5 mt-1 text-sm text-[var(--admin-text)]">Ajoutez un groupe de produits qui apparaîtra dans la navigation et les filtres.</p>
                 <div className="space-y-4">
@@ -2028,7 +2028,7 @@ export default function AdminPage() {
 
           {activeTab === "images" && (
             <>
-              <div className="mb-6 grid gap-4 md:grid-cols-3">
+              <div className="mb-6 grid gap-4 min-[420px]:grid-cols-2 md:grid-cols-3">
                 {[
                   { label: "Images", value: siteImages.length, icon: Images },
                   { label: "Sections", value: imageSectionCount, icon: Layers },
@@ -2044,8 +2044,8 @@ export default function AdminPage() {
                 ))}
               </div>
 
-              <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
-              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-6 shadow-sm">
+              <div className="grid gap-6 lg:grid-cols-[minmax(0,380px)_1fr]">
+              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-4 shadow-sm sm:p-6">
                 <h2 className="font-serif text-xl font-bold">Image d'interface</h2>
                 <p className="mb-5 mt-1 text-sm text-[var(--admin-text)]">Associez chaque visuel à une clé stable pour l'utiliser dans les pages publiques.</p>
                 <div className="space-y-4">
@@ -2054,7 +2054,7 @@ export default function AdminPage() {
                   <Input placeholder="Section: home, collections..." value={quickForms.imageSection} onChange={(e) => setQuickForms({ ...quickForms, imageSection: e.target.value })} />
                   <div className="space-y-3 rounded-[6px] border border-dashed border-border p-4">
                     <Input placeholder="URL Cloudinary ou image" value={quickForms.imageUrl} onChange={(e) => setQuickForms({ ...quickForms, imageUrl: e.target.value })} />
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-col gap-3 min-[420px]:flex-row min-[420px]:items-center">
                       <input id="site-image-upload" type="file" accept="image/*" onChange={handleSiteImageUpload} disabled={uploadingSiteImage} className="hidden" />
                       <label htmlFor="site-image-upload" className="inline-flex cursor-pointer items-center gap-2 bg-[var(--admin-text)] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white transition-colors hover:bg-[var(--admin-accent)] hover:text-[var(--admin-text)]">
                         {uploadingSiteImage ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
@@ -2094,8 +2094,8 @@ export default function AdminPage() {
           )}
 
           {activeTab === "home" && (
-            <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
-              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-6 shadow-sm">
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,380px)_1fr]">
+              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-4 shadow-sm sm:p-6">
                 <h2 className="font-serif text-xl font-bold">Section accueil</h2>
                 <p className="mb-5 mt-1 text-sm text-[var(--admin-text)]">Préparez les contenus réutilisables sur la première page.</p>
                 <div className="space-y-4">
@@ -2140,7 +2140,7 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              <div className="mb-6 rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-6 shadow-sm">
+              <div className="mb-6 rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-4 shadow-sm sm:p-6">
                 <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--admin-text)]">Paiements manuels</p>
@@ -2150,7 +2150,7 @@ export default function AdminPage() {
                   <button
                     type="button"
                     onClick={handleSavePaymentSettings}
-                    className="rounded-[6px] bg-[var(--admin-accent)] px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[var(--admin-text)] shadow-[0_12px_28px_rgba(var(--admin-accent-rgb),0.18)] transition-colors hover:bg-[var(--admin-soft)] hover:text-[var(--admin-bg)]"
+                    className="w-full rounded-[6px] bg-[var(--admin-accent)] px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[var(--admin-text)] shadow-[0_12px_28px_rgba(var(--admin-accent-rgb),0.18)] transition-colors hover:bg-[var(--admin-soft)] hover:text-[var(--admin-bg)] sm:w-auto"
                   >
                     Sauvegarder
                   </button>
@@ -2196,8 +2196,8 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
-              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-6 shadow-sm">
+              <div className="grid gap-6 lg:grid-cols-[minmax(0,380px)_1fr]">
+              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-4 shadow-sm sm:p-6">
                 <h2 className="font-serif text-xl font-bold">Réglage boutique</h2>
                 <p className="mb-5 mt-1 text-sm text-[var(--admin-text)]">Ajoutez les valeurs globales utilisées par la boutique et le footer.</p>
                 <div className="space-y-4">
@@ -2227,8 +2227,8 @@ export default function AdminPage() {
           )}
 
           {activeTab === "security" && (
-            <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.5fr)]">
-              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-6 shadow-sm">
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(280px,0.5fr)]">
+              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-4 shadow-sm sm:p-6">
                 <h2 className="font-serif text-xl font-bold mb-3">Sécurité admin</h2>
                 <p className="text-sm text-[var(--admin-text)] mb-5">L'authentification utilise un JWT signé HS256. Les identifiants se règlent dans les variables d'environnement.</p>
                 <div className="grid gap-3 sm:grid-cols-3">
@@ -2244,7 +2244,7 @@ export default function AdminPage() {
                   ))}
                 </div>
               </div>
-              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-bg)] p-6 shadow-sm">
+              <div className="rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-bg)] p-4 shadow-sm sm:p-6">
                 <ShieldCheck className="mb-4 h-8 w-8 text-[var(--admin-accent)]" />
                 <h3 className="font-serif text-lg font-bold text-[var(--admin-text)]">Bonnes pratiques</h3>
                 <p className="mt-2 text-sm leading-relaxed text-[var(--admin-text)]">Utilisez un mot de passe fort, gardez `JWT_SECRET` privé et changez-le après une fuite ou un accès suspect.</p>
@@ -2256,14 +2256,14 @@ export default function AdminPage() {
           {activeTab === "orders" && (
             <>
               {/* Stats */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <div className="mb-8 grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 lg:grid-cols-4">
                 {[
                   { label: "Total Commandes", value: orders.length, icon: ShoppingCart, color: "text-[var(--admin-accent)]" },
                   { label: "En Attente", value: orders.filter(o => o.status === 'pending').length, icon: Clock, color: "text-amber-600" },
                   { label: "Confirmées", value: orders.filter(o => o.status === 'confirmed').length, icon: CheckCircle, color: "text-emerald-600" },
                   { label: "Livrées", value: orders.filter(o => o.status === 'delivered').length, icon: Truck, color: "text-blue-600" },
                 ].map((stat, i) => (
-                  <div key={i} className="bg-[var(--admin-panel)] border border-border p-5 group hover:border-[var(--admin-accent)]/30 transition-colors">
+                  <div key={i} className="group border border-border bg-[var(--admin-panel)] p-4 transition-colors hover:border-[var(--admin-accent)]/30 sm:p-5">
                     <div className="flex items-start justify-between mb-3">
                       <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground">{stat.label}</p>
                       <stat.icon className={`w-4 h-4 ${stat.color} opacity-60`} />
@@ -2274,7 +2274,7 @@ export default function AdminPage() {
               </div>
 
               {/* Orders List */}
-              <div className="bg-[var(--admin-panel)] border border-border">
+              <div className="border border-border bg-[var(--admin-panel)]">
                 <div className="px-5 py-4 border-b border-border">
                   <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex items-center gap-3">
@@ -2317,13 +2317,13 @@ export default function AdminPage() {
                 </div>
                 
                 {orders.length === 0 ? (
-                  <div className="p-16 text-center">
+                  <div className="p-8 text-center sm:p-16">
                     <ShoppingCart className="w-10 h-10 mx-auto text-[var(--admin-accent)]/40 mb-4" />
                     <h3 className="font-serif text-xl font-semibold text-foreground mb-2">Aucune commande</h3>
                     <p className="text-muted-foreground text-sm tracking-wide">Les commandes apparaîtront ici dès qu'un client en passera une.</p>
                   </div>
                 ) : filteredOrders.length === 0 ? (
-                  <div className="p-16 text-center">
+                  <div className="p-8 text-center sm:p-16">
                     <Search className="w-10 h-10 mx-auto text-[var(--admin-accent)]/40 mb-4" />
                     <h3 className="font-serif text-xl font-semibold text-foreground mb-2">Aucun résultat</h3>
                     <p className="text-muted-foreground text-sm tracking-wide">Essayez un autre téléphone, numéro de commande ou statut.</p>
@@ -2340,10 +2340,10 @@ export default function AdminPage() {
                         const manualOrderPayment = isManualMobilePayment(order.paiement);
 
                         return (
-                          <div key={order.id} className="p-5 hover:bg-muted/30 transition-colors">
+                          <div key={order.id} className="p-4 transition-colors hover:bg-muted/30 sm:p-5">
                             <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
                               <div className="min-w-0 flex-1">
-                                <div className="flex items-center gap-3 mb-2">
+                                <div className="mb-2 flex flex-wrap items-center gap-3">
                                   <span className="font-semibold text-foreground">#{order.id}</span>
                                   <StatusBadge status={order.status} />
                                 </div>
@@ -2497,7 +2497,7 @@ export default function AdminPage() {
                       <p className="text-xs text-muted-foreground">
                         Affichage {orderStartIndex + 1}-{Math.min(orderStartIndex + ordersPerPage, filteredOrders.length)} sur {filteredOrders.length}
                       </p>
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <button
                           type="button"
                           onClick={() => setOrderCurrentPage((p) => Math.max(1, p - 1))}
@@ -2536,13 +2536,13 @@ export default function AdminPage() {
           {activeTab === "contacts" && (
             <>
               {/* Stats */}
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+              <div className="mb-8 grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 lg:grid-cols-3">
                 {[
                   { label: "Total Messages", value: contacts.length, icon: MessageCircle, color: "text-[var(--admin-accent)]" },
                   { label: "Non Lus", value: contacts.filter(c => !c.lu).length, icon: Eye, color: "text-amber-600" },
                   { label: "Lus", value: contacts.filter(c => c.lu).length, icon: Check, color: "text-emerald-600" },
                 ].map((stat, i) => (
-                  <div key={i} className="bg-[var(--admin-panel)] border border-border p-5 group hover:border-[var(--admin-accent)]/30 transition-colors">
+                  <div key={i} className="group border border-border bg-[var(--admin-panel)] p-4 transition-colors hover:border-[var(--admin-accent)]/30 sm:p-5">
                     <div className="flex items-start justify-between mb-3">
                       <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground">{stat.label}</p>
                       <stat.icon className={`w-4 h-4 ${stat.color} opacity-60`} />
@@ -2553,14 +2553,14 @@ export default function AdminPage() {
               </div>
 
               {/* Contacts List */}
-              <div className="bg-[var(--admin-panel)] border border-border">
+              <div className="border border-border bg-[var(--admin-panel)]">
                 <div className="px-5 py-4 border-b border-border flex items-center gap-3">
                   <div className="w-1 h-5 bg-[var(--admin-accent)]" />
                   <h2 className="font-serif text-lg font-semibold text-foreground">Messages</h2>
                 </div>
                 
                 {contacts.length === 0 ? (
-                  <div className="p-16 text-center">
+                  <div className="p-8 text-center sm:p-16">
                     <MessageCircle className="w-10 h-10 mx-auto text-[var(--admin-accent)]/40 mb-4" />
                     <h3 className="font-serif text-xl font-semibold text-foreground mb-2">Aucun message</h3>
                     <p className="text-muted-foreground text-sm tracking-wide">Les messages de contact apparaîtront ici.</p>
@@ -2568,16 +2568,16 @@ export default function AdminPage() {
                 ) : (
                   <div className="divide-y divide-border">
                     {contacts.map((contact) => (
-                      <div key={contact.id} className={`p-5 hover:bg-muted/30 transition-colors ${!contact.lu ? 'bg-blue-50/50' : ''}`}>
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
+                      <div key={contact.id} className={`p-4 transition-colors hover:bg-muted/30 sm:p-5 ${!contact.lu ? 'bg-blue-50/50' : ''}`}>
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                          <div className="min-w-0 flex-1">
+                            <div className="mb-2 flex flex-wrap items-center gap-3">
                               <span className="font-semibold text-foreground">{contact.nom}</span>
                               {!contact.lu && (
                                 <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-medium rounded">Nouveau</span>
                               )}
                             </div>
-                            <p className="text-xs text-muted-foreground mb-1">{contact.email} • {contact.telephone}</p>
+                            <p className="mb-1 break-all text-xs text-muted-foreground">{contact.email} • {contact.telephone}</p>
                             <p className="text-sm text-foreground mb-2"><strong>{contact.sujet}</strong></p>
                             <p className="text-sm text-muted-foreground line-clamp-2">{contact.message}</p>
                             <p className="text-[10px] text-muted-foreground mt-2">
@@ -2589,7 +2589,7 @@ export default function AdminPage() {
                           
                           <a
                             href={`mailto:${contact.email}?subject=Re: ${contact.sujet}`}
-                            className="px-3 py-1.5 border border-[var(--admin-accent)] text-[var(--admin-text)] text-xs hover:bg-[var(--admin-accent)] hover:text-[var(--admin-text)] transition-colors"
+                            className="inline-flex h-9 items-center justify-center border border-[var(--admin-accent)] px-3 py-1.5 text-xs text-[var(--admin-text)] transition-colors hover:bg-[var(--admin-accent)] hover:text-[var(--admin-text)]"
                           >
                             Répondre
                           </a>

@@ -90,8 +90,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <Header />
 
         <main className="flex-1 bg-[#fffaf2]">
-          <div className="container mx-auto px-4 py-8 md:py-12">
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(360px,0.85fr)_1fr] lg:gap-12 mb-16">
+          <div className="container mx-auto px-4 py-6 sm:py-8 md:py-12">
+            <div className="mb-12 grid grid-cols-1 gap-8 lg:mb-16 lg:grid-cols-[minmax(320px,0.85fr)_1fr] lg:gap-12">
               <div className="relative w-full max-w-[520px] justify-self-center lg:justify-self-start">
                 <BackButton
                   className="absolute left-3 top-3 z-20 bg-white/95 shadow-sm backdrop-blur-sm dark:bg-[#211207]/95"

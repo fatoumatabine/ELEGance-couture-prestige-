@@ -110,11 +110,11 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
 
           {/* Slide-up action bar */}
-          <div className="absolute inset-x-3 bottom-3 z-20 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="absolute inset-x-3 bottom-3 z-20 translate-y-0 opacity-100 transition-all duration-300 sm:translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100">
             <div className="flex overflow-hidden rounded-[6px] border border-white/15 bg-[#120b06]/90 backdrop-blur-md">
               <button
                 onClick={(e) => { e.preventDefault() }}
-                className="flex flex-1 items-center justify-center gap-2 border-r border-[#FF9D00]/20 py-2.5 text-[9px] uppercase tracking-[0.18em] text-[#fff8ed] transition-colors hover:bg-[#FF9D00]/10 hover:text-[#FFCF71]"
+                className="flex min-w-0 flex-1 items-center justify-center gap-1.5 border-r border-[#FF9D00]/20 px-1 py-2.5 text-[9px] uppercase tracking-[0.1em] text-[#fff8ed] transition-colors hover:bg-[#FF9D00]/10 hover:text-[#FFCF71] sm:gap-2 sm:tracking-[0.18em]"
               >
                 <Eye className="w-3.5 h-3.5" />
                 Aperçu
@@ -122,7 +122,7 @@ export function ProductCard({ product }: ProductCardProps) {
               <button
                 onClick={handleQuickAdd}
                 disabled={!product.inStock}
-                className="flex flex-1 items-center justify-center gap-2 py-2.5 text-[9px] uppercase tracking-[0.18em] text-[#fff8ed] transition-colors hover:bg-[#FF9D00]/10 hover:text-[#FFCF71] disabled:opacity-40"
+                className="flex min-w-0 flex-1 items-center justify-center gap-1.5 px-1 py-2.5 text-[9px] uppercase tracking-[0.1em] text-[#fff8ed] transition-colors hover:bg-[#FF9D00]/10 hover:text-[#FFCF71] disabled:opacity-40 sm:gap-2 sm:tracking-[0.18em]"
               >
                 <ShoppingBag className="w-3.5 h-3.5" />
                 Ajouter
@@ -134,18 +134,18 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* ── Info ── */}
         <div className="bg-card p-4">
           {/* Category */}
-          <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.24em] text-[#B6771D] dark:text-[#FFCF71]">
+          <p className="mb-2 break-words text-[9px] font-bold uppercase tracking-[0.18em] text-[#B6771D] dark:text-[#FFCF71] sm:tracking-[0.24em]">
             {product.category}
           </p>
 
           {/* Name */}
-          <h3 className="mb-3 line-clamp-2 min-h-[2.5rem] font-serif text-base font-semibold leading-tight tracking-wide text-foreground transition-colors duration-300 group-hover:text-[#B6771D] dark:group-hover:text-[#FFCF71]">
+          <h3 className="mb-3 line-clamp-2 min-h-[2.5rem] break-words font-serif text-base font-semibold leading-tight tracking-wide text-foreground transition-colors duration-300 group-hover:text-[#B6771D] dark:group-hover:text-[#FFCF71]">
             {product.name}
           </h3>
 
           {/* Price + Colors row */}
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-bold tracking-wide text-foreground">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="min-w-0 text-sm font-bold tracking-wide text-foreground">
               {product.price.toLocaleString()}
               <span className="text-[10px] text-muted-foreground ml-1 font-normal">CFA</span>
               {optionLabels.priceSuffix && (

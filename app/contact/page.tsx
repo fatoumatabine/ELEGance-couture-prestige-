@@ -83,16 +83,16 @@ export default function ContactPage() {
       <Header />
 
       <main className="flex-1">
-        <div className="bg-muted/30 py-12 md:py-16">
+        <div className="bg-muted/30 py-10 sm:py-12 md:py-16">
           <div className="container mx-auto px-4">
-            <h1 className="font-serif text-4xl md:text-6xl font-bold text-center mb-4">Contactez-nous</h1>
-            <p className="text-center text-muted-foreground text-lg max-w-2xl mx-auto">
+            <h1 className="mb-4 text-center font-serif text-3xl font-bold sm:text-4xl md:text-6xl">Contactez-nous</h1>
+            <p className="mx-auto max-w-2xl text-center text-base text-muted-foreground sm:text-lg">
               Nous sommes à votre écoute pour toute question ou demande
             </p>
           </div>
         </div>
 
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-4 py-8 sm:py-12">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Contact Information */}
             <div className="space-y-6">
@@ -117,7 +117,7 @@ export default function ContactPage() {
                       <p className="font-semibold mb-1">Email</p>
                       <a
                         href="mailto:contact@elegancecouture.sn"
-                        className="text-muted-foreground hover:text-accent transition-colors"
+                        className="break-all text-muted-foreground transition-colors hover:text-accent"
                       >
                         contact@elegancecouture.sn
                       </a>

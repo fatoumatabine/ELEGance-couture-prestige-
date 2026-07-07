@@ -50,24 +50,24 @@ export default function ConditionsPage() {
       <Header />
 
       {/* Hero */}
-      <section className="h-64 bg-[#120b06] border-b border-[#3b2717] flex items-center justify-center">
+      <section className="flex h-56 items-center justify-center border-b border-[#3b2717] bg-[#120b06] px-4 sm:h-64">
         <div className="text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="h-px w-8 bg-[#FF9D00]" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-[#FF9D00]">Légal</span>
+            <span className="text-[10px] uppercase tracking-[0.24em] text-[#FF9D00] sm:tracking-[0.4em]">Légal</span>
             <div className="h-px w-8 bg-[#FF9D00]" />
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl text-[#fff8ed] font-bold tracking-wide">
+          <h1 className="mx-auto max-w-2xl font-serif text-3xl font-bold tracking-wide text-[#fff8ed] sm:text-4xl md:text-5xl">
             Conditions Générales de Vente
           </h1>
         </div>
       </section>
 
-      <main className="flex-1 py-20">
-        <div className="container mx-auto px-6 max-w-3xl">
+      <main className="flex-1 py-14 sm:py-20">
+        <div className="container mx-auto max-w-3xl px-4 sm:px-6">
 
           {/* Last Updated */}
-          <div className="flex items-center gap-3 mb-12 pb-6 border-b border-[#3b2717]">
+          <div className="mb-12 flex flex-wrap items-center gap-3 border-b border-[#3b2717] pb-6">
             <div className="h-px w-8 bg-[#FF9D00]" />
             <p className="text-[11px] tracking-[0.2em] uppercase text-[#d7ba8c]">
               Dernière mise à jour : Janvier 2025
@@ -83,7 +83,7 @@ export default function ConditionsPage() {
           {/* Sections */}
           <div className="space-y-10">
             {sections.map((s, i) => (
-              <div key={i} className="border-l-2 border-[#3b2717] pl-6 hover:border-l-[#FF9D00]/50 transition-colors duration-300">
+              <div key={i} className="border-l-2 border-[#3b2717] pl-4 transition-colors duration-300 hover:border-l-[#FF9D00]/50 sm:pl-6">
                 <h2 className="font-serif text-lg text-[#fff8ed] font-bold mb-3 tracking-wide">{s.title}</h2>
                 <p className="text-[12px] text-[#d7ba8c] leading-relaxed tracking-wide">{s.content}</p>
               </div>
@@ -91,7 +91,7 @@ export default function ConditionsPage() {
           </div>
 
           {/* Contact */}
-          <div className="mt-16 border border-[#3b2717] p-8 bg-[#120b06]">
+          <div className="mt-16 border border-[#3b2717] bg-[#120b06] p-5 sm:p-8">
             <h3 className="font-serif text-lg text-[#fff8ed] font-bold mb-3 tracking-wide">
               Des Questions ?
             </h3>
@@ -99,7 +99,7 @@ export default function ConditionsPage() {
               Pour toute question relative à ces conditions, contactez-nous :
             </p>
             <div className="flex flex-col gap-2">
-              <a href="mailto:contact@elegancecouture.sn" className="text-[12px] text-[#FF9D00] hover:text-[#FFCF71] transition-colors tracking-wide">
+              <a href="mailto:contact@elegancecouture.sn" className="break-all text-[12px] tracking-wide text-[#FF9D00] transition-colors hover:text-[#FFCF71]">
                 contact@elegancecouture.sn
               </a>
               <a href="tel:+221778137032" className="text-[12px] text-[#FF9D00] hover:text-[#FFCF71] transition-colors tracking-wide">

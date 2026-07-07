@@ -323,7 +323,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
   return (
     <div className="w-full max-w-[520px] justify-self-center space-y-4 lg:justify-self-start">
       <div
-        className="relative flex aspect-[3/4] max-h-[680px] items-center justify-center overflow-hidden rounded-[12px] bg-white shadow-lg"
+        className="relative flex aspect-[3/4] max-h-[min(680px,calc(100svh-8rem))] items-center justify-center overflow-hidden rounded-[12px] bg-white shadow-lg"
       >
         {displayImages.length > 0 ? (
           <div
@@ -404,7 +404,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
       </div>
 
       {displayImages.length > 1 && (
-        <div className="flex gap-3 overflow-x-auto">
+        <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-hide">
           {displayImages.map((image, index) => (
             <button
               key={index}
@@ -413,7 +413,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 resetInlineZoom()
                 resetZoom()
               }}
-              className={`relative h-[72px] w-[72px] shrink-0 overflow-hidden border bg-white transition-colors ${
+              className={`relative h-16 w-16 shrink-0 overflow-hidden border bg-white transition-colors sm:h-[72px] sm:w-[72px] ${
                 currentIndex === index
                   ? "border-black"
                   : "border-gray-200 hover:border-gray-500"
@@ -436,12 +436,12 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
           aria-modal="true"
           aria-label={`Zoom ${productName}`}
         >
-          <div className="absolute right-4 top-4 z-20 flex gap-2 sm:right-6 sm:top-6">
+          <div className="absolute right-3 top-[max(0.75rem,env(safe-area-inset-top))] z-20 flex gap-1.5 sm:right-6 sm:top-6 sm:gap-2">
             <Button
               type="button"
               variant="secondary"
               size="icon"
-              className="h-10 w-10 rounded-full bg-white/95 text-[#180f08] shadow-lg hover:bg-white"
+              className="h-9 w-9 rounded-full bg-white/95 text-[#180f08] shadow-lg hover:bg-white sm:h-10 sm:w-10"
               onClick={() => updateZoomBy(-ZOOM_STEP)}
               aria-label="Réduire le zoom"
               title="Réduire"
@@ -452,7 +452,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               type="button"
               variant="secondary"
               size="icon"
-              className="h-10 w-10 rounded-full bg-white/95 text-[#180f08] shadow-lg hover:bg-white"
+              className="h-9 w-9 rounded-full bg-white/95 text-[#180f08] shadow-lg hover:bg-white sm:h-10 sm:w-10"
               onClick={() => resetZoom(INITIAL_ZOOM_SCALE)}
               aria-label="Réinitialiser le zoom"
               title="Réinitialiser"
@@ -463,7 +463,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               type="button"
               variant="secondary"
               size="icon"
-              className="h-10 w-10 rounded-full bg-white/95 text-[#180f08] shadow-lg hover:bg-white"
+              className="h-9 w-9 rounded-full bg-white/95 text-[#180f08] shadow-lg hover:bg-white sm:h-10 sm:w-10"
               onClick={() => updateZoomBy(ZOOM_STEP)}
               aria-label="Augmenter le zoom"
               title="Agrandir"
@@ -474,7 +474,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               type="button"
               variant="secondary"
               size="icon"
-              className="h-10 w-10 rounded-full bg-white/95 text-[#180f08] shadow-lg hover:bg-white"
+              className="h-9 w-9 rounded-full bg-white/95 text-[#180f08] shadow-lg hover:bg-white sm:h-10 sm:w-10"
               onClick={closeZoom}
               aria-label="Fermer"
               title="Fermer"
@@ -484,7 +484,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
           </div>
 
           <div
-            className={`flex h-full w-full touch-none items-center justify-center overflow-hidden px-4 py-20 ${
+            className={`flex h-full w-full touch-none items-center justify-center overflow-hidden px-3 py-16 sm:px-4 sm:py-20 ${
               zoomScale > 1 ? "cursor-grab active:cursor-grabbing" : "cursor-zoom-in"
             }`}
             onPointerDown={handleZoomPointerDown}
@@ -512,7 +512,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 type="button"
                 variant="secondary"
                 size="icon"
-                className="absolute left-4 top-1/2 z-20 h-11 w-11 -translate-y-1/2 rounded-full bg-white/95 text-[#180f08] shadow-lg hover:bg-white sm:left-6"
+                className="absolute left-3 top-1/2 z-20 h-10 w-10 -translate-y-1/2 rounded-full bg-white/95 text-[#180f08] shadow-lg hover:bg-white sm:left-6 sm:h-11 sm:w-11"
                 onClick={goToPrevious}
                 aria-label="Image précédente"
                 title="Précédent"
@@ -523,7 +523,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 type="button"
                 variant="secondary"
                 size="icon"
-                className="absolute right-4 top-1/2 z-20 h-11 w-11 -translate-y-1/2 rounded-full bg-white/95 text-[#180f08] shadow-lg hover:bg-white sm:right-6"
+                className="absolute right-3 top-1/2 z-20 h-10 w-10 -translate-y-1/2 rounded-full bg-white/95 text-[#180f08] shadow-lg hover:bg-white sm:right-6 sm:h-11 sm:w-11"
                 onClick={goToNext}
                 aria-label="Image suivante"
                 title="Suivant"
