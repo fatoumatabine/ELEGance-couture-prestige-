@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Download, Share2, X } from "lucide-react"
+import { ChevronRight, Download, Share2, X } from "lucide-react"
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>
@@ -36,6 +36,16 @@ function isAndroidDevice() {
   return /android/.test(window.navigator.userAgent.toLowerCase())
 }
 
+function isIosSafari() {
+  const userAgent = window.navigator.userAgent.toLowerCase()
+
+  return (
+    isIosLikeDevice() &&
+    /safari/.test(userAgent) &&
+    !/crios|fxios|edgios|instagram|fbav|fban/.test(userAgent)
+  )
+}
+
 function wasDismissedRecently() {
   try {
     const dismissedAt = window.localStorage.getItem(DISMISSED_STORAGE_KEY)
@@ -62,6 +72,7 @@ export function PwaManager() {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [showInstallButton, setShowInstallButton] = useState(false)
   const [manualInstallPlatform, setManualInstallPlatform] = useState<ManualInstallPlatform | null>(null)
+  const [manualInstallCollapsed, setManualInstallCollapsed] = useState(false)
 
   useEffect(() => {
     if (!("serviceWorker" in navigator)) {
@@ -90,6 +101,7 @@ export function PwaManager() {
     const handleBeforeInstallPrompt = (event: Event) => {
       event.preventDefault()
       setManualInstallPlatform(null)
+      setManualInstallCollapsed(false)
       setInstallPrompt(event as BeforeInstallPromptEvent)
 
       if (!wasDismissedRecently()) {
@@ -101,6 +113,7 @@ export function PwaManager() {
       setInstallPrompt(null)
       setShowInstallButton(false)
       setManualInstallPlatform(null)
+      setManualInstallCollapsed(false)
     }
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
@@ -113,7 +126,7 @@ export function PwaManager() {
   }, [])
 
   useEffect(() => {
-    if (isStandaloneApp() || installPrompt || showInstallButton || wasDismissedRecently()) {
+    if (isStandaloneApp() || installPrompt || showInstallButton) {
       return
     }
 
@@ -124,11 +137,13 @@ export function PwaManager() {
 
       if (isIosLikeDevice()) {
         setManualInstallPlatform("ios")
+        setManualInstallCollapsed(wasDismissedRecently())
         return
       }
 
       if (isAndroidDevice()) {
         setManualInstallPlatform("android")
+        setManualInstallCollapsed(wasDismissedRecently())
       }
     }, 1600)
 
@@ -149,7 +164,7 @@ export function PwaManager() {
   const dismissInstallMessage = () => {
     rememberDismissal()
     setShowInstallButton(false)
-    setManualInstallPlatform(null)
+    setManualInstallCollapsed(true)
   }
 
   if (showInstallButton && installPrompt) {
@@ -180,20 +195,52 @@ export function PwaManager() {
   }
 
   const isIos = manualInstallPlatform === "ios"
+  const isSafari = isIos ? isIosSafari() : false
+
+  if (manualInstallCollapsed) {
+    return (
+      <button
+        type="button"
+        onClick={() => setManualInstallCollapsed(false)}
+        className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-3 z-50 inline-flex h-11 items-center gap-2 rounded-full border border-[#ff9d00]/40 bg-[#180f08] px-4 text-xs font-bold uppercase tracking-[0.12em] text-[#fff8ed] shadow-[0_12px_30px_rgba(24,15,8,0.26)] transition-colors hover:border-[#ff9d00] md:bottom-5 md:left-5"
+      >
+        {isIos ? <Share2 className="h-4 w-4" /> : <Download className="h-4 w-4" />}
+        Installer
+      </button>
+    )
+  }
 
   return (
-    <div className="fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-3 z-50 max-w-[calc(100vw-1.5rem)] rounded-xl border border-[#ff9d00]/35 bg-[#180f08] p-3 text-[#fff8ed] shadow-[0_16px_36px_rgba(24,15,8,0.28)] min-[420px]:left-4 min-[420px]:max-w-[23rem] md:bottom-7 md:left-7">
+    <div className="fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-3 z-50 max-w-[calc(100vw-1.5rem)] rounded-xl border border-[#ff9d00]/35 bg-[#180f08] p-3 pr-10 text-[#fff8ed] shadow-[0_16px_36px_rgba(24,15,8,0.28)] min-[420px]:left-4 min-[420px]:max-w-[25rem] md:bottom-7 md:left-7">
       <div className="flex items-start gap-3">
         <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#ff9d00] text-[#180f08]">
           {isIos ? <Share2 className="h-4 w-4" /> : <Download className="h-4 w-4" />}
         </span>
         <div className="min-w-0">
           <p className="text-sm font-semibold">Installer l'app</p>
-          <p className="mt-1 text-xs leading-relaxed text-[#fff8ed]/85">
-            {isIos
-              ? "Sur iPhone/iPad : ouvrez Safari, touchez Partager, puis « Sur l’écran d’accueil »."
-              : "Sur Android : ouvrez le menu de Chrome, puis choisissez « Installer l’application » ou « Ajouter à l’écran d’accueil »."}
-          </p>
+          {isIos ? (
+            <div className="mt-1 space-y-1.5 text-xs leading-relaxed text-[#fff8ed]/85">
+              {!isSafari && (
+                <p className="rounded-md border border-[#ff9d00]/25 bg-[#ff9d00]/10 px-2 py-1 text-[#ffcf71]">
+                  Sur iPhone/iPad, ouvrez d'abord ce site dans Safari.
+                </p>
+              )}
+              {[
+                "Touchez le bouton Partager de Safari.",
+                "Choisissez « Sur l’écran d’accueil ».",
+                "Validez avec « Ajouter ».",
+              ].map((step) => (
+                <p key={step} className="flex gap-2">
+                  <ChevronRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#ff9d00]" />
+                  <span>{step}</span>
+                </p>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-1 text-xs leading-relaxed text-[#fff8ed]/85">
+              Sur Android : ouvrez le menu de Chrome, puis choisissez « Installer l’application » ou « Ajouter à l’écran d’accueil ».
+            </p>
+          )}
         </div>
       </div>
       <button

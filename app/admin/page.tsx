@@ -1076,12 +1076,12 @@ export default function AdminPage() {
   if (!isLoggedIn) {
     return (
       <div
-        className="admin-dashboard-theme min-h-dvh bg-[var(--admin-bg)] lg:flex"
+        className="admin-dashboard-theme min-h-dvh bg-[var(--admin-bg)] xl:flex"
         data-admin-theme={adminTheme}
         style={adminStyle}
       >
         {/* Left decorative panel */}
-        <div className="hidden lg:flex lg:w-[48%] relative overflow-hidden flex-col items-center justify-center bg-[var(--admin-soft)]">
+        <div className="relative hidden overflow-hidden bg-[var(--admin-soft)] xl:flex xl:w-[44%] xl:flex-col xl:items-center xl:justify-center">
           {/* diagonal pattern */}
           <div className="absolute inset-0 opacity-[0.06]"
             style={{
@@ -1202,9 +1202,9 @@ export default function AdminPage() {
     >
 
       {/* ── Sidebar ── */}
-      <aside className="hidden h-full w-64 flex-shrink-0 flex-col border-r border-[var(--admin-soft)] bg-[var(--admin-bg)] shadow-[8px_0_28px_rgba(var(--admin-text-rgb),0.06)] lg:flex">
+      <aside className="hidden h-full w-56 flex-shrink-0 flex-col border-r border-[var(--admin-soft)] bg-[var(--admin-bg)] shadow-[8px_0_28px_rgba(var(--admin-text-rgb),0.06)] xl:flex 2xl:w-64">
         {/* Brand */}
-        <div className="px-6 py-8 border-b border-[var(--admin-soft)]">
+        <div className="border-b border-[var(--admin-soft)] px-4 py-6 2xl:px-6 2xl:py-8">
           <div className="flex items-center gap-3 mb-1">
             <div className="w-8 h-8 flex items-center justify-center rounded-[6px] border border-[var(--admin-accent)]/40 bg-[var(--admin-soft)]">
               <span className="font-serif text-sm font-bold text-[var(--admin-accent)]">EC</span>
@@ -1217,13 +1217,13 @@ export default function AdminPage() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-4 py-6 space-y-1">
-          <p className="text-[9px] tracking-[0.35em] uppercase text-[var(--admin-text)] px-3 mb-4">Navigation</p>
+        <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-5 2xl:px-4 2xl:py-6">
+          <p className="mb-4 px-3 text-[9px] uppercase tracking-[0.35em] text-[var(--admin-text)]">Navigation</p>
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center justify-between rounded-[8px] px-3 py-2.5 transition-all duration-200 group ${
+              className={`group flex w-full items-center justify-between rounded-[8px] px-3 py-2.5 transition-all duration-200 ${
                 activeTab === item.id
                   ? "bg-[var(--admin-accent)] text-[var(--admin-text)] shadow-[0_12px_26px_rgba(var(--admin-accent-rgb),0.22)]"
                   : "text-[var(--admin-text)] hover:bg-[var(--admin-soft)] hover:text-[var(--admin-bg)]"
@@ -1231,7 +1231,7 @@ export default function AdminPage() {
             >
               <div className="flex items-center gap-3">
                 <item.icon className="w-4 h-4" />
-                <span className="text-[11px] tracking-[0.15em] uppercase font-medium">{item.label}</span>
+                <span className="text-[10px] font-medium uppercase tracking-[0.11em] 2xl:text-[11px] 2xl:tracking-[0.15em]">{item.label}</span>
               </div>
               {item.count > 0 && (
                 <span className={`rounded-full text-[10px] font-semibold px-1.5 py-0.5 ${
@@ -1245,7 +1245,7 @@ export default function AdminPage() {
         </nav>
 
         {/* Stats bottom */}
-        <div className="px-4 py-6 border-t border-[var(--admin-soft)] space-y-3">
+        <div className="space-y-3 border-t border-[var(--admin-soft)] px-3 py-5 2xl:px-4 2xl:py-6">
           <div className="flex items-center justify-between px-3">
             <span className="text-[10px] tracking-[0.2em] uppercase text-[var(--admin-text)]">En stock</span>
             <span className="text-[var(--admin-accent)] text-sm font-semibold">{inStockCount}</span>
@@ -1257,7 +1257,7 @@ export default function AdminPage() {
         </div>
 
         {/* Logout */}
-        <div className="px-4 pb-6">
+        <div className="px-3 pb-5 2xl:px-4 2xl:pb-6">
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 rounded-[8px] px-3 py-2.5 text-[var(--admin-text)] hover:bg-[var(--admin-soft)] hover:text-[var(--admin-bg)] transition-all"
@@ -1272,7 +1272,7 @@ export default function AdminPage() {
       <div className="flex min-h-0 flex-1 flex-col">
 
         {/* Header */}
-        <header className="z-30 shrink-0 border-b border-[var(--admin-soft)] bg-[var(--admin-bg)]/95 px-4 py-4 backdrop-blur md:px-6 lg:px-8">
+        <header className="z-30 shrink-0 border-b border-[var(--admin-soft)] bg-[var(--admin-bg)]/95 px-4 py-4 backdrop-blur md:px-6 xl:px-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <h1 className="font-serif text-lg font-bold capitalize text-foreground sm:text-xl">
@@ -1282,7 +1282,7 @@ export default function AdminPage() {
               {activeMeta.description}
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-3 sm:justify-end lg:gap-4">
+          <div className="flex flex-wrap items-center gap-3 sm:justify-end xl:gap-4">
             <button
               type="button"
               onClick={() => setAdminTheme((theme) => (theme === "dark" ? "light" : "dark"))}
@@ -1291,7 +1291,7 @@ export default function AdminPage() {
               title={adminTheme === "dark" ? "Mode clair" : "Mode sombre"}
             >
               {adminTheme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
-              <span className="hidden lg:inline">{adminTheme === "dark" ? "Clair" : "Sombre"}</span>
+              <span className="hidden xl:inline">{adminTheme === "dark" ? "Clair" : "Sombre"}</span>
             </button>
             <Link href="/boutique" target="_blank"
               className="hidden sm:flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase text-muted-foreground hover:text-[var(--admin-accent)] transition-colors">
@@ -1303,7 +1303,7 @@ export default function AdminPage() {
             </div>
           </div>
           </div>
-          <div className="mt-4 flex gap-2 overflow-x-auto pb-1 scrollbar-hide lg:hidden">
+          <div className="mt-4 flex gap-2 overflow-x-auto pb-1 scrollbar-hide xl:hidden">
             {navItems.map((item) => (
               <button
                 key={item.id}
@@ -1321,7 +1321,7 @@ export default function AdminPage() {
           </div>
         </header>
 
-        <main className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 lg:p-8">
+        <main className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 xl:p-8">
           <section className="mb-6 rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] px-4 py-5 shadow-sm sm:px-5">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex min-w-0 items-start gap-4">
