@@ -75,6 +75,37 @@ export function PwaManager() {
   const [manualInstallCollapsed, setManualInstallCollapsed] = useState(false)
 
   useEffect(() => {
+    const displayModeQuery = window.matchMedia("(display-mode: standalone)")
+
+    const updateViewportState = () => {
+      const root = document.documentElement
+      const standalone = isStandaloneApp()
+
+      root.style.setProperty("--app-height", `${window.innerHeight}px`)
+
+      if (standalone) {
+        root.dataset.pwaStandalone = "true"
+        document.body.dataset.pwaStandalone = "true"
+      } else {
+        delete root.dataset.pwaStandalone
+        delete document.body.dataset.pwaStandalone
+      }
+    }
+
+    updateViewportState()
+
+    window.addEventListener("resize", updateViewportState)
+    window.addEventListener("orientationchange", updateViewportState)
+    displayModeQuery.addEventListener?.("change", updateViewportState)
+
+    return () => {
+      window.removeEventListener("resize", updateViewportState)
+      window.removeEventListener("orientationchange", updateViewportState)
+      displayModeQuery.removeEventListener?.("change", updateViewportState)
+    }
+  }, [])
+
+  useEffect(() => {
     if (!("serviceWorker" in navigator)) {
       return
     }

@@ -200,7 +200,7 @@ export default async function BoutiquePage({ searchParams }: BoutiquePageProps) 
         </section>
 
         {/* ===== CATEGORY QUICK FILTER ===== */}
-        <section className="sticky top-16 z-30 border-b border-[#ead3aa] bg-[#fffaf2]/94 backdrop-blur-xl dark:border-[#3b2717] dark:bg-[#180f08]/94 sm:top-20 md:top-36">
+        <section className="sticky top-[calc(4rem+env(safe-area-inset-top))] z-30 border-b border-[#ead3aa] bg-[#fffaf2]/94 backdrop-blur-xl dark:border-[#3b2717] dark:bg-[#180f08]/94 sm:top-[calc(5rem+env(safe-area-inset-top))] md:top-[calc(9rem+env(safe-area-inset-top))]">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="flex items-center gap-2 overflow-x-auto py-3 scrollbar-hide">
               {categories.map((cat) => (
