@@ -392,7 +392,7 @@ export default function HomePage() {
       <main className="flex-1">
 
         {/* ===== HERO SLIDER ===== */}
-        <section className="relative h-[calc(100svh-4rem)] min-h-[500px] max-h-[780px] w-full overflow-hidden bg-[#120b06] sm:h-[calc(100svh-5rem)] md:h-[calc(100svh-6rem)] md:min-h-[600px] md:max-h-[900px] lg:min-h-[560px] lg:max-h-[760px] xl:h-[calc(100svh-11.5rem)] xl:min-h-[620px] xl:max-h-[860px]">
+        <section className="relative h-[calc(100svh-4rem)] min-h-[500px] max-h-[780px] w-full overflow-hidden bg-[#120b06] sm:h-[calc(100svh-5rem)] md:h-[calc(100svh-9rem)] md:min-h-[560px] md:max-h-[820px] lg:min-h-[560px] lg:max-h-[760px] xl:h-[calc(100svh-11.5rem)] xl:min-h-[620px] xl:max-h-[860px]">
           {/* Video Background */}
           <HeroVideo
             mp4="/hero-video.mp4"

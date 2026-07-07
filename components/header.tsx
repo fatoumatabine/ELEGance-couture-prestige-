@@ -291,7 +291,7 @@ export function Header() {
           <div className="relative flex h-16 items-center justify-between sm:h-20 md:h-24">
             {/* Mobile Menu Button */}
             <button
-              className="z-10 flex h-10 w-10 shrink-0 items-center justify-start text-[#241609] transition-colors hover:text-[#FF9D00] dark:text-[#fff8ed] xl:hidden"
+              className="z-10 flex h-10 w-10 shrink-0 items-center justify-start text-[#241609] transition-colors hover:text-[#FF9D00] dark:text-[#fff8ed] md:hidden"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Menu"
             >
@@ -299,20 +299,20 @@ export function Header() {
             </button>
 
             {/* Logo - Centered */}
-            <Link href="/" className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 sm:gap-4">
-              <div className="relative hidden h-14 w-14 shrink-0 overflow-hidden rounded-full border border-[#FF9D00]/35 bg-[#fff8ed] p-0.5 shadow-[0_10px_30px_rgba(123,84,47,0.18)] dark:border-[#FF9D00]/30 dark:bg-[#211207] sm:block">
+            <Link href="/" className="absolute left-1/2 flex -translate-x-1/2 items-center gap-1.5 sm:gap-4">
+              <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-[#FF9D00]/35 bg-[#fff8ed] p-0.5 shadow-[0_10px_30px_rgba(123,84,47,0.18)] dark:border-[#FF9D00]/30 dark:bg-[#211207] min-[390px]:h-9 min-[390px]:w-9 sm:h-14 sm:w-14">
                 <img
                   src="/logo.png"
                   alt="Elegance Couture"
                   className="h-full w-full rounded-full object-cover"
                 />
               </div>
-              <div className="w-[126px] text-center sm:w-auto">
-                <h1 className="font-serif text-[13px] font-bold leading-[1.05] tracking-wide text-[#241609] dark:text-[#fff8ed] sm:text-lg sm:leading-normal md:text-2xl">
+              <div className="w-[98px] text-center min-[390px]:w-[116px] sm:w-auto">
+                <h1 className="font-serif text-[10px] font-bold leading-[1.05] tracking-wide text-[#241609] dark:text-[#fff8ed] min-[390px]:text-[11px] sm:text-lg sm:leading-normal md:text-2xl">
                   <span className="block sm:inline">ELEGANCE</span>{" "}
                   <span className="brand-text-gradient block sm:inline">COUTURE PRESTIGE</span>
                 </h1>
-                <p className="mt-1 text-[6px] uppercase tracking-[0.24em] text-[#7B542F] dark:text-[#d7ba8c] sm:mt-0.5 sm:text-[8px] sm:tracking-[0.35em]">
+                <p className="mt-1 text-[5px] uppercase tracking-[0.18em] text-[#7B542F] dark:text-[#d7ba8c] min-[390px]:text-[6px] min-[390px]:tracking-[0.24em] sm:mt-0.5 sm:text-[8px] sm:tracking-[0.35em]">
                   {copy.tagline}
                 </p>
               </div>
@@ -320,6 +320,9 @@ export function Header() {
 
             {/* Mobile: cart */}
             <div className="z-10 flex shrink-0 items-center gap-2 xl:pointer-events-none xl:opacity-0">
+              <div className="hidden md:block">
+                <ThemeToggle />
+              </div>
               <div className="[&_button]:px-1.5 min-[390px]:[&_button]:px-2.5">
                 <LanguageToggle />
               </div>
@@ -335,7 +338,7 @@ export function Header() {
           </div>
 
           {/* Navigation Row (desktop) */}
-          <nav className="hidden h-12 items-center justify-center border-t border-[#ead3aa]/70 dark:border-[#3b2717] xl:flex">
+          <nav className="hidden h-12 items-center justify-center border-t border-[#ead3aa]/70 dark:border-[#3b2717] md:flex">
             {navLinks.map((link, idx) => (
               <div key={link.label} className="group/nav relative flex h-full items-center">
                 {idx > 0 && (
@@ -343,7 +346,7 @@ export function Header() {
                 )}
                 <Link
                   href={link.href}
-                  className="relative flex h-full items-center gap-1.5 px-4 text-[10px] font-semibold uppercase tracking-[0.17em] text-[#7B542F] transition-colors duration-200 hover:text-[#FF9D00] dark:text-[#d7ba8c] xl:px-5 xl:text-[11px]"
+                  className="relative flex h-full items-center gap-1 px-2 text-[9px] font-semibold uppercase tracking-[0.1em] text-[#7B542F] transition-colors duration-200 hover:text-[#FF9D00] dark:text-[#d7ba8c] lg:px-3 lg:text-[10px] lg:tracking-[0.14em] xl:px-5 xl:text-[11px] xl:tracking-[0.17em]"
                 >
                   {link.label}
                   <ChevronDown className="h-3 w-3 transition-transform duration-300 group-hover/nav:rotate-180" />
@@ -395,8 +398,8 @@ export function Header() {
 
         {/* Mobile Nav Drawer */}
         {mobileOpen && (
-          <div className="absolute left-0 top-full z-50 w-[82vw] max-w-[320px] border-b border-r border-[#ead3aa] bg-[#fffaf2] shadow-[18px_24px_60px_rgba(123,84,47,0.22)] dark:border-[#3b2717] dark:bg-[#120b06] sm:w-[74vw] sm:max-w-[380px] md:w-[56vw] md:max-w-[440px] xl:hidden">
-            <nav className="flex max-h-[calc(100svh-4rem)] flex-col gap-3 overflow-y-auto overscroll-contain px-5 py-5 md:max-h-[calc(100svh-6rem)] md:px-6 md:py-6">
+          <div className="absolute left-0 top-full z-50 w-[82vw] max-w-[320px] border-b border-r border-[#ead3aa] bg-[#fffaf2] shadow-[18px_24px_60px_rgba(123,84,47,0.22)] dark:border-[#3b2717] dark:bg-[#120b06] sm:w-[74vw] sm:max-w-[380px] md:hidden">
+            <nav className="flex max-h-[calc(100svh-4rem)] flex-col gap-3 overflow-y-auto overscroll-contain px-5 py-5">
               {navLinks.map((link) => (
                 <div key={link.label} className="border-b border-[#ead3aa] pb-3 dark:border-[#3b2717]">
                   <Link
@@ -447,7 +450,8 @@ export function Header() {
                 </div>
               ))}
               <div className="flex flex-col gap-2 pt-2">
-                <div className="mb-2">
+                <div className="mb-2 flex items-center gap-2">
+                  <ThemeToggle />
                   <LanguageToggle />
                 </div>
                 <a href="tel:+221778137032" className="flex items-center gap-2 text-[11px] tracking-wide text-[#7B542F] dark:text-[#d7ba8c]">

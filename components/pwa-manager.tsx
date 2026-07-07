@@ -137,13 +137,13 @@ export function PwaManager() {
 
       if (isIosLikeDevice()) {
         setManualInstallPlatform("ios")
-        setManualInstallCollapsed(wasDismissedRecently())
+        setManualInstallCollapsed(true)
         return
       }
 
       if (isAndroidDevice()) {
         setManualInstallPlatform("android")
-        setManualInstallCollapsed(wasDismissedRecently())
+        setManualInstallCollapsed(true)
       }
     }, 1600)
 
@@ -211,7 +211,11 @@ export function PwaManager() {
   }
 
   return (
-    <div className="fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-3 z-50 max-w-[calc(100vw-1.5rem)] rounded-xl border border-[#ff9d00]/35 bg-[#180f08] p-3 pr-10 text-[#fff8ed] shadow-[0_16px_36px_rgba(24,15,8,0.28)] min-[420px]:left-4 min-[420px]:max-w-[25rem] md:bottom-7 md:left-7">
+    <div
+      role="dialog"
+      aria-label="Aide pour installer l'application"
+      className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-1/2 z-[90] w-[min(calc(100vw-1.5rem),28rem)] -translate-x-1/2 rounded-2xl border border-[#ff9d00]/40 bg-[#180f08] p-4 pr-11 text-[#fff8ed] shadow-[0_22px_60px_rgba(24,15,8,0.36)] md:bottom-6"
+    >
       <div className="flex items-start gap-3">
         <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#ff9d00] text-[#180f08]">
           {isIos ? <Share2 className="h-4 w-4" /> : <Download className="h-4 w-4" />}
@@ -220,6 +224,9 @@ export function PwaManager() {
           <p className="text-sm font-semibold">Installer l'app</p>
           {isIos ? (
             <div className="mt-1 space-y-1.5 text-xs leading-relaxed text-[#fff8ed]/85">
+              <p className="rounded-md border border-[#ff9d00]/25 bg-[#ff9d00]/10 px-2 py-1 text-[#ffcf71]">
+                iOS n’ouvre pas de popup d’installation. Il faut passer par le bouton Partager de Safari.
+              </p>
               {!isSafari && (
                 <p className="rounded-md border border-[#ff9d00]/25 bg-[#ff9d00]/10 px-2 py-1 text-[#ffcf71]">
                   Sur iPhone/iPad, ouvrez d'abord ce site dans Safari.
