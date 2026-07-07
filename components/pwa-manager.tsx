@@ -205,7 +205,7 @@ export function PwaManager() {
         className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-3 z-50 inline-flex h-11 items-center gap-2 rounded-full border border-[#ff9d00]/40 bg-[#180f08] px-4 text-xs font-bold uppercase tracking-[0.12em] text-[#fff8ed] shadow-[0_12px_30px_rgba(24,15,8,0.26)] transition-colors hover:border-[#ff9d00] md:bottom-5 md:left-5"
       >
         {isIos ? <Share2 className="h-4 w-4" /> : <Download className="h-4 w-4" />}
-        Installer
+        {isIos ? "Ajouter à l’écran" : "Installer"}
       </button>
     )
   }
@@ -221,19 +221,18 @@ export function PwaManager() {
           {isIos ? <Share2 className="h-4 w-4" /> : <Download className="h-4 w-4" />}
         </span>
         <div className="min-w-0">
-          <p className="text-sm font-semibold">Installer l'app</p>
+          <p className="text-sm font-semibold">
+            {isIos ? "Ajouter l’app à l’écran d’accueil" : "Installer l'app"}
+          </p>
           {isIos ? (
             <div className="mt-1 space-y-1.5 text-xs leading-relaxed text-[#fff8ed]/85">
-              <p className="rounded-md border border-[#ff9d00]/25 bg-[#ff9d00]/10 px-2 py-1 text-[#ffcf71]">
-                iOS n’ouvre pas de popup d’installation. Il faut passer par le bouton Partager de Safari.
-              </p>
               {!isSafari && (
                 <p className="rounded-md border border-[#ff9d00]/25 bg-[#ff9d00]/10 px-2 py-1 text-[#ffcf71]">
                   Sur iPhone/iPad, ouvrez d'abord ce site dans Safari.
                 </p>
               )}
               {[
-                "Touchez le bouton Partager de Safari.",
+                "Dans Safari, touchez l’icône Partager.",
                 "Choisissez « Sur l’écran d’accueil ».",
                 "Validez avec « Ajouter ».",
               ].map((step) => (
