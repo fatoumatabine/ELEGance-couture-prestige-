@@ -32,35 +32,50 @@ export default function ContactPage() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const res = await fetch("/api/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+      const data = await res.json().catch(() => null)
 
-    // Create WhatsApp message
-    const message =
-      `📩 *Nouveau Message*\n\n` +
-      `👤 *Nom:* ${formData.nom}\n` +
-      `📧 *Email:* ${formData.email}\n` +
-      `📱 *Téléphone:* ${formData.telephone}\n` +
-      `💬 *Sujet:* ${formData.sujet}\n\n` +
-      `*Message:*\n${formData.message}`
+      if (!res.ok) {
+        throw new Error(data?.error || "Impossible d'envoyer le message")
+      }
 
-    const whatsappUrl = `https://wa.me/221778137032?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, "_blank")
+      const message =
+        `📩 *Nouveau Message*\n\n` +
+        `👤 *Nom:* ${formData.nom}\n` +
+        `📧 *Email:* ${formData.email}\n` +
+        `📱 *Téléphone:* ${formData.telephone}\n` +
+        `💬 *Sujet:* ${formData.sujet}\n\n` +
+        `*Message:*\n${formData.message}`
 
-    toast({
-      title: "Message envoyé!",
-      description: "Nous vous répondrons dans les plus brefs délais.",
-    })
+      const whatsappUrl = `https://wa.me/221778137032?text=${encodeURIComponent(message)}`
+      window.open(whatsappUrl, "_blank")
 
-    setFormData({
-      nom: "",
-      email: "",
-      telephone: "",
-      sujet: "",
-      message: "",
-    })
+      toast({
+        title: "Message envoyé!",
+        description: "Nous vous répondrons dans les plus brefs délais.",
+      })
 
-    setIsSubmitting(false)
+      setFormData({
+        nom: "",
+        email: "",
+        telephone: "",
+        sujet: "",
+        message: "",
+      })
+    } catch (error) {
+      toast({
+        title: "Message non envoyé",
+        description: error instanceof Error ? error.message : "Veuillez réessayer.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -217,6 +232,7 @@ export default function ContactPage() {
                         value={formData.message}
                         onChange={handleChange}
                         required
+                        minLength={10}
                         placeholder="Écrivez votre message ici..."
                         rows={6}
                       />

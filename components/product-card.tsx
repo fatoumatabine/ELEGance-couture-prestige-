@@ -6,6 +6,7 @@ import { Heart, ShoppingBag, Eye } from "lucide-react"
 import { normalizeImageUrl } from "@/lib/image-utils"
 import { ToastAction } from "@/components/ui/toast"
 import type { Product } from "@/lib/products"
+import { getProductOptionLabels } from "@/lib/products"
 import { useCartStore } from "@/lib/cart-store"
 import { useToast } from "@/hooks/use-toast"
 
@@ -34,14 +35,17 @@ export function ProductCard({ product }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem)
   const { toast } = useToast()
   const productImage = normalizeImageUrl(product.images?.[0])
+  const firstSize = product.sizes?.find((size) => size.trim().length > 0)
+  const firstColor = product.colors?.find((color) => color.trim().length > 0)
+  const optionLabels = getProductOptionLabels(product)
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault()
     addItem({
       product,
       quantity: 1,
-      selectedSize: product.sizes?.[0],
-      selectedColor: product.colors?.[0],
+      selectedSize: firstSize,
+      selectedColor: firstColor,
     })
     toast({
       title: "Ajouté au panier",
@@ -66,12 +70,12 @@ export function ProductCard({ product }: ProductCardProps) {
     <Link href={`/produit/${product.id}`} className="group block">
       <div className="relative overflow-hidden rounded-[8px] border border-[#ead3aa] bg-card shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#FF9D00]/70 hover:shadow-[0_18px_44px_rgba(123,84,47,0.14)] dark:border-[#3b2717]">
         {/* ── Image ── */}
-        <div className="relative aspect-[4/5] overflow-hidden bg-muted">
+        <div className="relative aspect-[3/4] overflow-hidden bg-muted">
           {productImage ? (
             <img
               src={productImage}
               alt={product.name}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-muted px-6 text-center text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
@@ -144,6 +148,9 @@ export function ProductCard({ product }: ProductCardProps) {
             <p className="text-sm font-bold tracking-wide text-foreground">
               {product.price.toLocaleString()}
               <span className="text-[10px] text-muted-foreground ml-1 font-normal">CFA</span>
+              {optionLabels.priceSuffix && (
+                <span className="ml-1 text-[10px] font-semibold text-[#B6771D] dark:text-[#FFCF71]">{optionLabels.priceSuffix}</span>
+              )}
             </p>
 
             {/* Color dots */}

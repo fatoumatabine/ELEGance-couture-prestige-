@@ -14,12 +14,22 @@ export interface CartItem {
 interface CartStore {
   items: CartItem[]
   addItem: (item: CartItem) => void
-  removeItem: (productId: number) => void
-  updateQuantity: (productId: number, quantity: number) => void
+  removeItem: (productId: number, selectedSize?: string, selectedColor?: string) => void
+  updateQuantity: (productId: number, quantity: number, selectedSize?: string, selectedColor?: string) => void
   clearCart: () => void
   getTotalItems: () => number
   getTotalPrice: () => number
 }
+
+const isSameCartLine = (
+  item: CartItem,
+  productId: number,
+  selectedSize?: string,
+  selectedColor?: string,
+) =>
+  item.product.id === productId &&
+  item.selectedSize === selectedSize &&
+  item.selectedColor === selectedColor
 
 export const useCartStore = create<CartStore>()(
   persist(
@@ -45,15 +55,17 @@ export const useCartStore = create<CartStore>()(
         })
       },
 
-      removeItem: (productId) => {
+      removeItem: (productId, selectedSize, selectedColor) => {
         set((state) => ({
-          items: state.items.filter((item) => item.product.id !== productId),
+          items: state.items.filter((item) => !isSameCartLine(item, productId, selectedSize, selectedColor)),
         }))
       },
 
-      updateQuantity: (productId, quantity) => {
+      updateQuantity: (productId, quantity, selectedSize, selectedColor) => {
         set((state) => ({
-          items: state.items.map((item) => (item.product.id === productId ? { ...item, quantity } : item)),
+          items: state.items.map((item) =>
+            isSameCartLine(item, productId, selectedSize, selectedColor) ? { ...item, quantity } : item,
+          ),
         }))
       },
 

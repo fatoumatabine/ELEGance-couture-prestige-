@@ -1,8 +1,12 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { BackButton } from "@/components/back-button"
 import { ProductGallery } from "@/components/product-gallery"
 import { ProductInfo } from "@/components/product-info"
 import { ProductRecommendations } from "@/components/product-recommendations"
+import { normalizeImageUrls } from "@/lib/image-utils"
+import { prisma, withPrismaRetry } from "@/lib/prisma"
+import type { Product } from "@/lib/products"
 import { notFound } from "next/navigation"
 
 interface ProductPageProps {
@@ -11,32 +15,55 @@ interface ProductPageProps {
   }>
 }
 
-interface Product {
-   id: number
-   name: string
-   description: string
-   price: number
-   category: "robes" | "jupes" | "pantalons" | "accessoires" | "autres"
-   images: string[]
-   sizes?: string[]
-   colors?: string[]
-   inStock: boolean
- }
+async function getProduct(id: string): Promise<Product | null> {
+  const productId = Number(id)
+
+  if (!Number.isInteger(productId)) {
+    return null
+  }
+
+  const product = await withPrismaRetry(() =>
+    prisma.product.findUnique({
+      where: { id: productId },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        category: true,
+        gender: true,
+        collection: true,
+        subcategory: true,
+        images: true,
+        sizes: true,
+        colors: true,
+        inStock: true,
+      },
+    })
+  )
+
+  if (!product) {
+    return null
+  }
+
+  return {
+    ...product,
+    images: normalizeImageUrls(product.images),
+    sizes: product.sizes.filter((size) => size.trim().length > 0),
+    colors: product.colors.filter((color) => color.trim().length > 0),
+  }
+}
 
 export async function generateMetadata({ params }: ProductPageProps) {
   try {
     const { id } = await params
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/products/${id}`, {
-      cache: 'no-store',
-    })
+    const product = await getProduct(id)
 
-    if (!response.ok) {
+    if (!product) {
       return {
         title: "Produit non trouvé",
       }
     }
-
-    const product: Product = await response.json()
 
     return {
       title: `${product.name} - Elegance Couture`,
@@ -52,16 +79,11 @@ export async function generateMetadata({ params }: ProductPageProps) {
 export default async function ProductPage({ params }: ProductPageProps) {
   try {
     const { id } = await params
+    const product = await getProduct(id)
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/products/${id}`, {
-      cache: 'no-store',
-    })
-
-    if (!response.ok) {
+    if (!product) {
       notFound()
     }
-
-    const product: Product = await response.json()
 
     return (
       <div className="min-h-screen flex flex-col">
@@ -70,7 +92,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <main className="flex-1 bg-[#fffaf2]">
           <div className="container mx-auto px-4 py-8 md:py-12">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(360px,0.85fr)_1fr] lg:gap-12 mb-16">
-              <ProductGallery images={product.images} productName={product.name} />
+              <div className="relative w-full max-w-[520px] justify-self-center lg:justify-self-start">
+                <BackButton
+                  className="absolute left-3 top-3 z-20 bg-white/95 shadow-sm backdrop-blur-sm dark:bg-[#211207]/95"
+                  fallbackHref="/boutique"
+                  showLabel={false}
+                />
+                <ProductGallery images={product.images} productName={product.name} />
+              </div>
               <ProductInfo product={product} />
             </div>
 

@@ -1,7 +1,6 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
-import { ProductFilters } from "@/components/product-filters"
 import { prisma, withPrismaRetry } from "@/lib/prisma"
 
 export const metadata = {
@@ -34,30 +33,22 @@ export default async function LingeriePage() {
         </div>
 
         <div className="container mx-auto px-6 py-12 md:py-16">
-          <div className="flex gap-8">
-            <aside className="hidden lg:block w-64 flex-shrink-0">
-              <div className="sticky top-24">
-                <ProductFilters />
-              </div>
-            </aside>
-
-            <div className="flex-1">
-              <div className="mb-8 border-b border-border pb-4">
-                <p className="text-muted-foreground">{products.length} produits disponibles</p>
-              </div>
-
-              {products.length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground">
-                  Aucun produit disponible dans cette catégorie
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                  ))}
-                </div>
-              )}
+          <div>
+            <div className="mb-8 border-b border-border pb-4">
+              <p className="text-muted-foreground">{products.length} produits disponibles</p>
             </div>
+
+            {products.length === 0 ? (
+              <div className="text-center py-12 text-muted-foreground">
+                Aucun produit disponible dans cette catégorie
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+                {products.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </main>

@@ -10,6 +10,7 @@ const categories = [
   { name: "Montres", slug: "montres", type: "accessory", parentSlug: "accessoires", sortOrder: 5 },
   { name: "Parfums", slug: "parfums", type: "accessory", parentSlug: "accessoires", sortOrder: 6 },
   { name: "Chaussures", slug: "chaussures", type: "accessory", parentSlug: "accessoires", sortOrder: 7 },
+  { name: "Tissus", slug: "tissus", type: "accessory", parentSlug: "accessoires", sortOrder: 8 },
 ];
 
 const collections = [

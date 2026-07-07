@@ -29,6 +29,7 @@ fi
 
 echo "🔥 Lancement du serveur de développement..."
 echo "Le site sera accessible sur: http://localhost:3000"
+echo "Mode: Webpack stable (Turbopack désactivé pour éviter les erreurs de cache)"
 echo ""
 
 # Lancer le serveur de développement

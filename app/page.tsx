@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { useLanguage } from "@/components/language-provider"
 import Link from "next/link"
 import { ArrowRight, Star, Check, Loader2, ChevronLeft, ChevronRight, Scissors, Package, Award, RefreshCw, Heart } from "lucide-react"
 import HeroVideo from "@/components/hero-video"
@@ -35,34 +36,227 @@ interface SiteImage {
 
 const getProductImage = (product?: Product) => product?.images?.find(Boolean)?.replace("http://", "https://");
 
-const heroSlides = [
-  {
-    title: "STYLES",
-    titleItalic: "Et",
-    titleEnd: "TENDANCES",
-    subtitle: "Chaque création reflète l'élégance africaine dans toute sa splendeur.",
-    cta: "Découvrir la Collection",
-    ctaHref: "/boutique",
+const homeCopy = {
+  fr: {
+    brand: "Elegance Couture",
+    previous: "Précédent",
+    next: "Suivant",
+    imageRequired: "Image admin requise",
+    heroSlides: [
+      {
+        title: "STYLES",
+        titleItalic: "Et",
+        titleEnd: "TENDANCES",
+        subtitle: "Chaque création reflète l'élégance africaine dans toute sa splendeur.",
+        cta: "Découvrir la Collection",
+        ctaHref: "/boutique",
+      },
+      {
+        title: "L'ART",
+        titleItalic: "De",
+        titleEnd: "LA COUTURE",
+        subtitle: "Des pièces uniques confectionnées par nos maîtres tailleurs africains.",
+        cta: "Nos Collections",
+        ctaHref: "/boutique",
+      },
+      {
+        title: "ÉLÉGANCE",
+        titleItalic: "Et",
+        titleEnd: "PRESTIGE",
+        subtitle: "Robes de gala, boubous et complets d'exception pour les grandes occasions.",
+        cta: "Voir les Créations",
+        ctaHref: "/robes",
+      },
+    ],
+    services: [
+      { label: "Couture Sur Mesure", desc: "Chaque pièce taillée à vos mensurations exactes" },
+      { label: "Qualité Premium", desc: "Tissus sélectionnés parmi les meilleures manufactures" },
+      { label: "Livraison Soignée", desc: "Emballage luxueux et livraison sécurisée partout" },
+      { label: "Retours Faciles", desc: "Satisfaction garantie, retours sous 14 jours" },
+    ],
+    spotlightTitle: "À la une...",
+    spotlightTabs: [
+      { id: "best", label: "Best sellers" },
+      { id: "promo", label: "Jusqu'à -40%" },
+      { id: "week", label: "Offres de la semaine" },
+    ],
+    emptySpotlightTitle: "Aucun produit à afficher",
+    emptySpotlightText: "Ajoutez des produits avec images depuis le dashboard admin.",
+    productDetails: {
+      fit: "Coupe",
+      fitFallback: "Sur mesure",
+      style: "Style",
+      finish: "Finition",
+      finishFallback: "Atelier",
+      available: "Disponible",
+      soldOut: "Épuisé",
+      viewProduct: "Voir le Produit",
+      addToCart: "Ajouter au Panier",
+    },
+    collections: [
+      { title: "Femme", subtitle: "Élégance & Prestige", key: "collection-femme", category: "femme", fallback: "/robe-elegant.svg", href: "/boutique?category=femme" },
+      { title: "Homme", subtitle: "Couture Africaine", key: "collection-homme", category: "homme", fallback: "/atelier-couture-modern.svg", href: "/boutique?category=homme" },
+      { title: "Enfant", subtitle: "Style & Confort", key: "collection-enfant", category: "enfant", fallback: "https://i.pinimg.com/736x/ab/0e/7c/ab0e7c2e9adf271d7b5fc20092bf4d91.jpg", href: "/boutique?category=enfant" },
+      { title: "Accessoires", subtitle: "Détails Précieux", key: "collection-accessoires", category: "accessoires", fallback: "/accessoires-mode.svg", href: "/boutique?category=accessoires" },
+    ],
+    collectionsEyebrow: "Nos Collections",
+    collectionsTitle: "Explorer nos Créations",
+    collectionsText: "Chaque pièce est une célébration de l'artisanat africain et de l'élégance contemporaine",
+    collectionsEmptyTitle: "Collections en attente d'images",
+    collectionsEmptyText: "Ajoutez des produits illustrés depuis l'admin pour remplir cette section.",
+    discover: "Découvrir",
+    featuredEyebrow: "Sélection Exclusive",
+    featuredTitle: "Nos Pièces Maîtresses",
+    featuredText: "Découvrez nos créations les plus prestigieuses et les plus désirées",
+    noProducts: "Aucun produit disponible pour le moment",
+    addProducts: "Ajouter des produits",
+    viewAllProducts: "Voir Tous les Produits",
+    aboutEyebrow: "Notre Histoire",
+    aboutTitleStart: "L'Essence de",
+    aboutTitleAccent: "l'Élégance",
+    aboutTextOne: "Elegance Couture est bien plus qu'une boutique. C'est une célébration de l'artisanat africain, de la tradition et de l'innovation contemporaine. Chaque création est confectionnée avec passion par nos tailleurs et designers africains de talent.",
+    aboutTextTwo: "Basée à Grand Dakar, Thiossane, notre maison de couture vous propose des créations sur mesure et prêt-à-porter qui incarnent le meilleur de la mode africaine contemporaine.",
+    aboutValues: [
+      "Confectionnées par des artisans africains de talent",
+      "Tissus de haute qualité sélectionnés avec expertise",
+      "Création sur mesure et prêt-à-porter",
+      "Service client irréprochable et satisfaction garantie",
+    ],
+    appointment: "Prendre Rendez-vous",
+    stats: [
+      { number: "5000+", label: "Clients Heureux" },
+      { number: "500+", label: "Créations" },
+      { number: "25+", label: "Artisans" },
+      { number: "10", label: "Pays Desservis" },
+    ],
+    testimonialsEyebrow: "Avis Clients",
+    testimonialsTitle: "Ils Nous Font Confiance",
+    testimonialsText: "Découvrez ce qu'en pensent ceux qui portent nos créations",
+    verifiedClient: "Client Vérifié",
+    testimonials: [
+      { name: "Marie Diallo", text: "Une qualité exceptionnelle ! J'ai porté la robe pour un gala et reçu que des compliments. L'élégance parfaite !", rating: 5, initial: "M" },
+      { name: "Amadou Sow", text: "Le boubou est magnifique, confortable et les finitions sont impeccables. Très satisfait de mon achat.", rating: 5, initial: "A" },
+      { name: "Fatou Ndiaye", text: "Service impeccable, livraison rapide et produits de haute qualité. Je recommande vivement !", rating: 5, initial: "F" },
+    ],
+    finalEyebrow: "Commencez Maintenant",
+    finalTitle: "Prêt à Découvrir l'Élégance ?",
+    finalText: "Explorez notre collection et trouvez la pièce qui incarne votre style unique",
+    shopCta: "Accéder à la Boutique",
+    contactCta: "Nous Contacter",
   },
-  {
-    title: "L'ART",
-    titleItalic: "De",
-    titleEnd: "LA COUTURE",
-    subtitle: "Des pièces uniques confectionnées par nos maîtres tailleurs africains.",
-    cta: "Nos Collections",
-    ctaHref: "/boutique",
+  en: {
+    brand: "Elegance Couture",
+    previous: "Previous",
+    next: "Next",
+    imageRequired: "Admin image required",
+    heroSlides: [
+      {
+        title: "STYLES",
+        titleItalic: "And",
+        titleEnd: "TRENDS",
+        subtitle: "Every creation reflects African elegance in all its splendor.",
+        cta: "Discover the Collection",
+        ctaHref: "/boutique",
+      },
+      {
+        title: "THE ART",
+        titleItalic: "Of",
+        titleEnd: "TAILORING",
+        subtitle: "Unique pieces crafted by our African master tailors.",
+        cta: "Our Collections",
+        ctaHref: "/boutique",
+      },
+      {
+        title: "ELEGANCE",
+        titleItalic: "And",
+        titleEnd: "PRESTIGE",
+        subtitle: "Gala dresses, boubous and exceptional suits for special occasions.",
+        cta: "View Creations",
+        ctaHref: "/robes",
+      },
+    ],
+    services: [
+      { label: "Custom Tailoring", desc: "Every piece tailored to your exact measurements" },
+      { label: "Premium Quality", desc: "Fabrics selected from the finest manufacturers" },
+      { label: "Careful Delivery", desc: "Luxury packaging and secure delivery everywhere" },
+      { label: "Easy Returns", desc: "Satisfaction guaranteed, returns within 14 days" },
+    ],
+    spotlightTitle: "Featured...",
+    spotlightTabs: [
+      { id: "best", label: "Best sellers" },
+      { id: "promo", label: "Up to -40%" },
+      { id: "week", label: "Weekly offers" },
+    ],
+    emptySpotlightTitle: "No products to display",
+    emptySpotlightText: "Add products with images from the admin dashboard.",
+    productDetails: {
+      fit: "Fit",
+      fitFallback: "Custom-made",
+      style: "Style",
+      finish: "Finish",
+      finishFallback: "Atelier",
+      available: "Available",
+      soldOut: "Sold out",
+      viewProduct: "View Product",
+      addToCart: "Add to Cart",
+    },
+    collections: [
+      { title: "Women", subtitle: "Elegance & Prestige", key: "collection-femme", category: "femme", fallback: "/robe-elegant.svg", href: "/boutique?category=femme" },
+      { title: "Men", subtitle: "African Tailoring", key: "collection-homme", category: "homme", fallback: "/atelier-couture-modern.svg", href: "/boutique?category=homme" },
+      { title: "Kids", subtitle: "Style & Comfort", key: "collection-enfant", category: "enfant", fallback: "https://i.pinimg.com/736x/ab/0e/7c/ab0e7c2e9adf271d7b5fc20092bf4d91.jpg", href: "/boutique?category=enfant" },
+      { title: "Accessories", subtitle: "Precious Details", key: "collection-accessoires", category: "accessoires", fallback: "/accessoires-mode.svg", href: "/boutique?category=accessoires" },
+    ],
+    collectionsEyebrow: "Our Collections",
+    collectionsTitle: "Explore Our Creations",
+    collectionsText: "Every piece celebrates African craftsmanship and contemporary elegance",
+    collectionsEmptyTitle: "Collections waiting for images",
+    collectionsEmptyText: "Add illustrated products from the admin dashboard to fill this section.",
+    discover: "Discover",
+    featuredEyebrow: "Exclusive Selection",
+    featuredTitle: "Signature Pieces",
+    featuredText: "Discover our most prestigious and most desired creations",
+    noProducts: "No products available at the moment",
+    addProducts: "Add products",
+    viewAllProducts: "View All Products",
+    aboutEyebrow: "Our Story",
+    aboutTitleStart: "The Essence of",
+    aboutTitleAccent: "Elegance",
+    aboutTextOne: "Elegance Couture is more than a shop. It celebrates African craftsmanship, tradition and contemporary innovation. Every creation is made with passion by our talented African tailors and designers.",
+    aboutTextTwo: "Based in Grand Dakar, Thiossane, our fashion house offers custom-made and ready-to-wear creations that embody the best of contemporary African fashion.",
+    aboutValues: [
+      "Crafted by talented African artisans",
+      "High-quality fabrics selected with expertise",
+      "Custom creation and ready-to-wear",
+      "Outstanding customer care and guaranteed satisfaction",
+    ],
+    appointment: "Book Appointment",
+    stats: [
+      { number: "5000+", label: "Happy Clients" },
+      { number: "500+", label: "Creations" },
+      { number: "25+", label: "Artisans" },
+      { number: "10", label: "Countries Served" },
+    ],
+    testimonialsEyebrow: "Client Reviews",
+    testimonialsTitle: "They Trust Us",
+    testimonialsText: "See what people who wear our creations think",
+    verifiedClient: "Verified Client",
+    testimonials: [
+      { name: "Marie Diallo", text: "Exceptional quality! I wore the dress to a gala and received so many compliments. Perfect elegance.", rating: 5, initial: "M" },
+      { name: "Amadou Sow", text: "The boubou is beautiful, comfortable and impeccably finished. I am very satisfied with my purchase.", rating: 5, initial: "A" },
+      { name: "Fatou Ndiaye", text: "Excellent service, fast delivery and high-quality products. I highly recommend them.", rating: 5, initial: "F" },
+    ],
+    finalEyebrow: "Start Now",
+    finalTitle: "Ready to Discover Elegance?",
+    finalText: "Explore our collection and find the piece that expresses your unique style",
+    shopCta: "Go to Shop",
+    contactCta: "Contact Us",
   },
-  {
-    title: "ÉLÉGANCE",
-    titleItalic: "Et",
-    titleEnd: "PRESTIGE",
-    subtitle: "Robes de gala, boubous et complets d'exception pour les grandes occasions.",
-    cta: "Voir les Créations",
-    ctaHref: "/robes",
-  },
-]
+} as const
 
 export default function HomePage() {
+  const { language } = useLanguage();
+  const copy = homeCopy[language];
+  const heroSlides = copy.heroSlides;
   const [products, setProducts] = useState<Product[]>([]);
   const [siteImages, setSiteImages] = useState<SiteImage[]>([]);
   const [loading, setLoading] = useState(true);
@@ -77,7 +271,7 @@ export default function HomePage() {
     hasLoadedHomeData.current = true;
     fetchProducts();
     fetchSiteImages();
-  }, []);
+  }, [heroSlides.length]);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -129,32 +323,10 @@ export default function HomePage() {
     return adminImage || productImage || fallback;
   };
 
-  const collections = [
-    {
-      title: "Femme",
-      subtitle: "Élégance & Prestige",
-      image: getCollectionImage("collection-femme", "femme", "/robe-elegant.svg"),
-      href: "/boutique?category=femme",
-    },
-    {
-      title: "Homme",
-      subtitle: "Couture Africaine",
-      image: getCollectionImage("collection-homme", "homme", "/atelier-couture-modern.svg"),
-      href: "/boutique?category=homme",
-    },
-    {
-      title: "Enfant",
-      subtitle: "Style & Confort",
-      image: getCollectionImage("collection-enfant", "enfant", "https://i.pinimg.com/736x/ab/0e/7c/ab0e7c2e9adf271d7b5fc20092bf4d91.jpg"),
-      href: "/boutique?category=enfant",
-    },
-    {
-      title: "Accessoires",
-      subtitle: "Détails Précieux",
-      image: getCollectionImage("collection-accessoires", "accessoires", "/accessoires-mode.svg"),
-      href: "/boutique?category=accessoires",
-    },
-  ];
+  const collections = copy.collections.map((collection) => ({
+    ...collection,
+    image: getCollectionImage(collection.key, collection.category, collection.fallback),
+  }));
 
   const productsWithImages = products.filter((product) => getProductImage(product));
   const featuredProducts = (
@@ -162,11 +334,7 @@ export default function HomePage() {
       ? productsWithImages.filter((product) => product.featured)
       : productsWithImages
   ).slice(0, 4);
-  const spotlightTabs = [
-    { id: "best", label: "Best sellers" },
-    { id: "promo", label: "Jusqu'à -40%" },
-    { id: "week", label: "Offres de la semaine" },
-  ];
+  const spotlightTabs = copy.spotlightTabs;
   const spotlightProducts = (() => {
     const productsByTab: Record<string, Product[]> = {
       best: productsWithImages.filter((product) => product.bestSeller),
@@ -207,33 +375,13 @@ export default function HomePage() {
     "https://i.pinimg.com/1200x/f5/6c/53/f56c53d579219a85dc898fb3a1e1395a.jpg",
   ];
 
-  const testimonials = [
-    {
-      name: "Marie Diallo",
-      text: "Une qualité exceptionnelle ! J'ai porté la robe pour un gala et reçu que des compliments. L'élégance parfaite !",
-      rating: 5,
-      initial: "M"
-    },
-    {
-      name: "Amadou Sow",
-      text: "Le boubou est magnifique, confortable et les finitions sont impeccables. Très satisfait de mon achat.",
-      rating: 5,
-      initial: "A"
-    },
-    {
-      name: "Fatou Ndiaye",
-      text: "Service impeccable, livraison rapide et produits de haute qualité. Je recommande vivement !",
-      rating: 5,
-      initial: "F"
-    },
-  ]
+  const testimonials = copy.testimonials
 
-  const services = [
-    { icon: Scissors, label: "Couture Sur Mesure", desc: "Chaque pièce taillée à vos mensurations exactes" },
-    { icon: Award, label: "Qualité Premium", desc: "Tissus sélectionnés parmi les meilleures manufactures" },
-    { icon: Package, label: "Livraison Soignée", desc: "Emballage luxueux et livraison sécurisée partout" },
-    { icon: RefreshCw, label: "Retours Faciles", desc: "Satisfaction garantie, retours sous 14 jours" },
-  ]
+  const serviceIcons = [Scissors, Award, Package, RefreshCw]
+  const services = copy.services.map((service, index) => ({
+    ...service,
+    icon: serviceIcons[index],
+  }))
 
   const currentSlide = heroSlides[heroIndex];
 
@@ -244,7 +392,7 @@ export default function HomePage() {
       <main className="flex-1">
 
         {/* ===== HERO SLIDER ===== */}
-        <section className="relative h-screen min-h-[600px] max-h-[900px] w-full overflow-hidden bg-[#120b06]">
+        <section className="relative h-[calc(100svh-4rem)] min-h-[520px] max-h-[780px] w-full overflow-hidden bg-[#120b06] sm:h-[calc(100svh-5rem)] md:h-screen md:min-h-[600px] md:max-h-[900px]">
           {/* Video Background */}
           <HeroVideo
             mp4="/hero-video.mp4"
@@ -256,35 +404,35 @@ export default function HomePage() {
           <div className="editorial-grid absolute inset-0 z-[2] opacity-[0.08]" />
 
           {/* Slide Content */}
-          <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-            <div key={heroIndex} className="animate-fadeIn max-w-6xl">
+          <div className="relative z-10 flex h-full flex-col items-center justify-center px-5 pb-14 text-center sm:px-6 sm:pb-0">
+            <div key={heroIndex} className="animate-fadeIn w-full max-w-6xl">
               {/* Decorative line */}
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#FF9D00]" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#FFCF71]">
+              <div className="mb-5 flex items-center justify-center gap-3 sm:mb-8 sm:gap-4">
+                <div className="h-px w-8 bg-gradient-to-r from-transparent to-[#FF9D00] sm:w-12" />
+                <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#FFCF71] sm:text-[10px] sm:tracking-[0.4em]">
                   Elegance Couture
                 </span>
-                <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#FF9D00]" />
+                <div className="h-px w-8 bg-gradient-to-l from-transparent to-[#FF9D00] sm:w-12" />
               </div>
 
               {/* Large Hero Title */}
-              <h1 className="mb-6 font-serif font-bold leading-none text-[#fff8ed] drop-shadow-[0_16px_48px_rgba(0,0,0,0.55)]">
-                <span className="block text-5xl tracking-wide md:text-7xl lg:text-8xl">
+              <h1 className="mb-5 font-serif font-bold leading-[0.94] text-[#fff8ed] drop-shadow-[0_16px_48px_rgba(0,0,0,0.55)] sm:mb-6">
+                <span className="block text-[clamp(2.35rem,11.5vw,3.25rem)] tracking-[0.015em] md:text-7xl md:tracking-wide lg:text-8xl">
                   {currentSlide.title}{" "}
                   <em className="brand-text-gradient italic font-normal">{currentSlide.titleItalic}</em>{" "}
-                  {currentSlide.titleEnd}
+                  <span className="block md:inline">{currentSlide.titleEnd}</span>
                 </span>
               </h1>
 
               {/* Subtitle */}
-              <p className="mx-auto mb-10 max-w-xl text-base leading-relaxed tracking-wide text-[#f2d9ad] md:text-lg">
+              <p className="mx-auto mb-7 max-w-[20rem] text-sm leading-relaxed tracking-wide text-[#f2d9ad] sm:mb-10 sm:max-w-xl sm:text-base md:text-lg">
                 {currentSlide.subtitle}
               </p>
 
               {/* CTA */}
               <Link
                 href={currentSlide.ctaHref}
-                className="brand-glow inline-flex items-center gap-3 bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] px-8 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-[#180f08] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_58px_rgba(255,157,0,0.32)]"
+                className="brand-glow inline-flex w-full max-w-[19rem] items-center justify-center gap-3 bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] px-5 py-3.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#180f08] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_58px_rgba(255,157,0,0.32)] sm:w-auto sm:px-8 sm:py-4 sm:text-[11px] sm:tracking-[0.25em]"
               >
                 {currentSlide.cta}
                 <ArrowRight className="w-4 h-4" />
@@ -295,21 +443,21 @@ export default function HomePage() {
           {/* Slider Controls */}
           <button
             onClick={prevSlide}
-            className="absolute left-6 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-[#fff8ed]/25 bg-[#120b06]/25 text-[#fff8ed] backdrop-blur-md transition-all duration-300 hover:border-[#FF9D00] hover:bg-[#FF9D00] hover:text-[#180f08]"
-            aria-label="Précédent"
+            className="absolute bottom-4 left-4 z-20 flex h-10 w-10 items-center justify-center border border-[#fff8ed]/25 bg-[#120b06]/25 text-[#fff8ed] backdrop-blur-md transition-all duration-300 hover:border-[#FF9D00] hover:bg-[#FF9D00] hover:text-[#180f08] sm:left-6 md:bottom-auto md:top-1/2 md:h-11 md:w-11 md:-translate-y-1/2"
+            aria-label={copy.previous}
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-6 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-[#fff8ed]/25 bg-[#120b06]/25 text-[#fff8ed] backdrop-blur-md transition-all duration-300 hover:border-[#FF9D00] hover:bg-[#FF9D00] hover:text-[#180f08]"
-            aria-label="Suivant"
+            className="absolute bottom-4 right-4 z-20 flex h-10 w-10 items-center justify-center border border-[#fff8ed]/25 bg-[#120b06]/25 text-[#fff8ed] backdrop-blur-md transition-all duration-300 hover:border-[#FF9D00] hover:bg-[#FF9D00] hover:text-[#180f08] sm:right-6 md:bottom-auto md:top-1/2 md:h-11 md:w-11 md:-translate-y-1/2"
+            aria-label={copy.next}
           >
             <ChevronRight className="w-5 h-5" />
           </button>
 
           {/* Slide Dots */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+          <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-3 md:bottom-8">
             {heroSlides.map((_, idx) => (
               <button
                 key={idx}
@@ -354,7 +502,7 @@ export default function HomePage() {
           <div className="container mx-auto px-6">
             <div className="mb-10 text-center">
               <h2 className="font-serif text-5xl italic leading-none text-[#241609] dark:text-[#fff8ed] md:text-6xl">
-                À la une...
+                {copy.spotlightTitle}
               </h2>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-7">
                 {spotlightTabs.map((tab) => (
@@ -379,8 +527,8 @@ export default function HomePage() {
               </div>
             ) : spotlightProducts.length === 0 ? (
               <div className="border border-[#ead3aa] bg-white/70 py-16 text-center dark:border-[#3b2717] dark:bg-[#211207]">
-                <p className="font-serif text-2xl text-foreground">Aucun produit à afficher</p>
-                <p className="mt-2 text-sm text-muted-foreground">Ajoutez des produits avec images depuis le dashboard admin.</p>
+                <p className="font-serif text-2xl text-foreground">{copy.emptySpotlightTitle}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{copy.emptySpotlightText}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
@@ -423,9 +571,9 @@ export default function HomePage() {
 
                         <div className="mt-5 grid grid-cols-3 border-t border-[#ead3aa] pt-4 text-center dark:border-[#3b2717]">
                           {[
-                            ["Coupe", product.sizes?.[0] || "Sur mesure"],
-                            ["Style", product.category],
-                            ["Finition", product.colors?.[0] || "Atelier"],
+                            [copy.productDetails.fit, product.sizes?.[0] || copy.productDetails.fitFallback],
+                            [copy.productDetails.style, product.category],
+                            [copy.productDetails.finish, product.colors?.[0] || copy.productDetails.finishFallback],
                           ].map(([label, value]) => (
                             <div key={label}>
                               <p className="text-[11px] font-bold text-[#180f08] dark:text-[#fff8ed]">{label}</p>
@@ -451,23 +599,23 @@ export default function HomePage() {
               <div className="flex items-center justify-center gap-4 mb-5">
                 <div className="h-px w-10 bg-[#FF9D00]" />
                 <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00] font-medium">
-                  Nos Collections
+                  {copy.collectionsEyebrow}
                 </span>
                 <div className="h-px w-10 bg-[#FF9D00]" />
               </div>
               <h2 className="mb-4 font-serif text-4xl font-bold tracking-wide text-foreground md:text-5xl">
-                Explorer nos Créations
+                {copy.collectionsTitle}
               </h2>
               <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto leading-relaxed tracking-wide">
-                Chaque pièce est une célébration de l'artisanat africain et de l'élégance contemporaine
+                {copy.collectionsText}
               </p>
             </div>
 
             {/* Collections Grid */}
             {collections.length === 0 ? (
               <div className="border border-[#ead3aa] bg-white/70 py-14 text-center dark:border-[#3b2717] dark:bg-[#211207]">
-                <p className="font-serif text-2xl text-foreground">Collections en attente d'images</p>
-                <p className="mt-2 text-sm text-muted-foreground">Ajoutez des produits illustrés depuis l'admin pour remplir cette section.</p>
+                <p className="font-serif text-2xl text-foreground">{copy.collectionsEmptyTitle}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{copy.collectionsEmptyText}</p>
               </div>
             ) : (
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -495,7 +643,7 @@ export default function HomePage() {
                       </h3>
                       <div className="flex items-center gap-2 mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <span className="text-[10px] tracking-[0.2em] uppercase text-[#FF9D00]">
-                          Découvrir
+                          {copy.discover}
                         </span>
                         <ArrowRight className="w-3 h-3 text-[#FF9D00]" />
                       </div>
@@ -516,15 +664,15 @@ export default function HomePage() {
               <div className="flex items-center justify-center gap-4 mb-5">
                 <div className="h-px w-10 bg-[#FF9D00]" />
                 <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00] font-medium">
-                  Sélection Exclusive
+                  {copy.featuredEyebrow}
                 </span>
                 <div className="h-px w-10 bg-[#FF9D00]" />
               </div>
               <h2 className="font-serif text-4xl md:text-5xl text-foreground font-bold tracking-wide mb-4">
-                Nos Pièces Maîtresses
+                {copy.featuredTitle}
               </h2>
               <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto leading-relaxed">
-                Découvrez nos créations les plus prestigieuses et les plus désirées
+                {copy.featuredText}
               </p>
             </div>
 
@@ -535,12 +683,12 @@ export default function HomePage() {
               </div>
             ) : products.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-muted-foreground text-sm mb-6 tracking-wide">Aucun produit disponible pour le moment</p>
+                <p className="text-muted-foreground text-sm mb-6 tracking-wide">{copy.noProducts}</p>
                 <Link
                   href="/admin"
                   className="inline-block px-8 py-3 border border-[#FF9D00] text-[#FF9D00] text-[11px] tracking-[0.2em] uppercase hover:bg-[#FF9D00] hover:text-white transition-all duration-300"
                 >
-                  Ajouter des produits
+                  {copy.addProducts}
                 </Link>
               </div>
             ) : (
@@ -557,7 +705,7 @@ export default function HomePage() {
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center bg-muted text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                          Image admin requise
+                          {copy.imageRequired}
                         </div>
                       )}
                       {/* Badge */}
@@ -566,7 +714,7 @@ export default function HomePage() {
                           ? "bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] text-[#180f08]"
                           : "bg-muted text-muted-foreground"
                       }`}>
-                        {product.inStock ? "Disponible" : "Épuisé"}
+                        {product.inStock ? copy.productDetails.available : copy.productDetails.soldOut}
                       </div>
                       {/* Hover Overlay */}
                       <div className="absolute inset-0 flex items-center justify-center bg-[#180f08]/58 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
@@ -574,7 +722,7 @@ export default function HomePage() {
                           href={`/produit/${product.id}`}
                           className="bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#180f08] transition-transform hover:scale-[1.03]"
                         >
-                          Voir le Produit
+                          {copy.productDetails.viewProduct}
                         </Link>
                       </div>
                     </div>
@@ -614,7 +762,7 @@ export default function HomePage() {
                         href={`/produit/${product.id}`}
                         className="block w-full text-center py-3 border border-border text-foreground text-[10px] tracking-[0.2em] uppercase hover:border-[#FF9D00] hover:text-[#FF9D00] transition-all duration-300"
                       >
-                        Ajouter au Panier
+                        {copy.productDetails.addToCart}
                       </Link>
                     </div>
                   </div>
@@ -628,7 +776,7 @@ export default function HomePage() {
                 href="/boutique"
                 className="inline-flex items-center gap-3 border border-[#FF9D00] px-10 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-[#B6771D] transition-all duration-300 hover:bg-[#FF9D00] hover:text-[#180f08] dark:text-[#FFCF71]"
               >
-                Voir Tous les Produits
+                {copy.viewAllProducts}
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -645,14 +793,14 @@ export default function HomePage() {
                   <div className="aspect-[3/4] overflow-hidden border border-[#ead3aa] shadow-[0_20px_60px_rgba(123,84,47,0.14)] dark:border-[#3b2717]">
                     <img
                       src={storyImages[0]}
-                      alt="Création couture africaine"
+                      alt={language === "fr" ? "Création couture africaine" : "African couture creation"}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="mt-8 aspect-[3/4] overflow-hidden border border-[#ead3aa] shadow-[0_20px_60px_rgba(123,84,47,0.14)] dark:border-[#3b2717]">
                     <img
                       src={storyImages[1]}
-                      alt="Élégance couture prestige"
+                      alt={language === "fr" ? "Élégance couture prestige" : "Elegance couture prestige"}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -665,30 +813,22 @@ export default function HomePage() {
               <div>
                 <div className="flex items-center gap-4 mb-6">
                   <div className="h-px w-10 bg-[#FF9D00]" />
-                  <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00]">Notre Histoire</span>
+                  <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00]">{copy.aboutEyebrow}</span>
                 </div>
                 <h2 className="font-serif text-4xl md:text-5xl text-foreground font-bold mb-6 leading-tight">
-                  L'Essence de<br />
-                  <span className="brand-text-gradient">l'Élégance</span>
+                  {copy.aboutTitleStart}<br />
+                  <span className="brand-text-gradient">{copy.aboutTitleAccent}</span>
                 </h2>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-6 tracking-wide">
-                  Elegance Couture est bien plus qu'une boutique. C'est une célébration de l'artisanat africain,
-                  de la tradition et de l'innovation contemporaine. Chaque création est confectionnée avec passion par
-                  nos tailleurs et designers africains de talent.
+                  {copy.aboutTextOne}
                 </p>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-8 tracking-wide">
-                  Basée à Grand Dakar, Thiossane, notre maison de couture vous propose des créations sur mesure
-                  et prêt-à-porter qui incarnent le meilleur de la mode africaine contemporaine.
+                  {copy.aboutTextTwo}
                 </p>
 
                 {/* Values */}
                 <div className="space-y-3 mb-10">
-                  {[
-                    "Confectionnées par des artisans africains de talent",
-                    "Tissus de haute qualité sélectionnés avec expertise",
-                    "Création sur mesure et prêt-à-porter",
-                    "Service client irréprochable et satisfaction garantie",
-                  ].map((val, i) => (
+                  {copy.aboutValues.map((val, i) => (
                     <div key={i} className="flex items-start gap-3">
                       <Check className="w-4 h-4 text-[#FF9D00] flex-shrink-0 mt-0.5" />
                       <p className="text-foreground/80 text-sm tracking-wide">{val}</p>
@@ -700,7 +840,7 @@ export default function HomePage() {
                   href="/contact"
                   className="brand-glow inline-flex items-center gap-3 bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] px-8 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-[#180f08] transition-all duration-300 hover:-translate-y-1"
                 >
-                  Prendre Rendez-vous
+                  {copy.appointment}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -710,12 +850,7 @@ export default function HomePage() {
           {/* Stats Row */}
           <div className="container mx-auto px-6 mt-20">
             <div className="border-t border-border pt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {[
-                { number: "5000+", label: "Clients Heureux" },
-                { number: "500+", label: "Créations" },
-                { number: "25+", label: "Artisans" },
-                { number: "10", label: "Pays Desservis" },
-              ].map((stat, idx) => (
+              {copy.stats.map((stat, idx) => (
                 <div key={idx}>
                   <div className="brand-text-gradient mb-2 font-serif text-4xl font-bold tracking-wide md:text-5xl">
                     {stat.number}
@@ -735,15 +870,15 @@ export default function HomePage() {
               <div className="flex items-center justify-center gap-4 mb-5">
                 <div className="h-px w-10 bg-[#FF9D00]" />
                 <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00] font-medium">
-                  Avis Clients
+                  {copy.testimonialsEyebrow}
                 </span>
                 <div className="h-px w-10 bg-[#FF9D00]" />
               </div>
               <h2 className="font-serif text-4xl md:text-5xl text-foreground font-bold tracking-wide mb-4">
-                Ils Nous Font Confiance
+                {copy.testimonialsTitle}
               </h2>
               <p className="text-muted-foreground text-sm max-w-md mx-auto tracking-wide">
-                Découvrez ce qu'en pensent ceux qui portent nos créations
+                {copy.testimonialsText}
               </p>
             </div>
 
@@ -770,7 +905,7 @@ export default function HomePage() {
                     </div>
                     <div>
                       <p className="text-foreground text-sm font-semibold tracking-wide">{t.name}</p>
-                      <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Client Vérifié</p>
+                      <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground">{copy.verifiedClient}</p>
                     </div>
                   </div>
                 </div>
@@ -792,28 +927,28 @@ export default function HomePage() {
           <div className="relative container mx-auto px-6 text-center">
             <div className="flex items-center justify-center gap-4 mb-6">
               <div className="h-px w-10 bg-[#FF9D00]" />
-              <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00]">Commencez Maintenant</span>
+              <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00]">{copy.finalEyebrow}</span>
               <div className="h-px w-10 bg-[#FF9D00]" />
             </div>
             <h2 className="mb-5 font-serif text-4xl font-bold tracking-wide text-[#fff8ed] md:text-5xl">
-              Prêt à Découvrir l'Élégance ?
+              {copy.finalTitle}
             </h2>
             <p className="mx-auto mb-10 max-w-md text-sm leading-relaxed tracking-wide text-[#f2d9ad]">
-              Explorez notre collection et trouvez la pièce qui incarne votre style unique
+              {copy.finalText}
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
                 href="/boutique"
                 className="brand-glow inline-flex items-center gap-3 bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] px-10 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-[#180f08] transition-all duration-300 hover:-translate-y-1"
               >
-                Accéder à la Boutique
+                {copy.shopCta}
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/contact"
                 className="inline-flex items-center gap-3 border border-[#FF9D00]/70 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-[#FFCF71] transition-all duration-300 hover:bg-[#FF9D00] hover:text-[#180f08]"
               >
-                Nous Contacter
+                {copy.contactCta}
               </Link>
             </div>
           </div>

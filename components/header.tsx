@@ -5,8 +5,189 @@ import { ShoppingCart, Menu, X, Phone, Mail, MessageCircle, Instagram, Facebook,
 import { useCartStore } from "@/lib/cart-store"
 import { useEffect, useState, useCallback } from "react"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { LanguageToggle } from "@/components/language-toggle"
+import { useLanguage } from "@/components/language-provider"
+
+type HeaderNavItem = {
+  label: string
+  href: string
+}
+
+type HeaderNavLink = {
+  label: string
+  href: string
+  items?: HeaderNavItem[]
+  columns?: {
+    title: string
+    items: HeaderNavItem[]
+  }[]
+}
+
+type HeaderCopy = {
+  tagline: string
+  appointment: string
+  cart: string
+  navLinks: HeaderNavLink[]
+}
+
+const headerCopy: Record<"fr" | "en", HeaderCopy> = {
+  fr: {
+    tagline: "Mode Africaine Premium",
+    appointment: "Rendez-vous",
+    cart: "Panier",
+    navLinks: [
+      {
+        label: "Découvrir",
+        href: "/",
+        items: [
+          { label: "Accueil", href: "/" },
+          { label: "Nouveautés", href: "/boutique?selection=nouveautes" },
+          { label: "Pièces phares", href: "/boutique?selection=pieces-phares" },
+          { label: "Notre atelier", href: "/a-propos" },
+        ],
+      },
+      {
+        label: "Collections",
+        href: "/boutique",
+        columns: [
+          {
+            title: "Femme",
+            items: [
+              { label: "Robe", href: "/robes" },
+              { label: "Grand boubou", href: "/boutique?collection=femme-grand-boubou" },
+              { label: "Taille basse", href: "/boutique?collection=taille-basse" },
+            ],
+          },
+          {
+            title: "Homme",
+            items: [
+              { label: "Grand boubou", href: "/boutique?collection=homme-grand-boubou" },
+              { label: "Kaftan", href: "/boutique?collection=kaftan-homme" },
+              { label: "Demi-saison", href: "/boutique?collection=demi-saison-homme" },
+              { label: "Tenue Super 100", href: "/boutique?collection=super-100" },
+            ],
+          },
+          {
+            title: "Enfant",
+            items: [
+              { label: "Robe enfant", href: "/boutique?collection=robe-enfant" },
+              { label: "Boubou enfant", href: "/boutique?collection=boubou-enfant" },
+              { label: "Kaftan enfant", href: "/boutique?collection=kaftan-enfant" },
+              { label: "Tenue cérémonie", href: "/boutique?collection=ceremonie-enfant" },
+            ],
+          },
+        ],
+      },
+      {
+        label: "Accessoires",
+        href: "/accessoires",
+        items: [
+          { label: "Montres", href: "/boutique?accessoire=montres" },
+          { label: "Parfums", href: "/parfums" },
+          { label: "Chaussures", href: "/boutique?accessoire=chaussures" },
+        ],
+      },
+      {
+        label: "Sur Mesure",
+        href: "/commander",
+        items: [
+          { label: "Prendre rendez-vous", href: "/contact" },
+          { label: "Commander une création", href: "/commander" },
+          { label: "Guide des tailles", href: "/conditions" },
+        ],
+      },
+      {
+        label: "Services",
+        href: "/contact",
+        items: [
+          { label: "Livraison", href: "/livraison" },
+          { label: "Retours & échanges", href: "/retours" },
+          { label: "Contact WhatsApp", href: "https://wa.me/221778137032" },
+        ],
+      },
+    ],
+  },
+  en: {
+    tagline: "Premium African Fashion",
+    appointment: "Appointment",
+    cart: "Cart",
+    navLinks: [
+      {
+        label: "Discover",
+        href: "/",
+        items: [
+          { label: "Home", href: "/" },
+          { label: "New arrivals", href: "/boutique?selection=nouveautes" },
+          { label: "Featured pieces", href: "/boutique?selection=pieces-phares" },
+          { label: "Our atelier", href: "/a-propos" },
+        ],
+      },
+      {
+        label: "Collections",
+        href: "/boutique",
+        columns: [
+          {
+            title: "Women",
+            items: [
+              { label: "Dresses", href: "/robes" },
+              { label: "Grand boubou", href: "/boutique?collection=femme-grand-boubou" },
+              { label: "Taille basse", href: "/boutique?collection=taille-basse" },
+            ],
+          },
+          {
+            title: "Men",
+            items: [
+              { label: "Grand boubou", href: "/boutique?collection=homme-grand-boubou" },
+              { label: "Kaftan", href: "/boutique?collection=kaftan-homme" },
+              { label: "Demi-season", href: "/boutique?collection=demi-saison-homme" },
+              { label: "Super 100 outfit", href: "/boutique?collection=super-100" },
+            ],
+          },
+          {
+            title: "Kids",
+            items: [
+              { label: "Kids dress", href: "/boutique?collection=robe-enfant" },
+              { label: "Kids boubou", href: "/boutique?collection=boubou-enfant" },
+              { label: "Kids kaftan", href: "/boutique?collection=kaftan-enfant" },
+              { label: "Ceremony outfit", href: "/boutique?collection=ceremonie-enfant" },
+            ],
+          },
+        ],
+      },
+      {
+        label: "Accessories",
+        href: "/accessoires",
+        items: [
+          { label: "Watches", href: "/boutique?accessoire=montres" },
+          { label: "Perfumes", href: "/parfums" },
+          { label: "Shoes", href: "/boutique?accessoire=chaussures" },
+        ],
+      },
+      {
+        label: "Custom",
+        href: "/commander",
+        items: [
+          { label: "Book an appointment", href: "/contact" },
+          { label: "Order a creation", href: "/commander" },
+          { label: "Size guide", href: "/conditions" },
+        ],
+      },
+      {
+        label: "Services",
+        href: "/contact",
+        items: [
+          { label: "Delivery", href: "/livraison" },
+          { label: "Returns & exchanges", href: "/retours" },
+          { label: "WhatsApp contact", href: "https://wa.me/221778137032" },
+        ],
+      },
+    ],
+  },
+}
 
 export function Header() {
+  const { language } = useLanguage()
+  const copy = headerCopy[language]
   const [cartCount, setCartCount] = useState(0)
   const [isClient, setIsClient] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -31,77 +212,7 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [handleScroll])
 
-  const navLinks = [
-    {
-      label: "Découvrir",
-      href: "/",
-      items: [
-        { label: "Accueil", href: "/" },
-        { label: "Nouveautés", href: "/boutique?selection=nouveautes" },
-        { label: "Pièces phares", href: "/boutique?selection=pieces-phares" },
-        { label: "Notre atelier", href: "/a-propos" },
-      ],
-    },
-    {
-      label: "Collections",
-      href: "/boutique",
-      columns: [
-        {
-          title: "Femme",
-          items: [
-            { label: "Robe", href: "/robes" },
-            { label: "Grand boubou", href: "/boutique?collection=femme-grand-boubou" },
-            { label: "Taille basse", href: "/boutique?collection=taille-basse" },
-          ],
-        },
-        {
-          title: "Homme",
-          items: [
-            { label: "Grand boubou", href: "/boutique?collection=homme-grand-boubou" },
-            { label: "Kaftan", href: "/boutique?collection=kaftan-homme" },
-            { label: "Demi-saison", href: "/boutique?collection=demi-saison-homme" },
-            { label: "Tenue Super 100", href: "/boutique?collection=super-100" },
-          ],
-        },
-        {
-          title: "Enfant",
-          items: [
-            { label: "Robe enfant", href: "/boutique?collection=robe-enfant" },
-            { label: "Boubou enfant", href: "/boutique?collection=boubou-enfant" },
-            { label: "Kaftan enfant", href: "/boutique?collection=kaftan-enfant" },
-            { label: "Tenue cérémonie", href: "/boutique?collection=ceremonie-enfant" },
-          ],
-        },
-      ],
-    },
-    {
-      label: "Accessoires",
-      href: "/accessoires",
-      items: [
-        { label: "Montres", href: "/boutique?accessoire=montres" },
-        { label: "Parfums", href: "/parfums" },
-        { label: "Chaussures", href: "/boutique?accessoire=chaussures" },
-      ],
-    },
-    {
-      label: "Sur Mesure",
-      href: "/commander",
-      items: [
-        { label: "Prendre rendez-vous", href: "/contact" },
-        { label: "Commander une création", href: "/commander" },
-        { label: "Guide des tailles", href: "/conditions" },
-      ],
-    },
-    {
-      label: "Services",
-      href: "/contact",
-      items: [
-        { label: "Livraison", href: "/livraison" },
-        { label: "Retours & échanges", href: "/retours" },
-        { label: "Contact WhatsApp", href: "https://wa.me/221778137032" },
-      ],
-    },
-  ]
+  const navLinks = copy.navLinks
 
   return (
     <>
@@ -144,9 +255,11 @@ export function Header() {
               </a>
               <span className="text-[#e0d5c5] dark:text-[#3b2717]">|</span>
               <ThemeToggle />
+              <LanguageToggle />
               <span className="text-[#e0d5c5] dark:text-[#3b2717]">|</span>
               <Link
                 href="/panier"
+                aria-label={copy.cart}
                 className="flex items-center gap-2 text-[#7B542F] dark:text-[#d7ba8c] hover:text-[#FF9D00] transition-colors"
               >
                 <ShoppingCart className="h-3.5 w-3.5" />
@@ -158,7 +271,7 @@ export function Header() {
                 href="/contact"
                 className="ml-2 px-4 py-1.5 bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] text-[#180f08] text-[10px] tracking-[0.2em] uppercase font-bold shadow-[0_10px_24px_rgba(255,157,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(255,157,0,0.28)]"
               >
-                Rendez-vous
+                {copy.appointment}
               </Link>
             </div>
           </div>
@@ -173,40 +286,44 @@ export function Header() {
             : "bg-[#fffaf2]/86 backdrop-blur-md dark:bg-[#180f08]"
         }`}
       >
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-3 sm:px-6">
           {/* Logo Row */}
-          <div className="flex items-center justify-between h-20 md:h-24">
+          <div className="relative flex h-16 items-center justify-between sm:h-20 md:h-24">
             {/* Mobile Menu Button */}
             <button
-              className="md:hidden text-[#241609] dark:text-[#fff8ed] hover:text-[#FF9D00] transition-colors"
+              className="z-10 flex h-10 w-10 shrink-0 items-center justify-start text-[#241609] transition-colors hover:text-[#FF9D00] dark:text-[#fff8ed] md:hidden"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Menu"
             >
-              {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {mobileOpen ? <X className="h-5 w-5 sm:h-6 sm:w-6" /> : <Menu className="h-5 w-5 sm:h-6 sm:w-6" />}
             </button>
 
             {/* Logo - Centered */}
-            <Link href="/" className="flex items-center gap-4 mx-auto md:mx-0 md:absolute md:left-1/2 md:-translate-x-1/2">
-              <div className="relative h-14 w-14 overflow-hidden rounded-full border border-[#FF9D00]/35 bg-[#fff8ed] p-0.5 shadow-[0_10px_30px_rgba(123,84,47,0.18)] dark:border-[#FF9D00]/30 dark:bg-[#211207]">
+            <Link href="/" className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 sm:gap-4">
+              <div className="relative hidden h-14 w-14 shrink-0 overflow-hidden rounded-full border border-[#FF9D00]/35 bg-[#fff8ed] p-0.5 shadow-[0_10px_30px_rgba(123,84,47,0.18)] dark:border-[#FF9D00]/30 dark:bg-[#211207] sm:block">
                 <img
                   src="/logo.png"
                   alt="Elegance Couture"
                   className="h-full w-full rounded-full object-cover"
                 />
               </div>
-              <div className="text-center">
-                <h1 className="font-serif text-lg font-bold tracking-wide text-[#241609] dark:text-[#fff8ed] md:text-2xl">
-                  ELEGANCE <span className="brand-text-gradient">COUTURE PRESTIGE</span>
+              <div className="w-[126px] text-center sm:w-auto">
+                <h1 className="font-serif text-[13px] font-bold leading-[1.05] tracking-wide text-[#241609] dark:text-[#fff8ed] sm:text-lg sm:leading-normal md:text-2xl">
+                  <span className="block sm:inline">ELEGANCE</span>{" "}
+                  <span className="brand-text-gradient block sm:inline">COUTURE PRESTIGE</span>
                 </h1>
-                <p className="mt-0.5 text-[8px] uppercase tracking-[0.35em] text-[#7B542F] dark:text-[#d7ba8c]">
-                  Mode Africaine Premium
+                <p className="mt-1 text-[6px] uppercase tracking-[0.24em] text-[#7B542F] dark:text-[#d7ba8c] sm:mt-0.5 sm:text-[8px] sm:tracking-[0.35em]">
+                  {copy.tagline}
                 </p>
               </div>
             </Link>
 
             {/* Mobile: cart */}
-            <div className="flex items-center gap-3 md:opacity-0 md:pointer-events-none">
-              <Link href="/panier" className="text-[#241609] dark:text-[#fff8ed] hover:text-[#FF9D00] transition-colors relative">
+            <div className="z-10 flex shrink-0 items-center gap-2 md:pointer-events-none md:opacity-0">
+              <div className="[&_button]:px-1.5 min-[390px]:[&_button]:px-2.5">
+                <LanguageToggle />
+              </div>
+              <Link href="/panier" aria-label={copy.cart} className="relative flex h-10 w-6 items-center justify-end text-[#241609] transition-colors hover:text-[#FF9D00] dark:text-[#fff8ed]">
                 <ShoppingCart className="h-5 w-5" />
                 {isClient && cartCount > 0 && (
                   <span className="absolute -top-1.5 -right-1.5 bg-[#FF9D00] text-[#180f08] text-[9px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
@@ -278,33 +395,33 @@ export function Header() {
 
         {/* Mobile Nav Drawer */}
         {mobileOpen && (
-          <div className="absolute left-0 right-0 top-full z-50 border-b border-[#ead3aa] bg-[#fffaf2]/98 shadow-[0_24px_60px_rgba(123,84,47,0.18)] backdrop-blur-xl dark:border-[#3b2717] dark:bg-[#120b06] md:hidden">
-            <nav className="container mx-auto flex max-h-[calc(100vh-6rem)] flex-col gap-4 overflow-y-auto px-6 py-6">
+          <div className="absolute left-0 top-full z-50 w-[82vw] max-w-[300px] border-b border-r border-[#ead3aa] bg-[#fffaf2] shadow-[18px_24px_60px_rgba(123,84,47,0.22)] dark:border-[#3b2717] dark:bg-[#120b06] md:hidden">
+            <nav className="flex max-h-[calc(100svh-4rem)] flex-col gap-3 overflow-y-auto overscroll-contain px-5 py-5">
               {navLinks.map((link) => (
-                <div key={link.label} className="border-b border-[#ead3aa] pb-4 dark:border-[#3b2717]">
+                <div key={link.label} className="border-b border-[#ead3aa] pb-3 dark:border-[#3b2717]">
                   <Link
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className="mb-3 flex items-center justify-between text-[12px] font-bold uppercase tracking-[0.22em] text-[#241609] transition-colors hover:text-[#FF9D00] dark:text-[#fff8ed]"
+                    className="mb-2.5 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] text-[#241609] transition-colors hover:text-[#FF9D00] dark:text-[#fff8ed]"
                   >
                     {link.label}
                     <ChevronDown className="h-3.5 w-3.5 text-[#FF9D00]" />
                   </Link>
 
                   {"columns" in link && link.columns ? (
-                    <div className="grid gap-4">
+                    <div className="grid gap-3">
                       {link.columns.map((column) => (
                         <div key={column.title}>
-                          <p className="mb-2 font-serif text-base font-bold text-[#B6771D] dark:text-[#FFCF71]">
+                          <p className="mb-1.5 font-serif text-[15px] font-bold text-[#B6771D] dark:text-[#FFCF71]">
                             {column.title}
                           </p>
-                          <div className="grid grid-cols-1 gap-1 pl-3">
+                          <div className="grid grid-cols-1 gap-0.5 pl-2.5">
                             {column.items.map((item) => (
                               <Link
                                 key={item.label}
                                 href={item.href}
                                 onClick={() => setMobileOpen(false)}
-                                className="py-1.5 text-[12px] tracking-wide text-[#7B542F] transition-colors hover:text-[#FF9D00] dark:text-[#d7ba8c]"
+                                className="py-1.5 text-[11px] tracking-wide text-[#7B542F] transition-colors hover:text-[#FF9D00] dark:text-[#d7ba8c]"
                               >
                                 {item.label}
                               </Link>
@@ -314,13 +431,13 @@ export function Header() {
                       ))}
                     </div>
                   ) : (
-                    <div className="grid gap-1 pl-3">
+                    <div className="grid gap-0.5 pl-2.5">
                       {link.items?.map((item) => (
                         <Link
                           key={item.label}
                           href={item.href}
                           onClick={() => setMobileOpen(false)}
-                          className="py-1.5 text-[12px] tracking-wide text-[#7B542F] transition-colors hover:text-[#FF9D00] dark:text-[#d7ba8c]"
+                          className="py-1.5 text-[11px] tracking-wide text-[#7B542F] transition-colors hover:text-[#FF9D00] dark:text-[#d7ba8c]"
                         >
                           {item.label}
                         </Link>
@@ -329,7 +446,10 @@ export function Header() {
                   )}
                 </div>
               ))}
-              <div className="pt-4 flex flex-col gap-2">
+              <div className="flex flex-col gap-2 pt-2">
+                <div className="mb-2">
+                  <LanguageToggle />
+                </div>
                 <a href="tel:+221778137032" className="flex items-center gap-2 text-[11px] tracking-wide text-[#7B542F] dark:text-[#d7ba8c]">
                   <Phone className="h-3 w-3 text-[#FF9D00]" /> +221 77 813 70 32
                 </a>

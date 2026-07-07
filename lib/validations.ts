@@ -39,7 +39,7 @@ export const orderSchema = z.object({
   total: z.number(),
   fraisLivraison: z.number(),
   totalFinal: z.number(),
-  paiement: z.enum(["cash", "virement"]),
+  paiement: z.enum(["cash", "wave_manual", "orange_money_manual"]).default("cash"),
 });
 
 // Contact form validation

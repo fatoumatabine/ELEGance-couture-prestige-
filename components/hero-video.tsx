@@ -55,7 +55,7 @@ export default function HeroVideo({ mp4 = '/hero-video.mp4', webm = '', poster =
       <button
         aria-label={muted ? "Activer le son" : "Couper le son"}
         onClick={toggleMute}
-        className="absolute bottom-6 right-6 z-30 bg-white/80 text-gray-800 rounded-full p-3 shadow-lg hover:scale-105 transition-transform"
+        className="absolute right-4 top-4 z-30 rounded-full bg-white/80 p-2.5 text-gray-800 shadow-lg transition-transform hover:scale-105 sm:right-6 sm:top-6 sm:p-3"
       >
         {muted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
       </button>

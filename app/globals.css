@@ -141,10 +141,12 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
     @apply bg-background text-foreground;
+    overflow-x: clip;
     background:
       linear-gradient(180deg, rgba(255, 207, 113, 0.22) 0%, rgba(255, 250, 242, 0) 18rem),
       radial-gradient(140% 80% at 50% -20%, rgba(255, 157, 0, 0.12), transparent 58%),
@@ -344,4 +346,88 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+}
+
+/* Admin dashboard palette */
+.admin-dashboard-theme {
+  --background: var(--admin-bg, #FAF3E1);
+  --foreground: var(--admin-text, #222222);
+  --card: var(--admin-panel, #FFFFFF);
+  --card-foreground: var(--admin-text, #222222);
+  --popover: var(--admin-panel, #FFFFFF);
+  --popover-foreground: var(--admin-text, #222222);
+  --primary: var(--admin-accent, #FA8112);
+  --primary-foreground: var(--admin-text, #222222);
+  --secondary: var(--admin-soft, #F5E7C6);
+  --secondary-foreground: var(--admin-text, #222222);
+  --muted: var(--admin-muted, rgba(34, 34, 34, 0.06));
+  --muted-foreground: color-mix(in srgb, var(--admin-text, #222222) 72%, transparent);
+  --accent: var(--admin-accent, #FA8112);
+  --accent-foreground: var(--admin-text, #222222);
+  --border: var(--admin-border, rgba(34, 34, 34, 0.16));
+  --input: var(--admin-input, rgba(34, 34, 34, 0.20));
+  --ring: var(--admin-accent, #FA8112);
+  background: var(--admin-bg, #FAF3E1);
+  color: var(--admin-text, #222222);
+  color-scheme: light;
+}
+
+.admin-dashboard-theme[data-admin-theme="dark"] {
+  color-scheme: dark;
+}
+
+.admin-dashboard-theme .bg-white,
+.admin-dashboard-theme .bg-background,
+.admin-dashboard-theme .bg-card {
+  background-color: var(--admin-panel, #FFFFFF) !important;
+}
+
+.admin-dashboard-theme .bg-muted,
+.admin-dashboard-theme .bg-muted\/20,
+.admin-dashboard-theme .bg-muted\/30 {
+  background-color: var(--admin-muted, rgba(34, 34, 34, 0.06)) !important;
+}
+
+.admin-dashboard-theme .text-foreground,
+.admin-dashboard-theme .text-card-foreground {
+  color: var(--admin-text, #222222) !important;
+}
+
+.admin-dashboard-theme .text-muted-foreground {
+  color: color-mix(in srgb, var(--admin-text, #222222) 70%, transparent) !important;
+}
+
+.admin-dashboard-theme .border-border,
+.admin-dashboard-theme .border-input {
+  border-color: var(--admin-border, rgba(34, 34, 34, 0.16)) !important;
+}
+
+.admin-dashboard-theme input,
+.admin-dashboard-theme textarea,
+.admin-dashboard-theme select {
+  background-color: var(--admin-bg, #FAF3E1);
+  border-color: var(--admin-input, rgba(34, 34, 34, 0.20));
+  color: var(--admin-text, #222222);
+}
+
+.admin-dashboard-theme input::placeholder,
+.admin-dashboard-theme textarea::placeholder {
+  color: color-mix(in srgb, var(--admin-text, #222222) 58%, transparent);
+}
+
+.admin-dashboard-theme [class*="text-emerald"],
+.admin-dashboard-theme [class*="text-blue"],
+.admin-dashboard-theme [class*="text-purple"],
+.admin-dashboard-theme [class*="text-rose"],
+.admin-dashboard-theme [class*="text-amber"] {
+  color: var(--admin-text, #222222) !important;
+}
+
+.admin-dashboard-theme [class*="bg-emerald"],
+.admin-dashboard-theme [class*="bg-blue"],
+.admin-dashboard-theme [class*="bg-purple"],
+.admin-dashboard-theme [class*="bg-rose"],
+.admin-dashboard-theme [class*="bg-amber"] {
+  background-color: rgba(var(--admin-accent-rgb, 250, 129, 18), 0.16) !important;
+  color: var(--admin-text, #222222) !important;
 }

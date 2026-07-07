@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getPaymentMethodLabel } from '@/lib/payments';
+import { rateLimit, getClientIp } from '@/lib/rate-limit';
+import { orderSchema } from '@/lib/validations';
 
 interface OrderItem {
   product: {
@@ -39,7 +42,28 @@ interface OrderData {
 
 export async function POST(request: NextRequest) {
   try {
-    const data: OrderData = await request.json();
+    const ip = getClientIp(request);
+    const rateLimitResult = rateLimit(`invoice:${ip}`, 5, 60000);
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Trop de requêtes. Veuillez réessayer plus tard.' },
+        { status: 429 }
+      );
+    }
+
+    const body = await request.json();
+    const validationResult = orderSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      const errors = validationResult.error.errors.map((error) => error.message).join(', ');
+      return NextResponse.json(
+        { error: errors },
+        { status: 400 }
+      );
+    }
+
+    const data = validationResult.data as OrderData;
 
     // Generate invoice HTML
     const invoiceHtml = generateInvoiceHtml(data);
@@ -62,6 +86,35 @@ export async function POST(request: NextRequest) {
   }
 }
 
+function escapeHtml(value: unknown): string {
+  return String(value ?? '').replace(/[&<>"']/g, (char) => {
+    const entities: Record<string, string> = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+    };
+
+    return entities[char] || char;
+  });
+}
+
+function safeUrl(value?: string): string {
+  if (!value) return '';
+
+  const trimmed = value.trim();
+  if (trimmed.startsWith('/') || /^https?:\/\//i.test(trimmed)) {
+    return escapeHtml(trimmed.replace('http://', 'https://'));
+  }
+
+  return '';
+}
+
+function textWithBreaks(value?: string): string {
+  return escapeHtml(value).replace(/\n/g, '<br/>');
+}
+
 function generateInvoiceHtml(data: OrderData): string {
   const { customer, items, total, fraisLivraison, totalFinal } = data;
   const date = new Date().toLocaleDateString('fr-FR', {
@@ -76,20 +129,21 @@ function generateInvoiceHtml(data: OrderData): string {
   const locationLabel = customer.location
     ? `${customer.location.latitude}, ${customer.location.longitude}`
     : [customer.adresse, customer.quartier, customer.ville].filter(Boolean).join(', ');
+  const safeLocationHref = safeUrl(locationUrl);
 
   const itemsHtml = items.map((item, index) => `
     <tr style="border-bottom: 1px solid #eee;">
       <td style="padding: 15px 10px;">${index + 1}</td>
       <td style="padding: 15px 10px;">
-        <img src="${item.product.images[0]?.replace('http://', 'https://') || ''}" 
-             alt="${item.product.name}" 
+        <img src="${safeUrl(item.product.images[0])}" 
+             alt="${escapeHtml(item.product.name)}" 
              style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;" />
       </td>
       <td style="padding: 15px 10px;">
-        <strong>${item.product.name}</strong><br/>
-        <small style="color: #666;">${item.product.category}</small><br/>
-        ${item.selectedSize ? `<span style="color: #666;">Taille: ${item.selectedSize}</span><br/>` : ''}
-        ${item.selectedColor ? `<span style="color: #666;">Couleur: ${item.selectedColor}</span>` : ''}
+        <strong>${escapeHtml(item.product.name)}</strong><br/>
+        <small style="color: #666;">${escapeHtml(item.product.category)}</small><br/>
+        ${item.selectedSize ? `<span style="color: #666;">Taille: ${escapeHtml(item.selectedSize)}</span><br/>` : ''}
+        ${item.selectedColor ? `<span style="color: #666;">Couleur: ${escapeHtml(item.selectedColor)}</span>` : ''}
       </td>
       <td style="padding: 15px 10px; text-align: center;">${item.quantity}</td>
       <td style="padding: 15px 10px; text-align: right;">${item.product.price.toLocaleString()} CFA</td>
@@ -133,14 +187,14 @@ function generateInvoiceHtml(data: OrderData): string {
     <div style="padding: 30px; border-bottom: 2px solid #f0f0f0;">
       <h3 style="margin: 0 0 15px; color: #1a1a1a;">Informations Client</h3>
       <p style="margin: 5px 0; color: #333;">
-        <strong>${customerName}</strong>
+        <strong>${escapeHtml(customerName)}</strong>
       </p>
-      <p style="margin: 5px 0; color: #666;">📱 ${customer.telephone}</p>
-      ${customer.email ? `<p style="margin: 5px 0; color: #666;">📧 ${customer.email}</p>` : ''}
-      ${locationUrl ? `
+      <p style="margin: 5px 0; color: #666;">📱 ${escapeHtml(customer.telephone)}</p>
+      ${customer.email ? `<p style="margin: 5px 0; color: #666;">📧 ${escapeHtml(customer.email)}</p>` : ''}
+      ${safeLocationHref ? `
       <p style="margin: 5px 0; color: #666;">
-        📍 <a href="${locationUrl}" style="color: #FF9D00;">Voir la localisation</a>
-        ${locationLabel ? `<br/><small style="color: #777;">${locationLabel}</small>` : ''}
+        📍 <a href="${safeLocationHref}" style="color: #FF9D00;">Voir la localisation</a>
+        ${locationLabel ? `<br/><small style="color: #777;">${escapeHtml(locationLabel)}</small>` : ''}
       </p>
       ` : ''}
     </div>
@@ -188,11 +242,11 @@ function generateInvoiceHtml(data: OrderData): string {
     <!-- Payment Info -->
     <div style="padding: 30px; border-top: 2px solid #f0f0f0;">
       <p style="margin: 0; color: #666; font-size: 14px;">
-        <strong>Mode de paiement:</strong> ${data.paiement === 'cash' ? 'Paiement à la livraison' : 'Virement bancaire'}
+        <strong>Mode de paiement:</strong> ${getPaymentMethodLabel(data.paiement)}
       </p>
       ${customer.instructions ? `
       <p style="margin: 10px 0 0; color: #666; font-size: 14px;">
-        <strong>Instructions:</strong> ${customer.instructions}
+        <strong>Instructions:</strong> ${textWithBreaks(customer.instructions)}
       </p>
       ` : ''}
     </div>

@@ -8,6 +8,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ToastAction } from "@/components/ui/toast"
 import { Check, Heart, ShoppingCart, Star } from "lucide-react"
 import type { Product } from "@/lib/products"
+import { getProductOptionLabels } from "@/lib/products"
 import { useCartStore } from "@/lib/cart-store"
 import { useToast } from "@/hooks/use-toast"
 
@@ -16,8 +17,15 @@ interface ProductInfoProps {
 }
 
 export function ProductInfo({ product }: ProductInfoProps) {
-  const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || "")
-  const [selectedColor, setSelectedColor] = useState(product.colors?.[0] || "")
+  const availableSizes = product.sizes?.filter((size) => size.trim().length > 0) ?? []
+  const availableColors = product.colors?.filter((color) => color.trim().length > 0) ?? []
+  const rating = typeof product.rating === "number" ? product.rating : 0
+  const reviewCount = typeof product.reviewCount === "number" ? product.reviewCount : 0
+  const showReviews = rating > 0 && reviewCount > 0
+  const optionLabels = getProductOptionLabels(product)
+
+  const [selectedSize, setSelectedSize] = useState(availableSizes[0] || "")
+  const [selectedColor, setSelectedColor] = useState(availableColors[0] || "")
   const [quantity, setQuantity] = useState(1)
 
   const addItem = useCartStore((state) => state.addItem)
@@ -27,8 +35,8 @@ export function ProductInfo({ product }: ProductInfoProps) {
     addItem({
       product,
       quantity,
-      selectedSize: product.sizes ? selectedSize : undefined,
-      selectedColor: product.colors ? selectedColor : undefined,
+      selectedSize: availableSizes.length > 0 ? selectedSize : undefined,
+      selectedColor: availableColors.length > 0 ? selectedColor : undefined,
     })
 
     toast({
@@ -67,6 +75,9 @@ export function ProductInfo({ product }: ProductInfoProps) {
         <div className="flex flex-wrap items-center gap-3">
           <span className="text-2xl font-bold text-[#d97706] md:text-3xl">
             {product.price.toLocaleString()} CFA
+            {optionLabels.priceSuffix && (
+              <span className="ml-1 text-base font-semibold text-[#B6771D]">{optionLabels.priceSuffix}</span>
+            )}
           </span>
           <span className="text-base text-slate-400 line-through">
             {Math.round(product.price * 1.2).toLocaleString()} CFA
@@ -77,14 +88,23 @@ export function ProductInfo({ product }: ProductInfoProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <div className="flex gap-0.5">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Star key={star} className="h-4 w-4 fill-[#FF9D00] text-[#FF9D00]" />
-          ))}
+      {showReviews && (
+        <div className="flex items-center gap-2">
+          <div className="flex gap-0.5">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                className={`h-4 w-4 ${
+                  star <= Math.round(rating)
+                    ? "fill-[#FF9D00] text-[#FF9D00]"
+                    : "text-slate-300"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-xs text-slate-500">({reviewCount} avis clients)</span>
         </div>
-        <span className="text-xs text-slate-500">(12 avis clients)</span>
-      </div>
+      )}
 
       <div className="border-y border-[#ead3aa] py-5">
         <p className="text-base leading-relaxed text-slate-700">
@@ -92,15 +112,17 @@ export function ProductInfo({ product }: ProductInfoProps) {
         </p>
       </div>
 
-      {product.sizes && product.sizes.length > 0 && (
+      {availableSizes.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label className="text-sm font-bold text-[#180f08]">Taille</Label>
-            <button className="text-xs text-[#d97706] underline">Guide des tailles</button>
+            <Label className="text-sm font-bold text-[#180f08]">{optionLabels.optionLabel}</Label>
+            {optionLabels.showSizeGuide && (
+              <button className="text-xs text-[#d97706] underline">Guide des tailles</button>
+            )}
           </div>
           <RadioGroup value={selectedSize} onValueChange={setSelectedSize}>
             <div className="flex flex-wrap gap-3">
-              {product.sizes.map((size) => (
+              {availableSizes.map((size) => (
                 <div key={size}>
                   <RadioGroupItem value={size} id={`size-${size}`} className="peer sr-only" />
                   <Label
@@ -116,7 +138,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
         </div>
       )}
 
-      {product.colors && product.colors.length > 0 && (
+      {availableColors.length > 0 && (
         <div className="space-y-3">
           <Label className="text-sm font-bold text-[#180f08]">
             Couleur:
@@ -124,7 +146,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
           </Label>
           <RadioGroup value={selectedColor} onValueChange={setSelectedColor}>
             <div className="flex flex-wrap gap-3">
-              {product.colors.map((color) => (
+              {availableColors.map((color) => (
                 <div key={color}>
                   <RadioGroupItem value={color} id={`color-${color}`} className="peer sr-only" />
                   <Label
@@ -143,7 +165,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
       <div className="rounded-[8px] border border-[#f0d2a0] bg-white/65 p-4 shadow-sm">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-3">
-            <Label className="text-sm font-bold text-[#180f08]">Quantité</Label>
+            <Label className="text-sm font-bold text-[#180f08]">{optionLabels.quantityLabel}</Label>
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex h-11 items-center overflow-hidden rounded-[6px] border border-[#ead3aa] bg-white">
                 <button
