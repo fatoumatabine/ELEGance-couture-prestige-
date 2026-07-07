@@ -39,14 +39,14 @@ export default function AboutPage() {
       <Header />
 
       {/* Page Hero */}
-      <section className="relative h-64 md:h-80 bg-[#120b06] border-b border-[#3b2717] flex items-center justify-center">
+      <section className="relative flex h-56 items-center justify-center border-b border-[#3b2717] bg-[#120b06] px-4 sm:h-64 md:h-80">
         <div className="text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="h-px w-8 bg-[#FF9D00]" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-[#FF9D00]">Notre Maison</span>
+            <span className="text-[10px] uppercase tracking-[0.24em] text-[#FF9D00] sm:tracking-[0.4em]">Notre Maison</span>
             <div className="h-px w-8 bg-[#FF9D00]" />
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl text-[#fff8ed] font-bold tracking-wide">
+          <h1 className="font-serif text-3xl font-bold tracking-wide text-[#fff8ed] sm:text-4xl md:text-5xl">
             À Propos de Nous
           </h1>
         </div>
@@ -55,15 +55,15 @@ export default function AboutPage() {
       <main className="flex-1">
 
         {/* Story Section */}
-        <section className="py-24 bg-[#180f08]">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <section className="bg-[#180f08] py-16 sm:py-24">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-16">
               <div>
                 <div className="flex items-center gap-4 mb-6">
                   <div className="h-px w-10 bg-[#FF9D00]" />
                   <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00]">Notre Histoire</span>
                 </div>
-                <h2 className="font-serif text-4xl text-[#fff8ed] font-bold mb-6 leading-tight">
+                <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-[#fff8ed] sm:text-4xl">
                   Né de la Passion<br />
                   <span className="text-[#FF9D00]">de l'Élégance</span>
                 </h2>
@@ -108,19 +108,19 @@ export default function AboutPage() {
         </section>
 
         {/* Values */}
-        <section className="py-20 bg-[#120b06] border-y border-[#3b2717]">
-          <div className="container mx-auto px-6">
+        <section className="border-y border-[#3b2717] bg-[#120b06] py-14 sm:py-20">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="text-center mb-14">
               <div className="flex items-center justify-center gap-4 mb-5">
                 <div className="h-px w-10 bg-[#FF9D00]" />
                 <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00]">Nos Valeurs</span>
                 <div className="h-px w-10 bg-[#FF9D00]" />
               </div>
-              <h2 className="font-serif text-4xl text-[#fff8ed] font-bold tracking-wide">Ce Qui Nous Définit</h2>
+              <h2 className="font-serif text-3xl font-bold tracking-wide text-[#fff8ed] sm:text-4xl">Ce Qui Nous Définit</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {values.map((val, idx) => (
-                <div key={idx} className="border border-[#3b2717] p-8 hover:border-[#FF9D00]/40 transition-colors duration-300 group text-center">
+                <div key={idx} className="group border border-[#3b2717] p-5 text-center transition-colors duration-300 hover:border-[#FF9D00]/40 sm:p-8">
                   <div className="w-12 h-12 border border-[#3b2717] group-hover:border-[#FF9D00] flex items-center justify-center mx-auto mb-5 transition-colors">
                     <val.icon className="w-5 h-5 text-[#FF9D00]" />
                   </div>
@@ -133,17 +133,17 @@ export default function AboutPage() {
         </section>
 
         {/* Team */}
-        <section className="py-20 bg-[#180f08]">
-          <div className="container mx-auto px-6">
+        <section className="bg-[#180f08] py-14 sm:py-20">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="text-center mb-14">
               <div className="flex items-center justify-center gap-4 mb-5">
                 <div className="h-px w-10 bg-[#FF9D00]" />
                 <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00]">Notre Équipe</span>
                 <div className="h-px w-10 bg-[#FF9D00]" />
               </div>
-              <h2 className="font-serif text-4xl text-[#fff8ed] font-bold tracking-wide">Les Artisans du Rêve</h2>
+              <h2 className="font-serif text-3xl font-bold tracking-wide text-[#fff8ed] sm:text-4xl">Les Artisans du Rêve</h2>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 gap-8 min-[420px]:grid-cols-2 lg:grid-cols-4">
               {team.map((member, idx) => (
                 <div key={idx} className="text-center group">
                   <div className="w-20 h-20 mx-auto bg-[#FF9D00] flex items-center justify-center text-[#180f08] font-serif text-2xl font-bold mb-4 group-hover:bg-[#FFCF71] transition-colors">
@@ -158,9 +158,9 @@ export default function AboutPage() {
         </section>
 
         {/* Stats */}
-        <section className="py-14 bg-[#120b06] border-y border-[#3b2717]">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <section className="border-y border-[#3b2717] bg-[#120b06] py-14">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-2 gap-6 text-center lg:grid-cols-4 lg:gap-8">
               {[
                 { number: "5000+", label: "Clients Heureux" },
                 { number: "500+", label: "Créations" },
@@ -177,24 +177,24 @@ export default function AboutPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-16 bg-[#180f08] text-center">
-          <div className="container mx-auto px-6">
-            <h2 className="font-serif text-3xl text-[#fff8ed] font-bold mb-4 tracking-wide">
+        <section className="bg-[#180f08] py-14 text-center sm:py-16">
+          <div className="container mx-auto px-4 sm:px-6">
+            <h2 className="mb-4 font-serif text-2xl font-bold tracking-wide text-[#fff8ed] sm:text-3xl">
               Prêt à Nous Rencontrer ?
             </h2>
             <p className="text-[#d7ba8c] text-sm mb-8 max-w-sm mx-auto tracking-wide">
               Venez découvrir notre atelier et nos créations à Keur Massar, Dakar
             </p>
-            <div className="flex gap-4 justify-center flex-wrap">
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap">
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-[#FF9D00] text-[#180f08] text-[11px] tracking-[0.25em] uppercase font-semibold hover:bg-[#FFCF71] transition-all duration-300"
+                className="inline-flex w-full max-w-[20rem] items-center justify-center gap-2 bg-[#FF9D00] px-6 py-4 text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-[#180f08] transition-all duration-300 hover:bg-[#FFCF71] sm:w-auto sm:max-w-none sm:px-8 sm:text-[11px] sm:tracking-[0.25em]"
               >
                 Nous Contacter
               </Link>
               <Link
                 href="/boutique"
-                className="inline-flex items-center gap-2 px-8 py-4 border border-[#FF9D00] text-[#FF9D00] text-[11px] tracking-[0.25em] uppercase font-medium hover:bg-[#FF9D00] hover:text-[#180f08] transition-all duration-300"
+                className="inline-flex w-full max-w-[20rem] items-center justify-center gap-2 border border-[#FF9D00] px-6 py-4 text-center text-[10px] font-medium uppercase tracking-[0.16em] text-[#FF9D00] transition-all duration-300 hover:bg-[#FF9D00] hover:text-[#180f08] sm:w-auto sm:max-w-none sm:px-8 sm:text-[11px] sm:tracking-[0.25em]"
               >
                 Voir la Boutique
               </Link>

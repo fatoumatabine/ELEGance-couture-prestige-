@@ -142,10 +142,12 @@
   html {
     scroll-behavior: smooth;
     overflow-x: clip;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
     @apply bg-background text-foreground;
+    min-width: 320px;
     overflow-x: clip;
     background:
       linear-gradient(180deg, rgba(255, 207, 113, 0.22) 0%, rgba(255, 250, 242, 0) 18rem),
@@ -166,6 +168,35 @@
 
   img {
     -webkit-user-drag: none;
+  }
+
+  main,
+  section,
+  article,
+  aside,
+  header,
+  footer,
+  nav {
+    min-width: 0;
+  }
+
+  img,
+  video,
+  canvas,
+  picture {
+    max-width: 100%;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    max-width: 100%;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
   }
 }
 
@@ -408,6 +439,10 @@
   background-color: var(--admin-bg, #FAF3E1);
   border-color: var(--admin-input, rgba(34, 34, 34, 0.20));
   color: var(--admin-text, #222222);
+}
+
+.admin-dashboard-theme {
+  overflow-wrap: anywhere;
 }
 
 .admin-dashboard-theme input::placeholder,

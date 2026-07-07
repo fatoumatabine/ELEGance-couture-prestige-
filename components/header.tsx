@@ -217,7 +217,7 @@ export function Header() {
   return (
     <>
       {/* ===== TOP INFO BAR ===== */}
-      <div className="hidden border-b border-[#ead3aa]/80 bg-[#fff3dd]/85 backdrop-blur-xl dark:border-[#3b2717] dark:bg-[#120b06] md:block">
+      <div className="hidden border-b border-[#ead3aa]/80 bg-[#fff3dd]/85 backdrop-blur-xl dark:border-[#3b2717] dark:bg-[#120b06] xl:block">
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between h-10">
             {/* Contact Info */}
@@ -291,7 +291,7 @@ export function Header() {
           <div className="relative flex h-16 items-center justify-between sm:h-20 md:h-24">
             {/* Mobile Menu Button */}
             <button
-              className="z-10 flex h-10 w-10 shrink-0 items-center justify-start text-[#241609] transition-colors hover:text-[#FF9D00] dark:text-[#fff8ed] md:hidden"
+              className="z-10 flex h-10 w-10 shrink-0 items-center justify-start text-[#241609] transition-colors hover:text-[#FF9D00] dark:text-[#fff8ed] xl:hidden"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Menu"
             >
@@ -319,7 +319,7 @@ export function Header() {
             </Link>
 
             {/* Mobile: cart */}
-            <div className="z-10 flex shrink-0 items-center gap-2 md:pointer-events-none md:opacity-0">
+            <div className="z-10 flex shrink-0 items-center gap-2 xl:pointer-events-none xl:opacity-0">
               <div className="[&_button]:px-1.5 min-[390px]:[&_button]:px-2.5">
                 <LanguageToggle />
               </div>
@@ -335,7 +335,7 @@ export function Header() {
           </div>
 
           {/* Navigation Row (desktop) */}
-          <nav className="hidden h-12 items-center justify-center border-t border-[#ead3aa]/70 dark:border-[#3b2717] md:flex">
+          <nav className="hidden h-12 items-center justify-center border-t border-[#ead3aa]/70 dark:border-[#3b2717] xl:flex">
             {navLinks.map((link, idx) => (
               <div key={link.label} className="group/nav relative flex h-full items-center">
                 {idx > 0 && (
@@ -343,16 +343,16 @@ export function Header() {
                 )}
                 <Link
                   href={link.href}
-                  className="relative flex h-full items-center gap-1.5 px-4 text-[10px] font-semibold uppercase tracking-[0.17em] text-[#7B542F] transition-colors duration-200 hover:text-[#FF9D00] dark:text-[#d7ba8c] lg:px-5 lg:text-[11px]"
+                  className="relative flex h-full items-center gap-1.5 px-4 text-[10px] font-semibold uppercase tracking-[0.17em] text-[#7B542F] transition-colors duration-200 hover:text-[#FF9D00] dark:text-[#d7ba8c] xl:px-5 xl:text-[11px]"
                 >
                   {link.label}
                   <ChevronDown className="h-3 w-3 transition-transform duration-300 group-hover/nav:rotate-180" />
                   <span className="absolute bottom-2 left-1/2 h-px w-0 -translate-x-1/2 bg-[#FF9D00] transition-all duration-300 group-hover/nav:w-8" />
                 </Link>
 
-                <div className="invisible absolute left-1/2 top-full z-50 min-w-[220px] -translate-x-1/2 border border-[#ead3aa] bg-[#fffaf2]/98 p-2 opacity-0 shadow-[0_28px_70px_rgba(123,84,47,0.18)] backdrop-blur-xl transition-all duration-300 group-hover/nav:visible group-hover/nav:opacity-100 dark:border-[#3b2717] dark:bg-[#120b06]/98">
+                <div className="invisible absolute left-1/2 top-full z-50 min-w-[220px] max-w-[calc(100vw-2rem)] -translate-x-1/2 border border-[#ead3aa] bg-[#fffaf2]/98 p-2 opacity-0 shadow-[0_28px_70px_rgba(123,84,47,0.18)] backdrop-blur-xl transition-all duration-300 group-hover/nav:visible group-hover/nav:opacity-100 dark:border-[#3b2717] dark:bg-[#120b06]/98">
                   {"columns" in link && link.columns ? (
-                    <div className="grid w-[620px] grid-cols-3 gap-2">
+                    <div className="grid w-[620px] max-w-[calc(100vw-3rem)] grid-cols-3 gap-2">
                       {link.columns.map((column) => (
                         <div key={column.title} className="border-r border-[#ead3aa]/70 p-4 last:border-r-0 dark:border-[#3b2717]">
                           <p className="mb-4 font-serif text-lg font-bold text-[#241609] dark:text-[#fff8ed]">
@@ -395,8 +395,8 @@ export function Header() {
 
         {/* Mobile Nav Drawer */}
         {mobileOpen && (
-          <div className="absolute left-0 top-full z-50 w-[82vw] max-w-[300px] border-b border-r border-[#ead3aa] bg-[#fffaf2] shadow-[18px_24px_60px_rgba(123,84,47,0.22)] dark:border-[#3b2717] dark:bg-[#120b06] md:hidden">
-            <nav className="flex max-h-[calc(100svh-4rem)] flex-col gap-3 overflow-y-auto overscroll-contain px-5 py-5">
+          <div className="absolute left-0 top-full z-50 w-[82vw] max-w-[320px] border-b border-r border-[#ead3aa] bg-[#fffaf2] shadow-[18px_24px_60px_rgba(123,84,47,0.22)] dark:border-[#3b2717] dark:bg-[#120b06] sm:w-[74vw] sm:max-w-[380px] md:w-[56vw] md:max-w-[440px] xl:hidden">
+            <nav className="flex max-h-[calc(100svh-4rem)] flex-col gap-3 overflow-y-auto overscroll-contain px-5 py-5 md:max-h-[calc(100svh-6rem)] md:px-6 md:py-6">
               {navLinks.map((link) => (
                 <div key={link.label} className="border-b border-[#ead3aa] pb-3 dark:border-[#3b2717]">
                   <Link
@@ -409,13 +409,13 @@ export function Header() {
                   </Link>
 
                   {"columns" in link && link.columns ? (
-                    <div className="grid gap-3">
+                    <div className="grid gap-3 md:grid-cols-3 md:gap-4">
                       {link.columns.map((column) => (
                         <div key={column.title}>
                           <p className="mb-1.5 font-serif text-[15px] font-bold text-[#B6771D] dark:text-[#FFCF71]">
                             {column.title}
                           </p>
-                          <div className="grid grid-cols-1 gap-0.5 pl-2.5">
+                          <div className="grid grid-cols-1 gap-0.5 pl-2.5 md:pl-0">
                             {column.items.map((item) => (
                               <Link
                                 key={item.label}

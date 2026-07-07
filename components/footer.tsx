@@ -73,11 +73,11 @@ export function Footer() {
     <footer className="relative overflow-hidden border-t border-[#3b2717] bg-[#120b06]">
       <div className="editorial-grid absolute inset-0 opacity-[0.06]" />
       {/* Main Footer Grid */}
-      <div className="container relative mx-auto px-4 py-12 min-[400px]:px-5 sm:px-6 sm:py-14 md:py-20">
-        <div className="grid grid-cols-1 gap-x-6 gap-y-10 min-[360px]:grid-cols-2 md:grid-cols-4 md:gap-12">
+      <div className="container relative mx-auto px-4 py-12 min-[400px]:px-5 sm:px-6 sm:py-14 md:py-16 lg:py-20">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 min-[360px]:grid-cols-2 lg:grid-cols-4 lg:gap-12">
 
           {/* Brand Column */}
-          <div className="min-w-0 min-[360px]:col-span-2 md:col-span-1">
+          <div className="min-w-0 min-[360px]:col-span-2 lg:col-span-1">
             <div className="mb-4 flex min-w-0 items-center gap-3 sm:mb-5">
               <div className="h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#FF9D00]/35 bg-[#211207] p-0.5 shadow-[0_12px_34px_rgba(255,157,0,0.16)] sm:h-12 sm:w-12">
                 <img src="/logo.png" alt="Elegance Couture" className="h-full w-full rounded-full object-cover" />
@@ -143,9 +143,9 @@ export function Footer() {
           </div>
 
           {/* Contact */}
-          <div className="min-w-0 min-[360px]:col-span-2 md:col-span-1">
+          <div className="min-w-0 min-[360px]:col-span-2 lg:col-span-1">
             <h4 className="mb-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#fff8ed] sm:mb-6 sm:tracking-[0.3em]">{copy.contactTitle}</h4>
-            <ul className="grid gap-4 min-[460px]:grid-cols-2 md:grid-cols-1">
+            <ul className="grid gap-4 min-[460px]:grid-cols-2 lg:grid-cols-1">
               <li className="flex items-start gap-3">
                 <MapPin className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-[#FF9D00]" />
                 <span className="text-[12px] text-[#d7ba8c] leading-relaxed tracking-wide">Grand Dakar, Thiossane<br />Dakar, Sénégal</span>
@@ -180,7 +180,7 @@ export function Footer() {
 
       {/* Bottom Bar */}
       <div className="relative border-t border-[#3b2717]">
-        <div className="container mx-auto flex flex-col items-center justify-between gap-3 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5 text-center min-[400px]:px-5 sm:px-6 md:flex-row md:text-left">
+        <div className="container mx-auto flex flex-col items-center justify-between gap-3 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5 text-center min-[400px]:px-5 sm:px-6 lg:flex-row lg:text-left">
           <p className="max-w-full text-[10px] uppercase leading-relaxed tracking-[0.12em] text-[#d7ba8c] sm:text-[11px] sm:tracking-widest">
             © {new Date().getFullYear()} Elegance Couture - {copy.rights}
           </p>

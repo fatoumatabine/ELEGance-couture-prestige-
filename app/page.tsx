@@ -392,7 +392,7 @@ export default function HomePage() {
       <main className="flex-1">
 
         {/* ===== HERO SLIDER ===== */}
-        <section className="relative h-[calc(100svh-4rem)] min-h-[520px] max-h-[780px] w-full overflow-hidden bg-[#120b06] sm:h-[calc(100svh-5rem)] md:h-screen md:min-h-[600px] md:max-h-[900px]">
+        <section className="relative h-[calc(100svh-4rem)] min-h-[500px] max-h-[780px] w-full overflow-hidden bg-[#120b06] sm:h-[calc(100svh-5rem)] md:h-[calc(100svh-6rem)] md:min-h-[600px] md:max-h-[900px] lg:min-h-[560px] lg:max-h-[760px] xl:h-[calc(100svh-11.5rem)] xl:min-h-[620px] xl:max-h-[860px]">
           {/* Video Background */}
           <HeroVideo
             mp4="/hero-video.mp4"
@@ -404,7 +404,7 @@ export default function HomePage() {
           <div className="editorial-grid absolute inset-0 z-[2] opacity-[0.08]" />
 
           {/* Slide Content */}
-          <div className="relative z-10 flex h-full flex-col items-center justify-center px-5 pb-14 text-center sm:px-6 sm:pb-0">
+          <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pb-16 pt-8 text-center sm:px-6 sm:pb-0 sm:pt-0">
             <div key={heroIndex} className="animate-fadeIn w-full max-w-6xl">
               {/* Decorative line */}
               <div className="mb-5 flex items-center justify-center gap-3 sm:mb-8 sm:gap-4">
@@ -417,7 +417,7 @@ export default function HomePage() {
 
               {/* Large Hero Title */}
               <h1 className="mb-5 font-serif font-bold leading-[0.94] text-[#fff8ed] drop-shadow-[0_16px_48px_rgba(0,0,0,0.55)] sm:mb-6">
-                <span className="block text-[clamp(2.35rem,11.5vw,3.25rem)] tracking-[0.015em] md:text-7xl md:tracking-wide lg:text-8xl">
+                <span className="block text-[clamp(2.35rem,11.5vw,3.25rem)] tracking-[0.015em] md:text-7xl md:tracking-wide lg:text-[5.5rem] xl:text-8xl">
                   {currentSlide.title}{" "}
                   <em className="brand-text-gradient italic font-normal">{currentSlide.titleItalic}</em>{" "}
                   <span className="block md:inline">{currentSlide.titleEnd}</span>
@@ -475,12 +475,12 @@ export default function HomePage() {
 
         {/* ===== SERVICES STRIP ===== */}
         <section className="border-y border-[#ead3aa] bg-[#fff3dd]/80 dark:border-[#3b2717] dark:bg-[#211207]">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4">
               {services.map((service, idx) => (
                 <div
                   key={idx}
-                  className={`group flex flex-col items-center px-6 py-10 text-center ${
+                  className={`group flex flex-col items-center px-3 py-8 text-center sm:px-6 sm:py-10 ${
                     idx < services.length - 1 ? "border-r border-border" : ""
                   } transition-colors duration-300 hover:bg-[#fff8ed] dark:hover:bg-[#2b190d]`}
                 >
@@ -498,18 +498,18 @@ export default function HomePage() {
         </section>
 
         {/* ===== À LA UNE ===== */}
-        <section className="bg-[#fffaf2] py-20 dark:bg-[#140b05] md:py-28">
-          <div className="container mx-auto px-6">
+        <section className="bg-[#fffaf2] py-16 dark:bg-[#140b05] sm:py-20 md:py-28">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="mb-10 text-center">
-              <h2 className="font-serif text-5xl italic leading-none text-[#241609] dark:text-[#fff8ed] md:text-6xl">
+              <h2 className="font-serif text-4xl italic leading-none text-[#241609] dark:text-[#fff8ed] sm:text-5xl md:text-6xl">
                 {copy.spotlightTitle}
               </h2>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-7">
+              <div className="mt-7 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 sm:mt-8 sm:gap-7">
                 {spotlightTabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setSpotlightTab(tab.id)}
-                    className={`border-b pb-2 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors ${
+                    className={`border-b pb-2 text-center text-[10px] font-semibold uppercase tracking-[0.08em] transition-colors sm:text-[11px] sm:tracking-[0.12em] ${
                       spotlightTab === tab.id
                         ? "border-[#180f08] text-[#180f08] dark:border-[#FFCF71] dark:text-[#FFCF71]"
                         : "border-transparent text-[#7B542F] hover:border-[#FF9D00] hover:text-[#B6771D] dark:text-[#d7ba8c]"
@@ -531,7 +531,7 @@ export default function HomePage() {
                 <p className="mt-2 text-sm text-muted-foreground">{copy.emptySpotlightText}</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {spotlightProducts.map((product, idx) => (
                   <Link
                     key={`${product.id}-${idx}`}
@@ -555,9 +555,9 @@ export default function HomePage() {
                         <p className="mb-3 text-center text-[12px] text-[#7B542F] dark:text-[#d7ba8c]">
                           {product.category}
                         </p>
-                        <div className="flex min-h-12 items-start justify-between gap-4">
-                          <div>
-                            <h3 className="text-[13px] font-semibold uppercase tracking-[0.06em] text-[#180f08] transition-colors group-hover:text-[#B6771D] dark:text-[#fff8ed] dark:group-hover:text-[#FFCF71]">
+                        <div className="flex min-h-12 flex-col gap-2 min-[420px]:flex-row min-[420px]:items-start min-[420px]:justify-between min-[420px]:gap-4">
+                          <div className="min-w-0">
+                            <h3 className="break-words text-[13px] font-semibold uppercase tracking-[0.04em] text-[#180f08] transition-colors group-hover:text-[#B6771D] dark:text-[#fff8ed] dark:group-hover:text-[#FFCF71]">
                               {product.name}
                             </h3>
                             <p className="mt-2 text-[12px] text-[#7B542F] dark:text-[#d7ba8c]">
@@ -575,9 +575,9 @@ export default function HomePage() {
                             [copy.productDetails.style, product.category],
                             [copy.productDetails.finish, product.colors?.[0] || copy.productDetails.finishFallback],
                           ].map(([label, value]) => (
-                            <div key={label}>
+                            <div key={label} className="min-w-0 px-1">
                               <p className="text-[11px] font-bold text-[#180f08] dark:text-[#fff8ed]">{label}</p>
-                              <p className="mt-1 text-[11px] text-[#7B542F] dark:text-[#d7ba8c]">{value}</p>
+                              <p className="mt-1 truncate text-[11px] text-[#7B542F] dark:text-[#d7ba8c]">{value}</p>
                             </div>
                           ))}
                         </div>
@@ -591,11 +591,11 @@ export default function HomePage() {
         </section>
 
         {/* ===== COLLECTIONS ===== */}
-        <section className="relative overflow-hidden bg-background py-24 md:py-32">
+        <section className="relative overflow-hidden bg-background py-16 sm:py-24 md:py-32">
           <div className="editorial-grid absolute inset-0 opacity-[0.22]" />
-          <div className="container relative mx-auto px-6">
+          <div className="container relative mx-auto px-4 sm:px-6">
             {/* Section Header */}
-            <div className="text-center mb-16">
+            <div className="mb-12 text-center sm:mb-16">
               <div className="flex items-center justify-center gap-4 mb-5">
                 <div className="h-px w-10 bg-[#FF9D00]" />
                 <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00] font-medium">
@@ -603,7 +603,7 @@ export default function HomePage() {
                 </span>
                 <div className="h-px w-10 bg-[#FF9D00]" />
               </div>
-              <h2 className="mb-4 font-serif text-4xl font-bold tracking-wide text-foreground md:text-5xl">
+              <h2 className="mb-4 font-serif text-3xl font-bold tracking-wide text-foreground sm:text-4xl md:text-5xl">
                 {copy.collectionsTitle}
               </h2>
               <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto leading-relaxed tracking-wide">
@@ -618,10 +618,10 @@ export default function HomePage() {
                 <p className="mt-2 text-sm text-muted-foreground">{copy.collectionsEmptyText}</p>
               </div>
             ) : (
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
               {collections.map((col, idx) => (
                 <Link key={idx} href={col.href}>
-                  <div className="group relative h-[460px] cursor-pointer overflow-hidden border border-[#ead3aa] shadow-[0_18px_52px_rgba(123,84,47,0.14)] transition-all duration-500 hover:-translate-y-1 hover:border-[#FF9D00]/60 dark:border-[#3b2717]">
+                  <div className="group relative h-[360px] cursor-pointer overflow-hidden border border-[#ead3aa] shadow-[0_18px_52px_rgba(123,84,47,0.14)] transition-all duration-500 hover:-translate-y-1 hover:border-[#FF9D00]/60 dark:border-[#3b2717] sm:h-[420px] xl:h-[460px]">
                     {/* Image */}
                     <img
                       src={col.image}
@@ -632,7 +632,7 @@ export default function HomePage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#180f08]/95 via-[#180f08]/35 to-[#FFCF71]/10" />
 
                     {/* Content */}
-                    <div className="absolute inset-x-0 bottom-0 p-8">
+                    <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8">
                       {/* Gold line */}
                       <div className="w-6 h-px bg-[#FF9D00] mb-4 group-hover:w-12 transition-all duration-500" />
                       <p className="text-[10px] tracking-[0.3em] uppercase text-[#FF9D00] mb-2">
@@ -657,10 +657,10 @@ export default function HomePage() {
         </section>
 
         {/* ===== FEATURED PRODUCTS ===== */}
-        <section className="border-y border-[#ead3aa] bg-[#fff3dd] py-24 dark:border-[#3b2717] dark:bg-[#211207] md:py-32">
-          <div className="container mx-auto px-6">
+        <section className="border-y border-[#ead3aa] bg-[#fff3dd] py-16 dark:border-[#3b2717] dark:bg-[#211207] sm:py-24 md:py-32">
+          <div className="container mx-auto px-4 sm:px-6">
             {/* Section Header */}
-            <div className="text-center mb-16">
+            <div className="mb-12 text-center sm:mb-16">
               <div className="flex items-center justify-center gap-4 mb-5">
                 <div className="h-px w-10 bg-[#FF9D00]" />
                 <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00] font-medium">
@@ -668,7 +668,7 @@ export default function HomePage() {
                 </span>
                 <div className="h-px w-10 bg-[#FF9D00]" />
               </div>
-              <h2 className="font-serif text-4xl md:text-5xl text-foreground font-bold tracking-wide mb-4">
+              <h2 className="mb-4 font-serif text-3xl font-bold tracking-wide text-foreground sm:text-4xl md:text-5xl">
                 {copy.featuredTitle}
               </h2>
               <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto leading-relaxed">
@@ -692,7 +692,7 @@ export default function HomePage() {
                 </Link>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {featuredProducts.map((product) => (
                   <div key={product.id} className="group">
                     {/* Image */}
@@ -720,7 +720,7 @@ export default function HomePage() {
                       <div className="absolute inset-0 flex items-center justify-center bg-[#180f08]/58 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
                         <Link
                           href={`/produit/${product.id}`}
-                          className="bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#180f08] transition-transform hover:scale-[1.03]"
+                          className="bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] px-5 py-3 text-center text-[10px] font-bold uppercase tracking-[0.12em] text-[#180f08] transition-transform hover:scale-[1.03] sm:px-6 sm:tracking-[0.2em]"
                         >
                           {copy.productDetails.viewProduct}
                         </Link>
@@ -774,7 +774,7 @@ export default function HomePage() {
             <div className="text-center mt-14">
               <Link
                 href="/boutique"
-                className="inline-flex items-center gap-3 border border-[#FF9D00] px-10 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-[#B6771D] transition-all duration-300 hover:bg-[#FF9D00] hover:text-[#180f08] dark:text-[#FFCF71]"
+                className="inline-flex w-full max-w-[22rem] items-center justify-center gap-3 border border-[#FF9D00] px-6 py-4 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#B6771D] transition-all duration-300 hover:bg-[#FF9D00] hover:text-[#180f08] dark:text-[#FFCF71] sm:w-auto sm:max-w-none sm:px-10 sm:text-[11px] sm:tracking-[0.25em]"
               >
                 {copy.viewAllProducts}
                 <ArrowRight className="w-4 h-4" />
@@ -784,12 +784,12 @@ export default function HomePage() {
         </section>
 
         {/* ===== ABOUT / SAVOIR-FAIRE ===== */}
-        <section className="bg-background py-24 md:py-32">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <section className="bg-background py-16 sm:py-24 md:py-32">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-16">
               {/* Left - Image collage */}
               <div className="relative">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <div className="aspect-[3/4] overflow-hidden border border-[#ead3aa] shadow-[0_20px_60px_rgba(123,84,47,0.14)] dark:border-[#3b2717]">
                     <img
                       src={storyImages[0]}
@@ -806,7 +806,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 {/* Gold frame accent */}
-                <div className="absolute -bottom-4 -right-4 -z-0 h-32 w-32 border border-[#FF9D00]" />
+                <div className="absolute -bottom-3 -right-3 -z-0 h-24 w-24 border border-[#FF9D00] sm:-bottom-4 sm:-right-4 sm:h-32 sm:w-32" />
               </div>
 
               {/* Right - Text */}
@@ -815,7 +815,7 @@ export default function HomePage() {
                   <div className="h-px w-10 bg-[#FF9D00]" />
                   <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00]">{copy.aboutEyebrow}</span>
                 </div>
-                <h2 className="font-serif text-4xl md:text-5xl text-foreground font-bold mb-6 leading-tight">
+                <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-foreground sm:text-4xl md:text-5xl">
                   {copy.aboutTitleStart}<br />
                   <span className="brand-text-gradient">{copy.aboutTitleAccent}</span>
                 </h2>
@@ -838,7 +838,7 @@ export default function HomePage() {
 
                 <Link
                   href="/contact"
-                  className="brand-glow inline-flex items-center gap-3 bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] px-8 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-[#180f08] transition-all duration-300 hover:-translate-y-1"
+                  className="brand-glow inline-flex w-full max-w-[22rem] items-center justify-center gap-3 bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] px-6 py-4 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#180f08] transition-all duration-300 hover:-translate-y-1 sm:w-auto sm:max-w-none sm:px-8 sm:text-[11px] sm:tracking-[0.25em]"
                 >
                   {copy.appointment}
                   <ArrowRight className="w-4 h-4" />
@@ -848,8 +848,8 @@ export default function HomePage() {
           </div>
 
           {/* Stats Row */}
-          <div className="container mx-auto px-6 mt-20">
-            <div className="border-t border-border pt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="container mx-auto mt-16 px-4 sm:mt-20 sm:px-6">
+            <div className="grid grid-cols-2 gap-6 border-t border-border pt-12 text-center sm:gap-8 sm:pt-16 lg:grid-cols-4">
               {copy.stats.map((stat, idx) => (
                 <div key={idx}>
                   <div className="brand-text-gradient mb-2 font-serif text-4xl font-bold tracking-wide md:text-5xl">
@@ -863,10 +863,10 @@ export default function HomePage() {
         </section>
 
         {/* ===== TESTIMONIALS ===== */}
-        <section className="border-t border-[#ead3aa] bg-muted py-24 dark:border-[#3b2717] md:py-32">
-          <div className="container mx-auto px-6">
+        <section className="border-t border-[#ead3aa] bg-muted py-16 dark:border-[#3b2717] sm:py-24 md:py-32">
+          <div className="container mx-auto px-4 sm:px-6">
             {/* Header */}
-            <div className="text-center mb-16">
+            <div className="mb-12 text-center sm:mb-16">
               <div className="flex items-center justify-center gap-4 mb-5">
                 <div className="h-px w-10 bg-[#FF9D00]" />
                 <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00] font-medium">
@@ -874,7 +874,7 @@ export default function HomePage() {
                 </span>
                 <div className="h-px w-10 bg-[#FF9D00]" />
               </div>
-              <h2 className="font-serif text-4xl md:text-5xl text-foreground font-bold tracking-wide mb-4">
+              <h2 className="mb-4 font-serif text-3xl font-bold tracking-wide text-foreground sm:text-4xl md:text-5xl">
                 {copy.testimonialsTitle}
               </h2>
               <p className="text-muted-foreground text-sm max-w-md mx-auto tracking-wide">
@@ -883,9 +883,9 @@ export default function HomePage() {
             </div>
 
             {/* Testimonials Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {testimonials.map((t, idx) => (
-                <div key={idx} className="brand-surface p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9D00]/50">
+                <div key={idx} className="brand-surface p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9D00]/50 sm:p-8">
                   {/* Stars */}
                   <div className="flex gap-1 mb-6">
                     {[...Array(t.rating)].map((_, i) => (
@@ -915,7 +915,7 @@ export default function HomePage() {
         </section>
 
         {/* ===== CTA FINAL ===== */}
-        <section className="relative overflow-hidden border-t border-[#ead3aa] bg-[#180f08] py-24 dark:border-[#3b2717]">
+        <section className="relative overflow-hidden border-t border-[#ead3aa] bg-[#180f08] py-16 dark:border-[#3b2717] sm:py-24">
           {/* Background pattern */}
           <div className="absolute inset-0 opacity-5">
             <div className="absolute inset-0" style={{
@@ -924,29 +924,29 @@ export default function HomePage() {
             }} />
           </div>
 
-          <div className="relative container mx-auto px-6 text-center">
+          <div className="container relative mx-auto px-4 text-center sm:px-6">
             <div className="flex items-center justify-center gap-4 mb-6">
               <div className="h-px w-10 bg-[#FF9D00]" />
               <span className="text-[10px] tracking-[0.35em] uppercase text-[#FF9D00]">{copy.finalEyebrow}</span>
               <div className="h-px w-10 bg-[#FF9D00]" />
             </div>
-            <h2 className="mb-5 font-serif text-4xl font-bold tracking-wide text-[#fff8ed] md:text-5xl">
+            <h2 className="mb-5 font-serif text-3xl font-bold tracking-wide text-[#fff8ed] sm:text-4xl md:text-5xl">
               {copy.finalTitle}
             </h2>
             <p className="mx-auto mb-10 max-w-md text-sm leading-relaxed tracking-wide text-[#f2d9ad]">
               {copy.finalText}
             </p>
-            <div className="flex gap-4 justify-center flex-wrap">
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap">
               <Link
                 href="/boutique"
-                className="brand-glow inline-flex items-center gap-3 bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] px-10 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-[#180f08] transition-all duration-300 hover:-translate-y-1"
+                className="brand-glow inline-flex w-full max-w-[22rem] items-center justify-center gap-3 bg-gradient-to-r from-[#FF9D00] to-[#FFCF71] px-6 py-4 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#180f08] transition-all duration-300 hover:-translate-y-1 sm:w-auto sm:max-w-none sm:px-10 sm:text-[11px] sm:tracking-[0.25em]"
               >
                 {copy.shopCta}
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-3 border border-[#FF9D00]/70 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-[#FFCF71] transition-all duration-300 hover:bg-[#FF9D00] hover:text-[#180f08]"
+                className="inline-flex w-full max-w-[22rem] items-center justify-center gap-3 border border-[#FF9D00]/70 px-6 py-4 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#FFCF71] transition-all duration-300 hover:bg-[#FF9D00] hover:text-[#180f08] sm:w-auto sm:max-w-none sm:px-10 sm:text-[11px] sm:tracking-[0.25em]"
               >
                 {copy.contactCta}
               </Link>

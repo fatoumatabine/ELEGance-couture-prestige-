@@ -82,7 +82,7 @@ export default function AboutPage() {
       <main className="flex-1">
 
         {/* ===== HERO CINÉMATIQUE ===== */}
-        <section className="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden bg-[#120b06]">
+        <section className="relative flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center overflow-hidden bg-[#120b06] px-4 py-24 sm:min-h-[92vh]">
           {/* Decorative diagonal grid */}
           <div className="absolute inset-0 opacity-[0.04]"
             style={{
@@ -96,31 +96,31 @@ export default function AboutPage() {
           <div className="absolute right-12 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#FF9D00]/30 to-transparent hidden lg:block" />
 
           {/* Top label */}
-          <div className="absolute top-16 left-1/2 -translate-x-1/2 flex items-center gap-4 z-10">
+          <div className="absolute left-1/2 top-12 z-10 flex -translate-x-1/2 items-center gap-3 sm:top-16 sm:gap-4">
             <div className="h-px w-10 bg-[#FF9D00]/60" />
-            <span className="text-[9px] tracking-[0.5em] uppercase text-[#FF9D00]/80 font-medium">
+            <span className="text-center text-[9px] font-medium uppercase tracking-[0.28em] text-[#FF9D00]/80 sm:tracking-[0.5em]">
               Notre Histoire
             </span>
             <div className="h-px w-10 bg-[#FF9D00]/60" />
           </div>
 
           {/* Main content */}
-          <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+          <div className="relative z-10 mx-auto max-w-5xl text-center">
             {/* Large editorial number */}
-            <div className="font-serif text-[8rem] md:text-[14rem] lg:text-[18rem] font-bold text-[#FF9D00]/[0.06] leading-none select-none absolute -top-8 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap">
+            <div className="pointer-events-none absolute -top-4 left-1/2 -translate-x-1/2 select-none whitespace-nowrap font-serif text-[5.5rem] font-bold leading-none text-[#FF9D00]/[0.06] sm:-top-8 sm:text-[8rem] md:text-[14rem] lg:text-[18rem]">
               2019
             </div>
 
-            <p className="text-[10px] tracking-[0.4em] uppercase text-[#FF9D00] mb-8 animate-fadeIn">
+            <p className="mb-8 animate-fadeIn text-[10px] uppercase tracking-[0.24em] text-[#FF9D00] sm:tracking-[0.4em]">
               Elegance Couture Prestige
             </p>
 
             <h1 className="font-serif font-bold leading-[0.9] mb-8 animate-fadeIn"
               style={{ animationDelay: "0.1s" }}>
-              <span className="block text-[3.5rem] md:text-[5.5rem] lg:text-[7rem] text-[#fff8ed] tracking-tight">
+              <span className="block text-[clamp(2.7rem,15vw,3.5rem)] tracking-tight text-[#fff8ed] md:text-[5.5rem] lg:text-[7rem]">
                 L'Aiguille
               </span>
-              <span className="block text-[3.5rem] md:text-[5.5rem] lg:text-[7rem] text-[#FF9D00] italic font-normal tracking-tight">
+              <span className="block text-[clamp(2.7rem,15vw,3.5rem)] font-normal italic tracking-tight text-[#FF9D00] md:text-[5.5rem] lg:text-[7rem]">
                 dans le Sang
               </span>
             </h1>
@@ -141,18 +141,18 @@ export default function AboutPage() {
         </section>
 
         {/* ===== MANIFESTE ===== */}
-        <section className="py-20 md:py-28 bg-background overflow-hidden">
-          <div className="container mx-auto px-6">
+        <section className="overflow-hidden bg-background py-14 sm:py-20 md:py-28">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto text-center">
-              <p className="text-[10px] tracking-[0.4em] uppercase text-[#FF9D00] mb-10">Notre Identité</p>
-              <blockquote className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-[1.15] mb-10">
+              <p className="mb-10 text-[10px] uppercase tracking-[0.24em] text-[#FF9D00] sm:tracking-[0.4em]">Notre Identité</p>
+              <blockquote className="mb-10 font-serif text-2xl font-bold leading-[1.18] text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
                 "Bien plus qu'un atelier —{" "}
                 <em className="text-[#FF9D00] font-normal not-italic">
                   la continuité d'un père
                 </em>{" "}
                 dont le nom continue de guider chaque coupe."
               </blockquote>
-              <div className="flex items-center justify-center gap-6">
+              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
                 <div className="h-px flex-1 max-w-[80px] bg-border" />
                 <div className="flex items-center gap-3">
                   <MapPin className="w-3.5 h-3.5 text-[#FF9D00]" />
@@ -165,7 +165,7 @@ export default function AboutPage() {
         </section>
 
         {/* ===== PORTRAIT D'HÉRITAGE ===== */}
-        <section className="relative overflow-hidden bg-[#120b06] py-20 md:py-28">
+        <section className="relative overflow-hidden bg-[#120b06] py-14 sm:py-20 md:py-28">
           <div className="absolute inset-0 opacity-[0.04]"
             style={{
               backgroundImage: "repeating-linear-gradient(45deg, #FF9D00 0, #FF9D00 1px, transparent 0, transparent 50%)",
@@ -174,7 +174,7 @@ export default function AboutPage() {
           />
           <div className="absolute left-0 right-0 top-1/2 hidden h-px bg-gradient-to-r from-transparent via-[#FF9D00]/20 to-transparent lg:block" />
 
-          <div className="relative z-10 container mx-auto px-6">
+          <div className="container relative z-10 mx-auto px-4 sm:px-6">
             <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-[0.82fr_1fr] lg:gap-16">
               <div className="relative">
                 <div className="absolute -left-4 -top-4 h-28 w-28 border border-[#FF9D00]/35" />
@@ -183,7 +183,7 @@ export default function AboutPage() {
                   <img
                     src="/elhadj%20mortalla.jpeg"
                     alt="Portrait de El Hadj Mor Talla Fall, grand couturier et père fondateur de l'héritage familial"
-                    className="h-full min-h-[460px] w-full object-cover object-top"
+                    className="h-full min-h-[320px] w-full object-cover object-top sm:min-h-[460px]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#120b06]/72 via-transparent to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -203,7 +203,7 @@ export default function AboutPage() {
                   <span className="text-[9px] font-medium uppercase tracking-[0.45em] text-[#FF9D00]">L'Homme derrière l'héritage</span>
                 </div>
 
-                <h2 className="font-serif text-4xl font-bold leading-tight text-[#fff8ed] md:text-5xl lg:text-6xl">
+                <h2 className="font-serif text-3xl font-bold leading-tight text-[#fff8ed] sm:text-4xl md:text-5xl lg:text-6xl">
                   Le sourire d'un père,<br />
                   <span className="text-[#FF9D00] italic font-normal">la main d'un maître.</span>
                 </h2>
@@ -238,8 +238,8 @@ export default function AboutPage() {
         </section>
 
         {/* ===== CHAPITRES DE L'HISTOIRE ===== */}
-        <section className="py-4 bg-background">
-          <div className="container mx-auto px-6">
+        <section className="bg-background py-4">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-6xl mx-auto">
               {chapters.map((ch, idx) => (
                 <div key={idx}
@@ -270,7 +270,7 @@ export default function AboutPage() {
                   <div className={`lg:col-span-8 ${
                     idx % 2 === 1 ? "lg:order-first" : ""
                   }`}>
-                    <div className={`p-8 md:p-10 mb-8 transition-all duration-500 ${
+                    <div className={`mb-8 p-5 transition-all duration-500 sm:p-8 md:p-10 ${
                       ch.accent
                         ? "bg-[#120b06] border border-[#3b2717] group-hover:border-[#FF9D00]/30"
                         : "bg-muted border border-border group-hover:border-[#FF9D00]/20"
@@ -296,15 +296,15 @@ export default function AboutPage() {
         </section>
 
         {/* ===== INNOVATION SECTION ===== */}
-        <section className="py-20 md:py-28 bg-muted border-y border-border">
-          <div className="container mx-auto px-6">
+        <section className="border-y border-border bg-muted py-14 sm:py-20 md:py-28">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-6xl mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
                 {/* Text */}
                 <div>
-                  <p className="text-[10px] tracking-[0.4em] uppercase text-[#FF9D00] mb-6">Tradition + Innovation</p>
-                  <h2 className="font-serif text-4xl md:text-5xl font-bold text-foreground leading-tight mb-6">
+                  <p className="mb-6 text-[10px] uppercase tracking-[0.24em] text-[#FF9D00] sm:tracking-[0.4em]">Tradition + Innovation</p>
+                  <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-foreground sm:text-4xl md:text-5xl">
                     Le Passé comme<br />
                     <span className="text-[#FF9D00]">Fondation</span>,<br />
                     L'Avenir comme Vision
@@ -330,9 +330,9 @@ export default function AboutPage() {
                 </div>
 
                 {/* Bento values grid */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2">
                   {values.map((v, i) => (
-                    <div key={i} className={`group bg-card border border-border p-6 hover:border-[#FF9D00]/40 transition-all duration-400 ${
+                    <div key={i} className={`group border border-border bg-card p-5 transition-all duration-400 hover:border-[#FF9D00]/40 sm:p-6 ${
                       v.size === "large" ? "col-span-1" : ""
                     }`}>
                       <v.icon className="w-5 h-5 text-[#FF9D00] mb-5 group-hover:scale-110 transition-transform duration-300" />
@@ -348,13 +348,13 @@ export default function AboutPage() {
 
         {/* ===== STATS ===== */}
         <section className="bg-[#120b06]">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4">
               {stats.map((s, i) => (
-                <div key={i} className={`text-center py-14 px-6 ${
+                <div key={i} className={`px-3 py-10 text-center sm:px-6 sm:py-14 ${
                   i < stats.length - 1 ? "border-r border-[#3b2717]" : ""
                 }`}>
-                  <div className="font-serif text-4xl md:text-5xl font-bold text-[#FF9D00] mb-2 tracking-wide">
+                  <div className="mb-2 font-serif text-3xl font-bold tracking-wide text-[#FF9D00] sm:text-4xl md:text-5xl">
                     {s.number}
                   </div>
                   <p className="text-[10px] tracking-[0.2em] uppercase text-[#d7ba8c]">{s.label}</p>
@@ -365,10 +365,10 @@ export default function AboutPage() {
         </section>
 
         {/* ===== GRANDE CITATION ===== */}
-        <section className="relative py-28 md:py-40 bg-[#120b06] overflow-hidden">
+        <section className="relative overflow-hidden bg-[#120b06] py-16 sm:py-28 md:py-40">
           {/* Large decorative text */}
           <div className="absolute inset-0 flex items-center justify-center select-none pointer-events-none">
-            <span className="font-serif text-[8rem] md:text-[14rem] font-bold text-[#FF9D00]/[0.04] whitespace-nowrap leading-none">
+            <span className="whitespace-nowrap font-serif text-[5rem] font-bold leading-none text-[#FF9D00]/[0.04] sm:text-[8rem] md:text-[14rem]">
               PRESTIGE
             </span>
           </div>
@@ -379,15 +379,15 @@ export default function AboutPage() {
             <div className="h-px flex-1 bg-gradient-to-l from-transparent to-[#FF9D00]/20" />
           </div>
 
-          <div className="relative z-10 container mx-auto px-6 text-center">
+          <div className="container relative z-10 mx-auto px-4 text-center sm:px-6">
             <div className="max-w-3xl mx-auto">
               <div className="h-px w-16 bg-[#FF9D00] mx-auto mb-12" />
-              <p className="font-serif text-3xl md:text-4xl lg:text-5xl italic font-light text-[#fff8ed] leading-[1.3] mb-10">
+              <p className="mb-10 font-serif text-2xl font-light italic leading-[1.3] text-[#fff8ed] sm:text-3xl md:text-4xl lg:text-5xl">
                 "Nous ne cousons pas seulement des vêtements —{" "}
                 <span className="text-[#FF9D00] not-italic font-semibold">nous prolongeons un nom.</span>"
               </p>
               <div className="h-px w-16 bg-[#FF9D00] mx-auto mb-8" />
-              <p className="text-[10px] tracking-[0.4em] uppercase text-[#d7ba8c]">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-[#d7ba8c] sm:tracking-[0.4em]">
                 En hommage à El Hadj Mor Talla Fall · Elegance Couture Prestige · Depuis 2019
               </p>
             </div>
@@ -395,15 +395,15 @@ export default function AboutPage() {
         </section>
 
         {/* ===== LOCALISATION ===== */}
-        <section className="py-20 md:py-28 bg-background">
-          <div className="container mx-auto px-6">
+        <section className="bg-background py-14 sm:py-20 md:py-28">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-6xl mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
                 {/* Text */}
                 <div>
-                  <p className="text-[10px] tracking-[0.4em] uppercase text-[#FF9D00] mb-6">Notre Adresse</p>
-                  <h2 className="font-serif text-4xl md:text-5xl font-bold text-foreground leading-tight mb-6">
+                  <p className="mb-6 text-[10px] uppercase tracking-[0.24em] text-[#FF9D00] sm:tracking-[0.4em]">Notre Adresse</p>
+                  <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-foreground sm:text-4xl md:text-5xl">
                     Grand Dakar,<br />
                     <span className="text-[#FF9D00]">Thiossane</span>
                   </h2>
@@ -429,7 +429,7 @@ export default function AboutPage() {
 
                 {/* Decorative card */}
                 <div className="relative">
-                  <div className="bg-[#120b06] border border-[#3b2717] p-10 md:p-14">
+                  <div className="border border-[#3b2717] bg-[#120b06] p-6 sm:p-10 md:p-14">
                     <div className="flex items-center gap-4 mb-8">
                       <div className="h-px w-8 bg-[#FF9D00]" />
                       <span className="text-[9px] tracking-[0.4em] uppercase text-[#FF9D00]">Notre Promesse</span>
@@ -454,7 +454,7 @@ export default function AboutPage() {
         </section>
 
         {/* ===== CTA FINAL ===== */}
-        <section className="relative py-24 md:py-32 bg-[#120b06] overflow-hidden border-t border-[#3b2717]">
+        <section className="relative overflow-hidden border-t border-[#3b2717] bg-[#120b06] py-16 sm:py-24 md:py-32">
           <div className="absolute inset-0 opacity-[0.03]"
             style={{
               backgroundImage: "repeating-linear-gradient(-45deg, #FF9D00 0, #FF9D00 1px, transparent 0, transparent 50%)",
@@ -462,15 +462,15 @@ export default function AboutPage() {
             }}
           />
 
-          <div className="relative z-10 container mx-auto px-6 text-center">
+          <div className="container relative z-10 mx-auto px-4 text-center sm:px-6">
             <div className="max-w-2xl mx-auto">
               <div className="flex items-center justify-center gap-4 mb-8">
                 <div className="h-px w-10 bg-[#FF9D00]" />
-                <span className="text-[9px] tracking-[0.4em] uppercase text-[#FF9D00]">Commencez l'Aventure</span>
+                <span className="text-center text-[9px] uppercase tracking-[0.2em] text-[#FF9D00] sm:tracking-[0.4em]">Commencez l'Aventure</span>
                 <div className="h-px w-10 bg-[#FF9D00]" />
               </div>
 
-              <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-[#fff8ed] mb-6 leading-tight">
+              <h2 className="mb-6 font-serif text-3xl font-bold leading-tight text-[#fff8ed] sm:text-4xl md:text-5xl lg:text-6xl">
                 Votre Histoire<br />
                 <span className="text-[#FF9D00] italic font-normal">commence ici.</span>
               </h2>
@@ -483,14 +483,14 @@ export default function AboutPage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/boutique"
-                  className="inline-flex items-center justify-center gap-3 px-10 py-4 bg-[#FF9D00] text-white text-[11px] tracking-[0.25em] uppercase font-semibold hover:bg-[#FFCF71] hover:text-[#241609] transition-all duration-300"
+                  className="inline-flex items-center justify-center gap-3 bg-[#FF9D00] px-6 py-4 text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-white transition-all duration-300 hover:bg-[#FFCF71] hover:text-[#241609] sm:px-10 sm:text-[11px] sm:tracking-[0.25em]"
                 >
                   Voir nos Créations
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center gap-3 px-10 py-4 border border-[#FF9D00]/60 text-[#FF9D00] text-[11px] tracking-[0.25em] uppercase font-medium hover:border-[#FF9D00] hover:bg-[#FF9D00]/10 transition-all duration-300"
+                  className="inline-flex items-center justify-center gap-3 border border-[#FF9D00]/60 px-6 py-4 text-center text-[10px] font-medium uppercase tracking-[0.16em] text-[#FF9D00] transition-all duration-300 hover:border-[#FF9D00] hover:bg-[#FF9D00]/10 sm:px-10 sm:text-[11px] sm:tracking-[0.25em]"
                 >
                   Prendre Rendez-vous
                 </Link>

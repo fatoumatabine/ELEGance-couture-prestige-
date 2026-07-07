@@ -147,7 +147,7 @@ export default async function BoutiquePage({ searchParams }: BoutiquePageProps) 
 
         {/* ===== BOUTIQUE INTRO ===== */}
         <section className="border-b border-[#ead3aa] bg-[#fffaf2] dark:border-[#3b2717] dark:bg-[#140b05]">
-          <div className="container mx-auto grid gap-8 px-6 py-8 md:grid-cols-[minmax(0,1fr)_minmax(300px,440px)] md:items-center lg:py-10">
+          <div className="container mx-auto grid gap-8 px-4 py-8 sm:px-6 md:grid-cols-[minmax(0,1fr)_minmax(300px,440px)] md:items-center lg:py-10">
             <div className="max-w-2xl">
               <div className="mb-4 flex items-center gap-3">
                 <div className="h-px w-8 bg-[#FF9D00]" />
@@ -155,23 +155,23 @@ export default async function BoutiquePage({ searchParams }: BoutiquePageProps) 
                   Elegance Couture Prestige
                 </span>
               </div>
-              <h1 className="font-serif text-5xl font-bold leading-none text-[#241609] dark:text-[#fff8ed] md:text-6xl">
+              <h1 className="font-serif text-4xl font-bold leading-none text-[#241609] dark:text-[#fff8ed] sm:text-5xl md:text-6xl">
                 Boutique
               </h1>
               <p className="mt-4 max-w-xl text-sm leading-relaxed tracking-wide text-[#7B542F] dark:text-[#d7ba8c] md:text-base">
                 Des créations d'exception, taillées avec l'héritage d'un savoir-faire inégalé.
               </p>
               <div className="mt-5 flex flex-wrap items-center gap-3">
-                <span className="inline-flex items-center border border-[#ead3aa] bg-white/70 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7B542F] dark:border-[#3b2717] dark:bg-[#211207] dark:text-[#d7ba8c]">
+                <span className="inline-flex items-center border border-[#ead3aa] bg-white/70 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#7B542F] dark:border-[#3b2717] dark:bg-[#211207] dark:text-[#d7ba8c] sm:px-4 sm:text-[11px] sm:tracking-[0.18em]">
                   {products.length} création{products.length > 1 ? "s" : ""}
                 </span>
                 {selectedCategory !== "all" && activeCategoryLabel && (
-                  <span className="inline-flex items-center border border-[#FF9D00]/35 bg-[#FF9D00]/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#B6771D] dark:text-[#FFCF71]">
+                  <span className="inline-flex items-center border border-[#FF9D00]/35 bg-[#FF9D00]/10 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#B6771D] dark:text-[#FFCF71] sm:px-4 sm:text-[11px] sm:tracking-[0.18em]">
                     {activeCategoryLabel}
                   </span>
                 )}
                 {activeFilterLabels.slice(selectedCategory !== "all" ? 1 : 0).map((label) => (
-                  <span key={label} className="inline-flex items-center border border-[#FF9D00]/35 bg-[#FF9D00]/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#B6771D] dark:text-[#FFCF71]">
+                  <span key={label} className="inline-flex items-center border border-[#FF9D00]/35 bg-[#FF9D00]/10 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#B6771D] dark:text-[#FFCF71] sm:px-4 sm:text-[11px] sm:tracking-[0.18em]">
                     {label}
                   </span>
                 ))}
@@ -200,14 +200,14 @@ export default async function BoutiquePage({ searchParams }: BoutiquePageProps) 
         </section>
 
         {/* ===== CATEGORY QUICK FILTER ===== */}
-        <section className="sticky top-[64px] z-30 border-b border-[#ead3aa] bg-[#fffaf2]/94 backdrop-blur-xl dark:border-[#3b2717] dark:bg-[#180f08]/94 md:top-[108px]">
-          <div className="container mx-auto px-6">
+        <section className="sticky top-16 z-30 border-b border-[#ead3aa] bg-[#fffaf2]/94 backdrop-blur-xl dark:border-[#3b2717] dark:bg-[#180f08]/94 sm:top-20 md:top-24 xl:top-36">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className="flex items-center gap-2 overflow-x-auto py-3 scrollbar-hide">
               {categories.map((cat) => (
                 <Link
                   key={cat.value}
                   href={cat.value === "all" ? "/boutique" : `/boutique?category=${cat.value}`}
-                  className={`flex-shrink-0 whitespace-nowrap border px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] transition-all duration-200 hover:border-[#FF9D00] hover:text-[#B6771D] dark:hover:text-[#FFCF71] ${
+                  className={`flex-shrink-0 whitespace-nowrap border px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] transition-all duration-200 hover:border-[#FF9D00] hover:text-[#B6771D] dark:hover:text-[#FFCF71] sm:px-5 sm:text-[11px] sm:tracking-[0.18em] ${
                     selectedCategory === cat.value
                       ? "border-[#FF9D00] bg-[#FF9D00] text-[#180f08]"
                       : "border-[#ead3aa] bg-white/55 text-[#7B542F] dark:border-[#3b2717] dark:bg-[#211207]/60 dark:text-[#d7ba8c]"
@@ -225,9 +225,9 @@ export default async function BoutiquePage({ searchParams }: BoutiquePageProps) 
           <div>
             {/* Result bar */}
             <div className="mb-6 flex items-center border-b border-[#ead3aa] pb-4 dark:border-[#3b2717]">
-              <div className="flex items-center gap-3">
+              <div className="flex min-w-0 flex-wrap items-center gap-3">
                 <div className="h-px w-8 bg-[#FF9D00]" />
-                <p className="text-sm text-muted-foreground tracking-wide">
+                <p className="min-w-0 text-sm tracking-wide text-muted-foreground">
                   <span className="font-serif text-foreground font-semibold text-base">{products.length}</span>
                   {" "}création{products.length > 1 ? "s" : ""} disponible{products.length > 1 ? "s" : ""}
                   {selectedCategory !== "all" && (
@@ -253,14 +253,14 @@ export default async function BoutiquePage({ searchParams }: BoutiquePageProps) 
                 </p>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-3 border border-[#FF9D00] px-8 py-3 text-[11px] uppercase tracking-[0.2em] text-[#B6771D] transition-all duration-300 hover:bg-[#FF9D00] hover:text-[#180f08] dark:text-[#FFCF71]"
+                  className="inline-flex w-full max-w-[20rem] items-center justify-center gap-3 border border-[#FF9D00] px-6 py-3 text-center text-[10px] uppercase tracking-[0.14em] text-[#B6771D] transition-all duration-300 hover:bg-[#FF9D00] hover:text-[#180f08] dark:text-[#FFCF71] sm:w-auto sm:max-w-none sm:px-8 sm:text-[11px] sm:tracking-[0.2em]"
                 >
                   Nous contacter
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
                 {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

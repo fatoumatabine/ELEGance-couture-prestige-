@@ -23,14 +23,14 @@ export default function LivraisonPage() {
       <Header />
 
       {/* Hero */}
-      <section className="h-64 bg-[#120b06] border-b border-[#3b2717] flex items-center justify-center">
+      <section className="flex h-56 items-center justify-center border-b border-[#3b2717] bg-[#120b06] px-4 sm:h-64">
         <div className="text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="h-px w-8 bg-[#FF9D00]" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-[#FF9D00]">Informations</span>
+            <span className="text-[10px] uppercase tracking-[0.24em] text-[#FF9D00] sm:tracking-[0.4em]">Informations</span>
             <div className="h-px w-8 bg-[#FF9D00]" />
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl text-[#fff8ed] font-bold tracking-wide">
+          <h1 className="font-serif text-3xl font-bold tracking-wide text-[#fff8ed] sm:text-4xl md:text-5xl">
             Livraison
           </h1>
         </div>
@@ -39,16 +39,16 @@ export default function LivraisonPage() {
       <main className="flex-1">
 
         {/* Features */}
-        <section className="py-16 bg-[#180f08] border-b border-[#3b2717]">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#3b2717]">
+        <section className="border-b border-[#3b2717] bg-[#180f08] py-12 sm:py-16">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 gap-px bg-[#3b2717] min-[420px]:grid-cols-2 lg:grid-cols-4">
               {[
                 { icon: Truck, title: "Livraison Rapide", desc: "Dès 24h à Dakar" },
                 { icon: Package, title: "Emballage Luxueux", desc: "Packaging soigné" },
                 { icon: Shield, title: "Sécurisée", desc: "Colis protégé" },
                 { icon: Clock, title: "Suivi en Temps Réel", desc: "Numéro de suivi SMS" },
               ].map((f, i) => (
-                <div key={i} className="bg-[#180f08] p-8 text-center">
+                <div key={i} className="bg-[#180f08] p-6 text-center sm:p-8">
                   <f.icon className="w-5 h-5 text-[#FF9D00] mx-auto mb-3" />
                   <h4 className="text-[11px] tracking-[0.2em] uppercase text-[#fff8ed] font-semibold mb-1">{f.title}</h4>
                   <p className="text-[11px] text-[#d7ba8c]">{f.desc}</p>
@@ -59,8 +59,8 @@ export default function LivraisonPage() {
         </section>
 
         {/* Zones */}
-        <section className="py-20 bg-[#120b06]">
-          <div className="container mx-auto px-6 max-w-3xl">
+        <section className="bg-[#120b06] py-14 sm:py-20">
+          <div className="container mx-auto max-w-3xl px-4 sm:px-6">
             <div className="text-center mb-12">
               <div className="flex items-center justify-center gap-4 mb-5">
                 <div className="h-px w-8 bg-[#FF9D00]" />
@@ -69,7 +69,8 @@ export default function LivraisonPage() {
               </div>
               <h2 className="font-serif text-3xl text-[#fff8ed] font-bold tracking-wide">Zones de Livraison</h2>
             </div>
-            <div className="border border-[#3b2717]">
+            <div className="overflow-x-auto border border-[#3b2717]">
+              <div className="min-w-[620px]">
               <div className="grid grid-cols-3 border-b border-[#3b2717] bg-[#1a1a1a]">
                 <div className="px-6 py-4 text-[10px] tracking-[0.2em] uppercase text-[#FF9D00] font-semibold">Zone</div>
                 <div className="px-6 py-4 text-[10px] tracking-[0.2em] uppercase text-[#FF9D00] font-semibold">Délai</div>
@@ -87,6 +88,7 @@ export default function LivraisonPage() {
                   <div className="px-6 py-5 text-[12px] text-[#FF9D00] tracking-wide font-medium">{z.tarif}</div>
                 </div>
               ))}
+              </div>
             </div>
             <p className="text-[11px] text-[#d7ba8c] mt-4 tracking-wide">
               * La livraison gratuite est offerte pour toute commande supérieure à 25 000 CFA dans le Grand Dakar.
@@ -95,8 +97,8 @@ export default function LivraisonPage() {
         </section>
 
         {/* Process */}
-        <section className="py-20 bg-[#180f08]">
-          <div className="container mx-auto px-6 max-w-4xl">
+        <section className="bg-[#180f08] py-14 sm:py-20">
+          <div className="container mx-auto max-w-4xl px-4 sm:px-6">
             <div className="text-center mb-12">
               <div className="flex items-center justify-center gap-4 mb-5">
                 <div className="h-px w-8 bg-[#FF9D00]" />
@@ -105,11 +107,11 @@ export default function LivraisonPage() {
               </div>
               <h2 className="font-serif text-3xl text-[#fff8ed] font-bold tracking-wide">Comment Ça Marche ?</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 gap-6 min-[420px]:grid-cols-2 lg:grid-cols-4">
               {steps.map((s, i) => (
                 <div key={i} className="text-center relative">
                   {i < steps.length - 1 && (
-                    <div className="hidden md:block absolute top-6 left-1/2 w-full h-px bg-[#3b2717]" />
+                    <div className="absolute left-1/2 top-6 hidden h-px w-full bg-[#3b2717] lg:block" />
                   )}
                   <div className="relative w-12 h-12 border border-[#FF9D00] flex items-center justify-center mx-auto mb-4 bg-[#180f08]">
                     <span className="font-serif text-sm text-[#FF9D00] font-bold">{s.step}</span>
@@ -123,11 +125,11 @@ export default function LivraisonPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-14 bg-[#120b06] border-t border-[#3b2717] text-center">
+        <section className="border-t border-[#3b2717] bg-[#120b06] px-4 py-14 text-center">
           <p className="text-[#d7ba8c] text-sm mb-6 tracking-wide">Des questions sur la livraison ?</p>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[#FF9D00] text-[#180f08] text-[11px] tracking-[0.25em] uppercase font-semibold hover:bg-[#FFCF71] transition-all duration-300"
+            className="inline-flex w-full max-w-[20rem] items-center justify-center gap-2 bg-[#FF9D00] px-6 py-4 text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-[#180f08] transition-all duration-300 hover:bg-[#FFCF71] sm:w-auto sm:max-w-none sm:px-8 sm:text-[11px] sm:tracking-[0.25em]"
           >
             Contactez-nous
           </Link>

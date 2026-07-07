@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -22,6 +22,12 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: true,
   },
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "black-translucent",
+    "apple-mobile-web-app-title": "Elegance Couture",
+  },
   icons: {
     icon: [
       { url: "/logo-elegance-couture.svg", type: "image/svg+xml" },
@@ -29,6 +35,14 @@ export const metadata: Metadata = {
     ],
     apple: "/apple-touch-icon.png",
   },
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: "#180f08",
 }
 
 export default function RootLayout({
