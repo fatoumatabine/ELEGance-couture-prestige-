@@ -38,9 +38,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <head>
-        <link rel="preload" as="video" href="/hero-video-optimized.mp4" type="video/mp4" />
-      </head>
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
