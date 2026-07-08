@@ -291,7 +291,7 @@ export function Header() {
           <div className="relative flex h-16 items-center justify-between sm:h-20 md:h-24">
             {/* Mobile Menu Button */}
             <button
-              className="z-10 flex h-10 w-10 shrink-0 items-center justify-start text-[#241609] transition-colors hover:text-[#FF9D00] dark:text-[#fff8ed] md:hidden"
+              className="z-10 flex h-10 w-10 shrink-0 items-center justify-start text-[#241609] transition-colors hover:text-[#FF9D00] dark:text-[#fff8ed] xl:hidden"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Menu"
             >
@@ -338,7 +338,7 @@ export function Header() {
           </div>
 
           {/* Navigation Row (desktop) */}
-          <nav className="hidden h-12 items-center justify-center border-t border-[#ead3aa]/70 dark:border-[#3b2717] md:flex">
+          <nav className="hidden h-12 items-center justify-center border-t border-[#ead3aa]/70 dark:border-[#3b2717] xl:flex">
             {navLinks.map((link, idx) => (
               <div key={link.label} className="group/nav relative flex h-full items-center">
                 {idx > 0 && (
@@ -398,7 +398,7 @@ export function Header() {
 
         {/* Mobile Nav Drawer */}
         {mobileOpen && (
-          <div className="absolute left-0 top-full z-50 w-[82vw] max-w-[320px] border-b border-r border-[#ead3aa] bg-[#fffaf2] shadow-[18px_24px_60px_rgba(123,84,47,0.22)] dark:border-[#3b2717] dark:bg-[#120b06] sm:w-[74vw] sm:max-w-[380px] md:hidden">
+          <div className="absolute left-0 top-full z-50 w-[82vw] max-w-[320px] border-b border-r border-[#ead3aa] bg-[#fffaf2] shadow-[18px_24px_60px_rgba(123,84,47,0.22)] dark:border-[#3b2717] dark:bg-[#120b06] sm:w-[74vw] sm:max-w-[380px] xl:hidden">
             <nav className="flex max-h-[calc(100svh-4rem)] flex-col gap-3 overflow-y-auto overscroll-contain px-5 py-5">
               {navLinks.map((link) => (
                 <div key={link.label} className="border-b border-[#ead3aa] pb-3 dark:border-[#3b2717]">
@@ -412,13 +412,13 @@ export function Header() {
                   </Link>
 
                   {"columns" in link && link.columns ? (
-                    <div className="grid gap-3 md:grid-cols-3 md:gap-4">
+                    <div className="grid gap-3">
                       {link.columns.map((column) => (
                         <div key={column.title}>
                           <p className="mb-1.5 font-serif text-[15px] font-bold text-[#B6771D] dark:text-[#FFCF71]">
                             {column.title}
                           </p>
-                          <div className="grid grid-cols-1 gap-0.5 pl-2.5 md:pl-0">
+                          <div className="grid grid-cols-1 gap-0.5 pl-2.5">
                             {column.items.map((item) => (
                               <Link
                                 key={item.label}

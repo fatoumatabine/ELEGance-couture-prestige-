@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/components/language-provider"
 import { WhatsappFloat } from "@/components/whatsapp-float"
 import { PwaManager } from "@/components/pwa-manager"
+import { VisitorTracker } from "@/components/visitor-tracker"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -63,6 +64,7 @@ export default function RootLayout({
             {children}
             <WhatsappFloat />
             <PwaManager />
+            <VisitorTracker />
             <Toaster />
             <Analytics />
           </LanguageProvider>

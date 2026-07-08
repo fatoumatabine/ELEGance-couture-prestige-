@@ -56,6 +56,7 @@ import {
   KeyRound,
   Moon,
   Sun,
+  Users,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -175,7 +176,46 @@ interface Contact {
   createdAt: string;
 }
 
-type Tab = "dashboard" | "products" | "categories" | "collections" | "images" | "home" | "orders" | "contacts" | "settings" | "security";
+interface VisitorPageView {
+  id: number;
+  path: string;
+  title?: string | null;
+  referrer?: string | null;
+  createdAt: string;
+}
+
+interface Visitor {
+  id: number;
+  visitorId: string;
+  firstSeen: string;
+  lastSeen: string;
+  visits: number;
+  lastPath: string;
+  lastTitle?: string | null;
+  referrer?: string | null;
+  deviceType?: string | null;
+  browser?: string | null;
+  os?: string | null;
+  language?: string | null;
+  country?: string | null;
+  city?: string | null;
+  screen?: string | null;
+  pageViews?: VisitorPageView[];
+}
+
+interface VisitorStats {
+  totalVisitors: number;
+  todayVisitors: number;
+  activeVisitors: number;
+  totalPageViews: number;
+}
+
+interface TopVisitorPage {
+  path: string;
+  views: number;
+}
+
+type Tab = "dashboard" | "visitors" | "products" | "categories" | "collections" | "images" | "home" | "orders" | "contacts" | "settings" | "security";
 type ProductView = "table" | "cards";
 type AdminTheme = "light" | "dark";
 type ProductOptionKind = "clothing" | "shoe" | "fabric" | "fragrance" | "accessory";
@@ -312,6 +352,14 @@ export default function AdminPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [visitors, setVisitors] = useState<Visitor[]>([]);
+  const [visitorStats, setVisitorStats] = useState<VisitorStats>({
+    totalVisitors: 0,
+    todayVisitors: 0,
+    activeVisitors: 0,
+    totalPageViews: 0,
+  });
+  const [topVisitorPages, setTopVisitorPages] = useState<TopVisitorPage[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [siteImages, setSiteImages] = useState<SiteImage[]>([]);
@@ -637,6 +685,27 @@ export default function AdminPage() {
     }
   };
 
+  const fetchVisitors = async () => {
+    try {
+      const res = await fetch("/api/visitors?limit=80", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setVisitors(Array.isArray(data.visitors) ? data.visitors : []);
+        setVisitorStats({
+          totalVisitors: Number(data.stats?.totalVisitors || 0),
+          todayVisitors: Number(data.stats?.todayVisitors || 0),
+          activeVisitors: Number(data.stats?.activeVisitors || 0),
+          totalPageViews: Number(data.stats?.totalPageViews || 0),
+        });
+        setTopVisitorPages(Array.isArray(data.topPages) ? data.topPages : []);
+      }
+    } catch (error) {
+      console.error("Error fetching visitors:", error);
+    }
+  };
+
   const fetchAdminContent = async () => {
     const [catRes, colRes, imgRes, homeRes, settingsRes] = await Promise.all([
       fetch("/api/categories"),
@@ -850,6 +919,7 @@ export default function AdminPage() {
       fetchProducts();
       fetchOrders();
       fetchContacts();
+      fetchVisitors();
       fetchAdminContent();
     }
   }, [isLoggedIn]);
@@ -910,9 +980,29 @@ export default function AdminPage() {
   const childCategoryCount = categories.filter((category) => category.parentSlug).length;
   const imageSectionCount = new Set(siteImages.map((image) => image.section).filter(Boolean)).size;
   const settingsGroupCount = new Set(settings.map((setting) => setting.group).filter(Boolean)).size;
+  const formatAdminDate = (value?: string | null) => {
+    if (!value) return "Non renseigné";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "Non renseigné";
+
+    return date.toLocaleDateString("fr-FR", {
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+  const getVisitorShortId = (visitorId: string) => visitorId.slice(0, 8).toUpperCase();
+  const getVisitorLocation = (visitor: Visitor) =>
+    [visitor.city, visitor.country].filter(Boolean).join(", ") || "Localisation inconnue";
+  const getVisitorDevice = (visitor: Visitor) =>
+    [visitor.deviceType, visitor.browser, visitor.os].filter(Boolean).join(" / ") || "Appareil inconnu";
+  const isVisitorActive = (visitor: Visitor) =>
+    Date.now() - new Date(visitor.lastSeen).getTime() <= 15 * 60 * 1000;
 
   const navItems = [
     { id: "dashboard" as Tab, label: "Dashboard", icon: LayoutDashboard, count: 0 },
+    { id: "visitors" as Tab, label: "Visiteurs", icon: Users, count: visitorStats.todayVisitors },
     { id: "products" as Tab, label: "Produits", icon: Package, count: products.length },
     { id: "categories" as Tab, label: "Catégories", icon: Tags, count: categories.length },
     { id: "collections" as Tab, label: "Collections", icon: Layers, count: collections.length },
@@ -930,6 +1020,12 @@ export default function AdminPage() {
       description: "Vue rapide sur l'activité de la boutique, les priorités et les accès fréquents.",
       eyebrow: "Pilotage",
       metric: `${products.length} produits`,
+    },
+    visitors: {
+      title: "Visiteurs",
+      description: "Suivez les clients qui consultent la boutique, leurs pages vues et leur dernier passage.",
+      eyebrow: "Audience",
+      metric: `${visitorStats.todayVisitors} aujourd'hui`,
     },
     products: {
       title: "Gestion des produits",
@@ -1346,9 +1442,9 @@ export default function AdminPage() {
               <div className="mb-8 grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 lg:grid-cols-4">
                 {[
                   { label: "Produits", value: products.length, icon: Package, color: "text-[var(--admin-accent)]" },
-                  { label: "Catégories", value: categories.length, icon: Tags, color: "text-[var(--admin-text)]" },
-                  { label: "Collections", value: collections.length, icon: Layers, color: "text-emerald-600" },
-                  { label: "Images site", value: siteImages.length, icon: Images, color: "text-blue-600" },
+                  { label: "Visiteurs", value: visitorStats.totalVisitors, icon: Users, color: "text-[var(--admin-text)]" },
+                  { label: "Aujourd'hui", value: visitorStats.todayVisitors, icon: Eye, color: "text-emerald-600" },
+                  { label: "Pages vues", value: visitorStats.totalPageViews, icon: Navigation, color: "text-blue-600" },
                 ].map((stat, i) => (
                   <div key={i} className="group rounded-[10px] border border-[var(--admin-soft)] bg-[var(--admin-panel)] p-4 shadow-sm transition-colors hover:border-[var(--admin-accent)]/60 sm:p-5">
                     <div className="flex items-start justify-between mb-3">
@@ -1387,6 +1483,131 @@ export default function AdminPage() {
                       </button>
                     ))}
                   </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {activeTab === "visitors" && (
+            <>
+              <div className="mb-8 grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 lg:grid-cols-4">
+                {[
+                  { label: "Total visiteurs", value: visitorStats.totalVisitors, icon: Users, color: "text-[var(--admin-accent)]" },
+                  { label: "Aujourd'hui", value: visitorStats.todayVisitors, icon: Eye, color: "text-emerald-600" },
+                  { label: "Actifs 15 min", value: visitorStats.activeVisitors, icon: Clock, color: "text-amber-600" },
+                  { label: "Pages vues", value: visitorStats.totalPageViews, icon: Navigation, color: "text-blue-600" },
+                ].map((stat, i) => (
+                  <div key={i} className="group border border-border bg-[var(--admin-panel)] p-4 transition-colors hover:border-[var(--admin-accent)]/30 sm:p-5">
+                    <div className="mb-3 flex items-start justify-between">
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{stat.label}</p>
+                      <stat.icon className={`h-4 w-4 ${stat.color} opacity-70`} />
+                    </div>
+                    <p className={`font-serif text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+                <div className="border border-border bg-[var(--admin-panel)]">
+                  <div className="flex items-center gap-3 border-b border-border px-5 py-4">
+                    <div className="h-5 w-1 bg-[var(--admin-accent)]" />
+                    <h2 className="font-serif text-lg font-semibold text-foreground">Visiteurs récents</h2>
+                  </div>
+
+                  {visitors.length === 0 ? (
+                    <div className="p-8 text-center sm:p-16">
+                      <Users className="mx-auto mb-4 h-10 w-10 text-[var(--admin-accent)]/40" />
+                      <h3 className="mb-2 font-serif text-xl font-semibold text-foreground">Aucune visite enregistrée</h3>
+                      <p className="text-sm tracking-wide text-muted-foreground">Les visiteurs apparaîtront ici après leur passage sur la boutique.</p>
+                    </div>
+                  ) : (
+                    <div className="divide-y divide-border">
+                      {visitors.map((visitor) => (
+                        <div key={visitor.id} className="p-4 transition-colors hover:bg-muted/30 sm:p-5">
+                          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                            <div className="min-w-0 flex-1">
+                              <div className="mb-2 flex flex-wrap items-center gap-2">
+                                <span className="font-mono text-xs font-semibold uppercase tracking-[0.18em] text-foreground">
+                                  Visiteur {getVisitorShortId(visitor.visitorId)}
+                                </span>
+                                <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                                  isVisitorActive(visitor)
+                                    ? "bg-emerald-100 text-emerald-700"
+                                    : "bg-muted text-muted-foreground"
+                                }`}>
+                                  {isVisitorActive(visitor) ? "Actif" : "Récent"}
+                                </span>
+                              </div>
+                              <Link
+                                href={visitor.lastPath || "/"}
+                                target="_blank"
+                                className="mb-2 inline-flex max-w-full items-center gap-2 break-all text-sm font-semibold text-[var(--admin-accent)] hover:underline"
+                              >
+                                <span className="min-w-0 truncate">{visitor.lastPath || "/"}</span>
+                                <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+                              </Link>
+                              <div className="grid gap-2 text-xs text-muted-foreground sm:grid-cols-2">
+                                <p>{getVisitorDevice(visitor)}</p>
+                                <p>{getVisitorLocation(visitor)}</p>
+                                <p>Dernier passage: {formatAdminDate(visitor.lastSeen)}</p>
+                                <p>Pages vues: {visitor.visits}</p>
+                              </div>
+                              {!!visitor.referrer && (
+                                <p className="mt-2 break-all text-xs text-muted-foreground">
+                                  Source: {visitor.referrer}
+                                </p>
+                              )}
+                              {!!visitor.pageViews?.length && (
+                                <div className="mt-4 space-y-2">
+                                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Dernières pages</p>
+                                  {visitor.pageViews.slice(0, 3).map((pageView) => (
+                                    <div key={pageView.id} className="flex min-w-0 items-center justify-between gap-3 text-xs">
+                                      <span className="min-w-0 truncate text-foreground">{pageView.path}</span>
+                                      <span className="shrink-0 text-muted-foreground">{formatAdminDate(pageView.createdAt)}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex shrink-0 flex-wrap gap-2 lg:justify-end">
+                              {visitor.language && (
+                                <span className="rounded-full border border-border px-2.5 py-1 text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                                  {visitor.language}
+                                </span>
+                              )}
+                              {visitor.screen && (
+                                <span className="rounded-full border border-border px-2.5 py-1 text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                                  {visitor.screen}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="border border-border bg-[var(--admin-panel)] p-5">
+                  <div className="mb-5 flex items-center gap-3">
+                    <div className="h-5 w-1 bg-[var(--admin-accent)]" />
+                    <h2 className="font-serif text-lg font-semibold text-foreground">Pages les plus vues</h2>
+                  </div>
+                  {topVisitorPages.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">Les pages consultées apparaîtront ici.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {topVisitorPages.map((page) => (
+                        <div key={page.path} className="flex min-w-0 items-center justify-between gap-4 border-b border-border pb-3 last:border-b-0 last:pb-0">
+                          <div className="flex min-w-0 items-center gap-2">
+                            <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[var(--admin-accent)]" />
+                            <span className="min-w-0 truncate text-sm text-foreground">{page.path}</span>
+                          </div>
+                          <span className="shrink-0 font-serif text-lg font-bold text-[var(--admin-accent)]">{page.views}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </>
